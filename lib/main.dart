@@ -40,7 +40,7 @@ class _LoginpageState extends State<Loginpage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'เข้าเข้าสู่ระบบ',
+              'เข้าสู่ระบบ',
               style: TextStyle(fontSize: 30),
             ),
             Container(

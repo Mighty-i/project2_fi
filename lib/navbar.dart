@@ -111,8 +111,7 @@ class _NavbarState extends State<Navbar> {
         ),
       ),
       body: Center(
-        child: _pages.elementAt(_selectedIndex),
-      ),
+          child: _pages.elementAt(_selectedIndex), _buildbottomNavigationBar()),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0), // Adjust padding as needed
         child: Container(
@@ -132,30 +131,58 @@ class _NavbarState extends State<Navbar> {
               )
             ],
           ),
-          child: BottomNavigationBar(
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.car_repair_outlined,
-                    color: _selectedIndex == 0 ? Colors.blue : Colors.grey),
-                label: 'รายการซ่อม',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.history,
-                    color: _selectedIndex == 1 ? Colors.blue : Colors.grey),
-                label: 'รายการที่ดำเนินการอยู่',
-              ),
-            ],
-            selectedItemColor: Colors.blue,
-            unselectedItemColor: Colors.grey,
-            selectedLabelStyle: TextStyle(color: Colors.blue),
-            unselectedLabelStyle: TextStyle(color: Colors.grey),
-          ),
+          // child: BottomNavigationBar(
+          //   currentIndex: _selectedIndex,
+          //   onTap: _onItemTapped,
+          //   backgroundColor: Colors.transparent,
+          //   elevation: 0,
+          //   type: BottomNavigationBarType.fixed,
+          //   items: [
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.car_repair_outlined,
+          //           color: _selectedIndex == 0 ? Colors.blue : Colors.grey),
+          //       label: 'รายการซ่อม',
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.history,
+          //           color: _selectedIndex == 1 ? Colors.blue : Colors.grey),
+          //       label: 'รายการที่ดำเนินการอยู่',
+          //     ),
+          //   ],
+          //   selectedItemColor: Colors.blue,
+          //   unselectedItemColor: Colors.grey,
+          //   selectedLabelStyle: TextStyle(color: Colors.blue),
+          //   unselectedLabelStyle: TextStyle(color: Colors.grey),
+          // ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildbottomNavigationBar() {
+    return Container(
+      child: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        type: BottomNavigationBarType.fixed,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.car_repair_outlined,
+                color: _selectedIndex == 0 ? Colors.blue : Colors.grey),
+            label: 'รายการซ่อม',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.history,
+                color: _selectedIndex == 1 ? Colors.blue : Colors.grey),
+            label: 'รายการที่ดำเนินการอยู่',
+          ),
+        ],
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
+        selectedLabelStyle: TextStyle(color: Colors.blue),
+        unselectedLabelStyle: TextStyle(color: Colors.grey),
       ),
     );
   }

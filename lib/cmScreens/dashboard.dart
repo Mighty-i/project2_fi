@@ -106,9 +106,10 @@ class dashboard extends StatelessWidget {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Container(
                 padding: EdgeInsets.all(8.0),
@@ -121,27 +122,30 @@ class dashboard extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(width: 16),
+              SizedBox(width: 12),
               Text(
                 'ความเสียหาย: หนัก',
                 style: TextStyle(fontSize: 18),
               ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Align(
-            alignment: Alignment.centerRight,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
+              SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  ),
+                  child: Text(
+                    'Plan',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               ),
-              child: Text('Plan'),
-            ),
+            ],
           ),
         ],
       ),

@@ -81,28 +81,26 @@ class history extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(width: 12),
-              Text(
-                'ความเสียหาย: หนัก',
-                style: TextStyle(fontSize: 18),
+              Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: AlignmentDirectional(0, 0),
+                    child: Text(
+                      'ขั้นตอนรอตรวจสอบ: 2.โป๊ว',
+                    ),
+                  ),
+                  Text(
+                    'ขั้นตอนล่าสุด: 3.พ่นสี',
+                  ),
+                ],
               ),
               SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
-                  ),
-                  child: Text(
-                    'Plan',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+              GFIconButton(
+                onPressed: () {},
+                icon: Icon(Icons.chevron_right_outlined),
+                shape: GFIconButtonShape.circle,
               ),
             ],
           ),

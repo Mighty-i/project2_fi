@@ -3,9 +3,9 @@ import 'package:getwidget/getwidget.dart';
 import 'package:project2_fi/cmScreens/dashboard.dart';
 import 'package:project2_fi/cmScreens/history.dart';
 
-void main() {
-  runApp(apppage());
-}
+// void main() {
+//   runApp(apppage());
+// }
 
 class apppage extends StatelessWidget {
   const apppage({super.key});
@@ -111,7 +111,8 @@ class _NavbarState extends State<Navbar> {
         ),
       ),
       body: Center(
-          child: _pages.elementAt(_selectedIndex), _buildbottomNavigationBar()),
+        child: _pages.elementAt(_selectedIndex),
+      ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0), // Adjust padding as needed
         child: Container(
@@ -131,29 +132,29 @@ class _NavbarState extends State<Navbar> {
               )
             ],
           ),
-          // child: BottomNavigationBar(
-          //   currentIndex: _selectedIndex,
-          //   onTap: _onItemTapped,
-          //   backgroundColor: Colors.transparent,
-          //   elevation: 0,
-          //   type: BottomNavigationBarType.fixed,
-          //   items: [
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.car_repair_outlined,
-          //           color: _selectedIndex == 0 ? Colors.blue : Colors.grey),
-          //       label: 'รายการซ่อม',
-          //     ),
-          //     BottomNavigationBarItem(
-          //       icon: Icon(Icons.history,
-          //           color: _selectedIndex == 1 ? Colors.blue : Colors.grey),
-          //       label: 'รายการที่ดำเนินการอยู่',
-          //     ),
-          //   ],
-          //   selectedItemColor: Colors.blue,
-          //   unselectedItemColor: Colors.grey,
-          //   selectedLabelStyle: TextStyle(color: Colors.blue),
-          //   unselectedLabelStyle: TextStyle(color: Colors.grey),
-          // ),
+          child: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.car_repair_outlined,
+                    color: _selectedIndex == 0 ? Colors.blue : Colors.grey),
+                label: 'รายการซ่อม',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.history,
+                    color: _selectedIndex == 1 ? Colors.blue : Colors.grey),
+                label: 'รายการที่ดำเนินการอยู่',
+              ),
+            ],
+            selectedItemColor: Colors.blue,
+            unselectedItemColor: Colors.grey,
+            selectedLabelStyle: TextStyle(color: Colors.blue),
+            unselectedLabelStyle: TextStyle(color: Colors.grey),
+          ),
         ),
       ),
     );

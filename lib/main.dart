@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:project2_fi/navbar.dart';
+import 'package:project2_fi/navbar2.dart';
 
 void main() {
   runApp(const MainPage());

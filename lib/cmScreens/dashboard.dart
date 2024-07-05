@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:project2_fi/cmScreens/process.dart';
 
 // class dashboard extends StatefulWidget {
 //   const dashboard({super.key});
@@ -83,14 +84,15 @@ class dashboard extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.all(16.0),
             children:
-                List.generate(10, (index) => buildListItem(index)).toList(),
+                List.generate(10, (index) => buildListItem(index, context))
+                    .toList(),
           ),
         ),
       ],
     );
   }
 
-  Widget buildListItem(int index) {
+  Widget buildListItem(int index, BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8.0),
       padding: EdgeInsets.all(16.0),
@@ -131,7 +133,13 @@ class dashboard extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Process(),
+                        ));
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                     shape: RoundedRectangleBorder(

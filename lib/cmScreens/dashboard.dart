@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:getwidget/getwidget.dart';
-import 'package:project2_fi/cmScreens/process.dart';
+import 'package:project2_fi/cmScreens/process2.dart';
 
 // class dashboard extends StatefulWidget {
 //   const dashboard({super.key});

@@ -23,6 +23,7 @@ class DynamicListPage extends StatefulWidget {
 
 class _DynamicListPageState extends State<DynamicListPage> {
   List<Widget> _items = [];
+  String? _selectedItem;
 
   @override
   void initState() {
@@ -34,6 +35,14 @@ class _DynamicListPageState extends State<DynamicListPage> {
     setState(() {
       _items.add(_buildListItem());
     });
+  }
+
+  void selectedItem(String? selectedValue) {
+    if (selectedValue is String) {
+      setState(() {
+        _selectedItem = selectedValue;
+      });
+    }
   }
 
   Widget _buildListItem() {
@@ -58,17 +67,30 @@ class _DynamicListPageState extends State<DynamicListPage> {
               Expanded(
                 child: GFDropdown(
                   items: [
-                    'ขั้นตอนการซ่อม 1',
-                    'ขั้นตอนการซ่อม 2',
-                    'ขั้นตอนการซ่อม 3'
+                    'เคาะ',
+                    'โป๊ว',
+                    'ขัดสีโป๊ว',
+                    'พ่นพื้น',
+                    'ขัดน้ำ',
+                    'พ่นสีจริง',
+                    'ประกอบ',
+                    'ขัดสี'
                   ]
                       .map((value) => DropdownMenuItem(
                             child: Text(value),
                             value: value,
                           ))
                       .toList(),
-                  onChanged: (value) {},
+                  onChanged: selectedItem,
                   hint: Text('ขั้นตอนการซ่อม'),
+                  value: _selectedItem,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0, vertical: 10.0),
+                  borderRadius: BorderRadius.circular(12.0),
+                  border: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
                 ),
               ),
             ],
@@ -78,7 +100,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
             children: [
               Expanded(
                 child: GFDropdown(
-                  items: ['ช่าง 1', 'ช่าง 2', 'ช่าง 3']
+                  items: ['ถอด/ประกอบ', 'ช่างโป๊ว/ขัด', 'พ่นสี', 'ช่างเคาะ']
                       .map((value) => DropdownMenuItem(
                             child: Text(value),
                             value: value,
@@ -86,6 +108,13 @@ class _DynamicListPageState extends State<DynamicListPage> {
                       .toList(),
                   onChanged: (value) {},
                   hint: Text('ช่าง'),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0, vertical: 10.0),
+                  borderRadius: BorderRadius.circular(12.0),
+                  border: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
                 ),
               ),
               SizedBox(width: 16),
@@ -99,6 +128,13 @@ class _DynamicListPageState extends State<DynamicListPage> {
                       .toList(),
                   onChanged: (value) {},
                   hint: Text('ชื่อ'),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0, vertical: 10.0),
+                  borderRadius: BorderRadius.circular(12.0),
+                  border: const BorderSide(
+                    color: Colors.grey,
+                    width: 1.0,
+                  ),
                 ),
               ),
             ],
@@ -259,6 +295,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
         child: ListView(
           children: [
             _buildVehicleInfo(),
+            const SizedBox(height: 8),
             Container(
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.fromLTRB(30, 0, 0, 10),

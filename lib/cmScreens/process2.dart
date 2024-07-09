@@ -402,36 +402,39 @@ class _DynamicListPageState extends State<DynamicListPage> {
           Row(
             children: [
               Expanded(
-                child: DropdownButton<String>(
-                  onChanged: (String? newValue) {
-                    _updateDropdownValue(index, newValue);
+                child: StatefulBuilder(
+                  builder: (context, setState) {
+                    return GFDropdown<String>(
+                      hint: Text(_dropdownValues[index] ?? 'ขั้นตอนการซ่อม'),
+                      value: _dropdownValues[index],
+                      items: [
+                        'เคาะ',
+                        'โป๊ว',
+                        'ขัดสีโป๊ว',
+                        'พ่นพื้น',
+                        'ขัดน้ำ',
+                        'พ่นสีจริง',
+                        'ประกอบ',
+                        'ขัดสี'
+                      ].map<DropdownMenuItem<String>>(
+                        (String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _updateDropdownValue(index, newValue);
+                        });
+                      },
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 10.0),
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: const BorderSide(color: Colors.grey, width: 1.0),
+                    );
                   },
-                  // onChanged: (String? newValue) {
-                  //   setState(() {
-                  //     _updateDropdownValue(index, newValue);
-                  //   });
-                  // },
-                  value: _dropdownValues[index],
-                  items: [
-                    'เคาะ',
-                    'โป๊ว',
-                    'ขัดสีโป๊ว',
-                    'พ่นพื้น',
-                    'ขัดน้ำ',
-                    'พ่นสีจริง',
-                    'ประกอบ',
-                    'ขัดสี'
-                  ].map<DropdownMenuItem<String>>(
-                    (String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    },
-                  ).toList(),
-                  hint: _dropdownValues[index] == null
-                      ? Text('ขั้นตอนการซ่อม')
-                      : null,
                 ),
               ),
             ],
@@ -448,7 +451,10 @@ class _DynamicListPageState extends State<DynamicListPage> {
                           ))
                       .toList(),
                   onChanged: (value) {},
-                  hint: Text('ช่าง'),
+                  hint: Align(
+                    alignment: Alignment.center,
+                    child: Text('ช่าง'),
+                  ),
                   padding: const EdgeInsets.symmetric(
                       horizontal: 15.0, vertical: 10.0),
                   borderRadius: BorderRadius.circular(12.0),
@@ -483,7 +489,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
               style: TextStyle(fontSize: 14),
             ),
           ),
-          for (int i = 0; i < 3; i++)
+          for (int i = 0; i < 4; i++)
             Container(
               margin: EdgeInsets.symmetric(vertical: 8.0),
               padding: EdgeInsets.all(16.0),

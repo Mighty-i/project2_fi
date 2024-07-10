@@ -334,6 +334,7 @@
 // }
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:project2_fi/cmScreens/part.dart';
 import 'package:project2_fi/navbar2.dart';
 
 class Process extends StatelessWidget {
@@ -357,7 +358,9 @@ class DynamicListPage extends StatefulWidget {
 
 class _DynamicListPageState extends State<DynamicListPage> {
   List<Widget> _items = [];
-  List<String?> _dropdownValues = [];
+  List<String?> _dropdownRepair = [];
+  List<String?> _dropdowntechnician = [];
+  List<String?> _dropdownname = [];
 
   @override
   void initState() {
@@ -367,25 +370,43 @@ class _DynamicListPageState extends State<DynamicListPage> {
 
   void _addItem() {
     setState(() {
-      _dropdownValues.add(null); // Initialize with null to show the hint
+      _dropdownRepair.add(null);
+      _dropdowntechnician.add(null);
+      _dropdownname.add(null); // Initialize with null to show the hint
       _items.add(_buildListItem(_items.length));
     });
   }
 
-  // void _updateDropdownValue(int index, String? newValue) {
-  //   setState(() {
-  //     _dropdownValues[index] = newValue;
-  //     print('_updateDropdownValue: index = $index, newValue = $newValue');
-  //   });
-  // }
-  void _updateDropdownValue(int index, String? newValue) {
+  void _updateDropdownRepair(int index, String? newValue) {
     setState(() {
       if (newValue != null) {
-        _dropdownValues[index] = newValue;
+        _dropdownRepair[index] = newValue;
       } else {
-        _dropdownValues[index] = null; // Reset to null to show the hint
+        _dropdownRepair[index] = null; // Reset to null to show the hint
       }
-      print('_updateDropdownValue: index = $index, newValue = $newValue');
+      print('_updateDropdownRepair: index = $index, newValue = $newValue');
+    });
+  }
+
+  void _updateDropdowntechnician(int index, String? newValue) {
+    setState(() {
+      if (newValue != null) {
+        _dropdowntechnician[index] = newValue;
+      } else {
+        _dropdowntechnician[index] = null; // Reset to null to show the hint
+      }
+      print('_updateDropdowntechnician: index = $index, newValue = $newValue');
+    });
+  }
+
+  void _updateDropdownname(int index, String? newValue) {
+    setState(() {
+      if (newValue != null) {
+        _dropdownname[index] = newValue;
+      } else {
+        _dropdownname[index] = null; // Reset to null to show the hint
+      }
+      print('_updateDropdownname: index = $index, newValue = $newValue');
     });
   }
 
@@ -399,14 +420,15 @@ class _DynamicListPageState extends State<DynamicListPage> {
       ),
       child: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: StatefulBuilder(
-                  builder: (context, setState) {
-                    return GFDropdown<String>(
-                      hint: Text(_dropdownValues[index] ?? 'ขั้นตอนการซ่อม'),
-                      value: _dropdownValues[index],
+          SizedBox(height: 16),
+          Center(
+            child: Expanded(
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return DropdownButtonHideUnderline(
+                    child: GFDropdown<String>(
+                      hint: Text(_dropdownRepair[index] ?? 'ขั้นตอนการซ่อม'),
+                      value: _dropdownRepair[index],
                       items: [
                         'เคาะ',
                         'โป๊ว',
@@ -420,64 +442,92 @@ class _DynamicListPageState extends State<DynamicListPage> {
                         (String value) {
                           return DropdownMenuItem<String>(
                             value: value,
-                            child: Text(value),
+                            child: Text(
+                              value,
+                              style: TextStyle(fontSize: 14.0),
+                            ),
                           );
                         },
                       ).toList(),
                       onChanged: (String? newValue) {
                         setState(() {
-                          _updateDropdownValue(index, newValue);
+                          _updateDropdownRepair(index, newValue);
                         });
                       },
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 15.0, vertical: 10.0),
+                          horizontal: 25.0, vertical: 10.0),
                       borderRadius: BorderRadius.circular(12.0),
                       border: const BorderSide(color: Colors.grey, width: 1.0),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
-            ],
+            ),
           ),
           SizedBox(height: 16),
           Row(
             children: [
               Expanded(
-                child: GFDropdown(
-                  items: ['ถอด/ประกอบ', 'ช่างโป๊ว/ขัด', 'พ่นสี', 'ช่างเคาะ']
-                      .map((value) => DropdownMenuItem(
-                            child: Text(value),
-                            value: value,
-                          ))
-                      .toList(),
-                  onChanged: (value) {},
-                  hint: Align(
-                    alignment: Alignment.center,
-                    child: Text('ช่าง'),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0, vertical: 10.0),
-                  borderRadius: BorderRadius.circular(12.0),
-                  border: const BorderSide(color: Colors.grey, width: 1.0),
+                child: StatefulBuilder(
+                  builder: (context, setState) {
+                    return DropdownButtonHideUnderline(
+                      child: GFDropdown(
+                        items:
+                            ['ถอด/ประกอบ', 'ช่างโป๊ว/ขัด', 'พ่นสี', 'ช่างเคาะ']
+                                .map((value) => DropdownMenuItem(
+                                      child: Text(
+                                        value,
+                                        style: TextStyle(fontSize: 14.0),
+                                      ),
+                                      value: value,
+                                    ))
+                                .toList(),
+                        value: _dropdowntechnician[index], // Add this line
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _updateDropdowntechnician(index, newValue);
+                          });
+                        },
+                        hint: Text('ช่าง'),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15.0, vertical: 10.0),
+                        borderRadius: BorderRadius.circular(12.0),
+                        border:
+                            const BorderSide(color: Colors.grey, width: 1.0),
+                      ),
+                    );
+                  },
                 ),
               ),
               SizedBox(width: 16),
-              Expanded(
-                child: GFDropdown(
-                  items: ['ชื่อ 1', 'ชื่อ 2', 'ชื่อ 3']
-                      .map((value) => DropdownMenuItem(
-                            child: Text(value),
-                            value: value,
-                          ))
-                      .toList(),
-                  onChanged: (value) {},
-                  hint: Text('ชื่อ'),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 15.0, vertical: 10.0),
-                  borderRadius: BorderRadius.circular(12.0),
-                  border: const BorderSide(color: Colors.grey, width: 1.0),
-                ),
-              ),
+              Expanded(child: StatefulBuilder(
+                builder: (context, setState) {
+                  return DropdownButtonHideUnderline(
+                    child: GFDropdown(
+                      items: ['ชื่อ 1', 'ชื่อ 2', 'ชื่อ 3']
+                          .map((value) => DropdownMenuItem(
+                                child: Text(
+                                  value,
+                                  style: TextStyle(fontSize: 14.0),
+                                ),
+                                value: value,
+                              ))
+                          .toList(),
+                      value: _dropdownname[index], // Add this line
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          _updateDropdownname(index, newValue);
+                        });
+                      },
+                      hint: Text('ชื่อ'),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15.0, vertical: 10.0),
+                      borderRadius: BorderRadius.circular(12.0),
+                      border: const BorderSide(color: Colors.grey, width: 1.0),
+                    ),
+                  );
+                },
+              )),
             ],
           ),
           SizedBox(height: 16),
@@ -532,7 +582,13 @@ class _DynamicListPageState extends State<DynamicListPage> {
           Align(
             alignment: Alignment.center,
             child: ElevatedButton(
-              onPressed: _addItem,
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Mypart(),
+                    ));
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.blue.withOpacity(0.5),
                 shape: RoundedRectangleBorder(

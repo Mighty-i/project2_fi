@@ -23,6 +23,19 @@ class Partmain extends StatefulWidget {
 }
 
 class _PartmainState extends State<Partmain> {
+  Widget partListview(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          // margin: EdgeInsets.symmetric(vertical: 8.0),
+          padding: EdgeInsets.all(16.0),
+          decoration: BoxDecoration(),
+          
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,6 +92,13 @@ class _PartmainState extends State<Partmain> {
                   },
                 ),
               ],
+            ),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.all(16.0),
+                children: List.generate(10, (index) => partListview(context))
+                    .toList(),
+              ),
             ),
           ],
         ),

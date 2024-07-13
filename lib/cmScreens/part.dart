@@ -27,11 +27,27 @@ class _PartmainState extends State<Partmain> {
     return Row(
       children: [
         Container(
-          // margin: EdgeInsets.symmetric(vertical: 8.0),
+          margin: EdgeInsets.symmetric(vertical: 8.0),
           padding: EdgeInsets.all(16.0),
-          decoration: BoxDecoration(),
-          
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Row(
+            children: [
+              Text('กันชนหน้า'),
+              Text('จำนวน: 10 ชิ้น'),
+            ],
+          ),
         ),
+        GFIconButton(
+          onPressed: () {},
+          icon: Icon(
+            Icons.add,
+            size: 24,
+            color: Colors.black,
+          ),
+        )
       ],
     );
   }

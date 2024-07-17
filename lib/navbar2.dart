@@ -49,7 +49,7 @@ class _NavbarState extends State<Navbar> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('สมชาย ใจดี', style: TextStyle(fontSize: 20)),
-            Text('ตำแหน่ง: ช่างสี', style: TextStyle(fontSize: 20)),
+            Text('ตำแหน่ง: หัวหน้า', style: TextStyle(fontSize: 20)),
             GFAvatar(
               size: GFSize.SMALL,
             )

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:project2_fi/cmScreens/status.dart';
 
-class history extends StatelessWidget {
+class history extends StatefulWidget {
+  @override
+  State<history> createState() => _historyState();
+}
+
+class _historyState extends State<history> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -98,7 +104,14 @@ class history extends StatelessWidget {
               ),
               SizedBox(height: 10),
               GFIconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MyStatus(),
+                    ),
+                  );
+                },
                 icon: Icon(Icons.chevron_right_outlined),
                 shape: GFIconButtonShape.circle,
               ),

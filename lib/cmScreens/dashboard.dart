@@ -63,7 +63,7 @@ class dashboard extends StatelessWidget {
                 ),
               ],
             ),
-            child: Text(
+            child: const Text(
               '1 ม.ค. 2567',
               style: TextStyle(
                 fontSize: 24,
@@ -75,7 +75,7 @@ class dashboard extends StatelessWidget {
         Container(
           alignment: Alignment.centerLeft,
           padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
-          child: Text(
+          child: const Text(
             'รายการรถเข้าซ่อม',
             style: TextStyle(fontSize: 14),
           ),

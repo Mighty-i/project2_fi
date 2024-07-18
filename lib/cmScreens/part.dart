@@ -24,7 +24,50 @@ class Partmain extends StatefulWidget {
 }
 
 class _PartmainState extends State<Partmain> {
-  Widget partListview(BuildContext context) {
+  // Widget partListview(BuildContext context) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //     children: [
+  //       Container(
+  //         margin: EdgeInsets.symmetric(vertical: 8.0),
+  //         padding: EdgeInsets.all(36.0),
+  //         decoration: BoxDecoration(
+  //             color: Colors.white,
+  //             borderRadius: BorderRadius.circular(20.0),
+  //             boxShadow: [
+  //               BoxShadow(
+  //                 color: Colors.black12,
+  //                 blurRadius: 10,
+  //                 spreadRadius: 5,
+  //               )
+  //             ]),
+  //         child: Row(
+  //           children: [
+  //             Text('กันชนหน้า'),
+  //             SizedBox(
+  //               width: 20,
+  //             ),
+  //             Text('จำนวน: 10 ชิ้น'),
+  //           ],
+  //         ),
+  //       ),
+  //       OutlinedButton(
+  //         onPressed: () {},
+  //         child: Icon(Icons.add, size: 36, color: Colors.black),
+  //         style: OutlinedButton.styleFrom(
+  //           padding: EdgeInsets.all(22.0),
+  //           foregroundColor: Color.fromARGB(255, 247, 24, 255),
+  //           backgroundColor: Color.fromARGB(255, 134, 199, 252),
+  //           side: BorderSide(color: Color.fromARGB(255, 0, 104, 189)),
+  //           shape: RoundedRectangleBorder(
+  //               borderRadius: BorderRadius.circular(20.0)),
+  //         ),
+  //       )
+  //     ],
+  //   );
+  // }
+  List<String> _selectedParts = [];
+  Widget partListview(BuildContext context, String partName) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -43,7 +86,7 @@ class _PartmainState extends State<Partmain> {
               ]),
           child: Row(
             children: [
-              Text('กันชนหน้า'),
+              Text(partName),
               SizedBox(
                 width: 20,
               ),
@@ -52,7 +95,14 @@ class _PartmainState extends State<Partmain> {
           ),
         ),
         OutlinedButton(
-          onPressed: () {},
+          onPressed: () {
+            setState(() {
+              if (!_selectedParts.contains(partName)) {
+                _selectedParts.add(partName);
+              }
+              print('addpart: $partName');
+            });
+          },
           child: Icon(Icons.add, size: 36, color: Colors.black),
           style: OutlinedButton.styleFrom(
             padding: EdgeInsets.all(22.0),
@@ -80,8 +130,7 @@ class _PartmainState extends State<Partmain> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (context) => Process()));
+            Navigator.pop(context, _selectedParts); // Return selected parts
           },
         ),
         title: Row(
@@ -130,7 +179,8 @@ class _PartmainState extends State<Partmain> {
             Expanded(
               child: ListView(
                 padding: EdgeInsets.all(16.0),
-                children: List.generate(10, (index) => partListview(context))
+                children: List.generate(
+                        10, (index) => partListview(context, 'อะไหล่ $index'))
                     .toList(),
               ),
             ),

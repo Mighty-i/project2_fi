@@ -1,47 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:project2_fi/mScreens/StatusRepair.dart';
 
 class MYdashboard extends StatelessWidget {
-  const MYdashboard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Dynamic List Example',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: mainM(),
-    );
-  }
-}
-
-class mainM extends StatefulWidget {
-  const mainM({super.key});
-
-  @override
-  State<mainM> createState() => _mainMState();
-}
-
-class _mainMState extends State<mainM> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: GFAppBar(
-        backgroundColor: Colors.blue,
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('สมชาย ใจดี', style: TextStyle(fontSize: 20)),
-            Text('ตำแหน่ง: ช่างสี', style: TextStyle(fontSize: 20)),
-            GFAvatar(
-              size: GFSize.SMALL,
-            )
-          ],
-        ),
-      ),
       body: Padding(
         padding: EdgeInsets.all(6.0),
         child: Column(
@@ -133,7 +97,13 @@ Widget buildListItem(BuildContext context) {
             Align(
               alignment: Alignment.centerRight,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Statusrepair(),
+                      ));
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(

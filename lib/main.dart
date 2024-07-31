@@ -87,9 +87,9 @@
 //   }
 // }
 import 'package:flutter/material.dart';
+import 'package:project2_fi/navbar.dart';
 // import 'package:getwidget/getwidget.dart';
 import 'package:project2_fi/navbar2.dart';
-import 'package:project2_fi/mScreens/dashboard.dart';
 
 void main() {
   runApp(const MainPage());
@@ -174,7 +174,7 @@ class _LoginpageState extends State<Loginpage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => MYdashboard(),
+                          builder: (context) => apppageM(),
                         ));
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(

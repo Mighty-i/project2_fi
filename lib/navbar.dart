@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:project2_fi/cmScreens/dashboard.dart';
-import 'package:project2_fi/cmScreens/history.dart';
+import 'package:project2_fi/mScreens/dashboard.dart';
+import 'package:project2_fi/mScreens/history.dart';
 
-// void main() {
-//   runApp(apppage());
-// }
-
-class apppage extends StatelessWidget {
-  const apppage({super.key});
+class apppageM extends StatelessWidget {
+  const apppageM({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,60 +16,6 @@ class apppage extends StatelessWidget {
   }
 }
 
-// class Navbar extends StatefulWidget {
-//   const Navbar({super.key});
-
-//   @override
-//   State<Navbar> createState() => _NavbarState();
-// }
-
-// class _NavbarState extends State<Navbar> {
-//   late List<Widget> menu;
-//   int index = 0;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     menu = [
-//       dashboard(),
-//       history(),
-//     ];
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: GFAppBar(
-//         backgroundColor: Colors.blue,
-//         automaticallyImplyLeading: false,
-//         title: Row(
-//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//           children: [
-//             Text('สมชาย ใจดี', style: TextStyle(fontSize: 20)),
-//             Text('ตำแหน่ง: ช่างสี', style: TextStyle(fontSize: 20)),
-//             GFAvatar(
-//               size: GFSize.SMALL,
-//             )
-//           ],
-//         ),
-//       ),
-//       body: menu[index],
-//       backgroundColor: Colors.white,
-//       bottomNavigationBar: BottomNavigationBar(
-//           currentIndex: index,
-//           onTap: (value) {
-//             setState(() {
-//               index = value;
-//             });
-//           },
-//           items: [
-//             BottomNavigationBarItem(
-//                 icon: Icon(Icons.car_repair_outlined), label: 'รายการซ่อม'),
-//             BottomNavigationBarItem(icon: Icon(Icons.history), label: 'History')
-//           ]),
-//     );
-//   }
-// }
 class Navbar extends StatefulWidget {
   @override
   _NavbarState createState() => _NavbarState();
@@ -83,8 +25,8 @@ class _NavbarState extends State<Navbar> {
   int _selectedIndex = 0;
 
   static List<Widget> _pages = <Widget>[
-    dashboard(),
-    history(),
+    MYdashboard(),
+    History(),
   ];
 
   void _onItemTapped(int index) {

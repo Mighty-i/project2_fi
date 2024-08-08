@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:project2_fi/navbar2.dart';
 
-class Process extends StatelessWidget {
+class Process55 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -271,11 +271,11 @@ class _DynamicListPageState extends State<DynamicListPage> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => apppage(),
-                ));
+            // Navigator.pushReplacement(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => apppage(),
+            //     ));
           },
         ),
         title: Row(

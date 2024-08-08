@@ -1,49 +1,45 @@
 import 'package:flutter/material.dart';
 // import 'package:getwidget/getwidget.dart';
 import 'package:project2_fi/cmScreens/process2.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-// class dashboard extends StatefulWidget {
-//   const dashboard({super.key});
+class dashboard extends StatefulWidget {
+  final int roleId;
+  final String username;
+  final String roleName;
+  dashboard(
+      {required this.username, required this.roleName, required this.roleId});
+  @override
+  State<dashboard> createState() => _dashboardState();
+}
 
-//   @override
-//   State<dashboard> createState() => _dashboardState();
-// }
+class _dashboardState extends State<dashboard> {
+  List<dynamic> quotations = [];
 
-// class _dashboardState extends State<dashboard> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Center(
-//         child: Column(
-//           mainAxisAlignment: MainAxisAlignment.start,
-//           children: [
-//             Container(
-//               padding: EdgeInsets.all(16),
-//               decoration: BoxDecoration(
-//                   color: Color.fromARGB(255, 255, 255, 255),
-//                   borderRadius: BorderRadius.circular(16.0)),
-//               child: Text(
-//                 "1 ม.ค. 2567",
-//                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-//               ),
-//             ),
-//             Container(
-//               alignment: Alignment.centerLeft,
-//               padding: EdgeInsets.fromLTRB(30, 0, 0, 0),
-//               child: Text(
-//                 "รายการรถเข้าซ่อม",
-//                 style: TextStyle(fontSize: 14),
-//               ),
-//             ),
+  @override
+  void initState() {
+    super.initState();
+    fetchQuotations();
+  }
 
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  Future<void> fetchQuotations() async {
+    final url = 'https://bodyworkandpaint.pantook.com/api/quotations';
+    final response = await http.get(Uri.parse(url));
 
-class dashboard extends StatelessWidget {
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        quotations = data['data'];
+      });
+    } else {
+      // Handle the error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load quotations')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -81,18 +77,19 @@ class dashboard extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: ListView(
+          child: ListView.builder(
             padding: EdgeInsets.all(16.0),
-            children:
-                List.generate(10, (index) => buildListItem(index, context))
-                    .toList(),
+            itemCount: quotations.length,
+            itemBuilder: (context, index) {
+              return buildListItem(quotations[index], context);
+            },
           ),
         ),
       ],
     );
   }
 
-  Widget buildListItem(int index, BuildContext context) {
+  Widget buildListItem(dynamic quotation, BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8.0),
       padding: EdgeInsets.all(16.0),
@@ -120,13 +117,13 @@ class dashboard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Text(
-                  'ทะเบียนรถ\n1กด6444',
+                  'ทะเบียนรถ\n${quotation['licenseplate']}',
                   textAlign: TextAlign.center,
                 ),
               ),
               SizedBox(width: 12),
               Text(
-                'ความเสียหาย: หนัก',
+                'ความเสียหาย: ${quotation['damageassessment']}',
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 10),
@@ -135,10 +132,16 @@ class dashboard extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Process(),
-                        ));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Process(
+                          roleId: widget.roleId,
+                          username: widget.username,
+                          roleName: widget.roleName,
+                          quotationId: quotation['Quotation_ID'],
+                        ),
+                      ),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,

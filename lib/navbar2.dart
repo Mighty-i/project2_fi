@@ -2,36 +2,62 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:project2_fi/cmScreens/dashboard.dart';
 import 'package:project2_fi/cmScreens/OngoingList.dart';
-
-// void main() {
-//   runApp(apppage());
-// }
+import 'package:project2_fi/main.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class apppage extends StatelessWidget {
-  const apppage({super.key});
+  final String username;
+  final String roleName;
+  final int roleId;
+
+  const apppage(
+      {super.key,
+      required this.username,
+      required this.roleName,
+      required this.roleId});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.pink),
-      home: Navbar(),
+      home: Navbar(username: username, roleName: roleName, roleId: roleId),
     );
   }
 }
 
 class Navbar extends StatefulWidget {
+  final String username;
+  final String roleName;
+  final int roleId;
+
+  Navbar(
+      {required this.username, required this.roleName, required this.roleId});
+
   @override
   _NavbarState createState() => _NavbarState();
 }
 
 class _NavbarState extends State<Navbar> {
   int _selectedIndex = 0;
-
-  static List<Widget> _pages = <Widget>[
-    dashboard(),
-    history(),
-  ];
+  late List<Widget> _pages;
+  // static List<Widget> _pages = <Widget>[
+  //   dashboard(),
+  //   history(),
+  // ];
+  @override
+  void initState() {
+    super.initState();
+    _pages = <Widget>[
+      dashboard(
+        roleId: widget.roleId,
+        username: widget.username,
+        roleName: widget.roleName,
+      ),
+      history(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -48,11 +74,17 @@ class _NavbarState extends State<Navbar> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('สมชาย ใจดี', style: TextStyle(fontSize: 20)),
-            Text('ตำแหน่ง: หัวหน้า', style: TextStyle(fontSize: 20)),
+            Text(widget.username, style: TextStyle(fontSize: 20)),
+            Text('ตำแหน่ง: ${widget.roleName}', style: TextStyle(fontSize: 20)),
             GFAvatar(
               size: GFSize.SMALL,
-            )
+            ),
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () {
+                _logout(context);
+              },
+            ),
           ],
         ),
       ),
@@ -106,6 +138,35 @@ class _NavbarState extends State<Navbar> {
     );
   }
 
+  Future<void> _logout(BuildContext context) async {
+    final url = 'https://bodyworkandpaint.pantook.com/api/logout';
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        // Add necessary headers for authentication, e.g., token
+        // 'Authorization': 'Bearer YOUR_TOKEN',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Handle successful logout
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Loginpage()), // Navigate back to login page
+      );
+    } else {
+      // Handle logout failure
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to logout. Please try again.'),
+        ),
+      );
+    }
+  }
+}
+
   // Widget _buildbottomNavigationBar() {
   //   return Container(
   //     child: BottomNavigationBar(
@@ -133,4 +194,4 @@ class _NavbarState extends State<Navbar> {
   //     ),
   //   );
   // }
-}
+

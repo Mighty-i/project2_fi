@@ -38,6 +38,7 @@ dependencies:
   getwidget: ^4.0.0
   get: ^4.6.6
   image_picker: ^1.1.2
+  http: ^1.2.2
   
 
 dev_dependencies:

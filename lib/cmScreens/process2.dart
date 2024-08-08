@@ -1,9 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:project2_fi/cmScreens/dashboard.dart';
 // import 'package:project2_fi/cmScreens/part.dart';
 import 'package:project2_fi/navbar2.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Process extends StatelessWidget {
+  final int roleId;
+  final String username;
+  final String roleName;
+  final int quotationId;
+  Process(
+      {required this.roleId,
+      required this.username,
+      required this.roleName,
+      required this.quotationId});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,12 +24,27 @@ class Process extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: DynamicListPage(),
+      home: DynamicListPage(
+        roleId: roleId,
+        username: username,
+        roleName: roleName,
+        quotationId: quotationId,
+      ),
     );
   }
 }
 
 class DynamicListPage extends StatefulWidget {
+  final int roleId; // Accept roleId
+  final String username;
+  final String roleName;
+  final int quotationId; // Accept quotationId
+
+  DynamicListPage(
+      {required this.roleId,
+      required this.username,
+      required this.roleName,
+      required this.quotationId});
   @override
   _DynamicListPageState createState() => _DynamicListPageState();
 }
@@ -25,13 +52,13 @@ class DynamicListPage extends StatefulWidget {
 class _DynamicListPageState extends State<DynamicListPage> {
   List<Widget> _items = [];
   List<String?> _dropdownRepair = [];
-  List<String?> _dropdowntechnician = [];
-  List<String?> _dropdownname = [];
   List<String> _selectedParts = [];
+  List<dynamic> repairSteps = [];
 
   @override
   void initState() {
     super.initState();
+    _fetchRepairSteps();
     _addItem(); // Add initial item
   }
 
@@ -51,8 +78,6 @@ class _DynamicListPageState extends State<DynamicListPage> {
   void _addItem() {
     setState(() {
       _dropdownRepair.add(null);
-      _dropdowntechnician.add(null);
-      _dropdownname.add(null); // Initialize with null to show the hint
       _items.add(_buildListItem(_items.length));
     });
   }
@@ -60,7 +85,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
   void _updateDropdownRepair(int index, String? newValue) {
     setState(() {
       if (newValue != null) {
-        _dropdownRepair[index] = newValue;
+        _dropdownRepair[index] = newValue ?? '';
       } else {
         _dropdownRepair[index] = null; // Reset to null to show the hint
       }
@@ -68,26 +93,33 @@ class _DynamicListPageState extends State<DynamicListPage> {
     });
   }
 
-  void _updateDropdowntechnician(int index, String? newValue) {
-    setState(() {
-      if (newValue != null) {
-        _dropdowntechnician[index] = newValue;
-      } else {
-        _dropdowntechnician[index] = null; // Reset to null to show the hint
-      }
-      print('_updateDropdowntechnician: index = $index, newValue = $newValue');
-    });
-  }
+  Future<void> _fetchRepairSteps() async {
+    final response = await http.get(
+      Uri.parse('https://bodyworkandpaint.pantook.com/api/repair_steps'),
+    );
 
-  void _updateDropdownname(int index, String? newValue) {
-    setState(() {
-      if (newValue != null) {
-        _dropdownname[index] = newValue;
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      print('Response body: $responseBody'); // Debugging
+
+      if (responseBody is Map<String, dynamic> &&
+          responseBody.containsKey('data')) {
+        setState(() {
+          repairSteps = responseBody['data'] as List<
+              dynamic>; // Adjust according to the actual response structure
+          print('Repair steps: $repairSteps'); // Debugging
+        });
+      } else if (responseBody is List<dynamic>) {
+        setState(() {
+          repairSteps = responseBody;
+          print('Repair steps: $repairSteps'); // Debugging
+        });
       } else {
-        _dropdownname[index] = null; // Reset to null to show the hint
+        throw Exception('Unexpected response format');
       }
-      print('_updateDropdownname: index = $index, newValue = $newValue');
-    });
+    } else {
+      throw Exception('Failed to load repair steps');
+    }
   }
 
   Widget _buildListItem(int index) {
@@ -105,30 +137,26 @@ class _DynamicListPageState extends State<DynamicListPage> {
             child: StatefulBuilder(
               builder: (context, setState) {
                 return DropdownButtonHideUnderline(
-                  child: GFDropdown<String>(
+                  child: DropdownButton<String>(
                     hint: Text(_dropdownRepair[index] ?? 'ขั้นตอนการซ่อม'),
-                    value: _dropdownRepair[index],
-                    items: [
-                      'เคาะ',
-                      'โป๊ว',
-                      'ขัดสีโป๊ว',
-                      'พ่นพื้น',
-                      'ขัดน้ำ',
-                      'พ่นสีจริง',
-                      'ประกอบ',
-                      'ขัดสี'
-                    ].map<DropdownMenuItem<String>>(
-                      (String value) {
+                    value: _dropdownRepair[index]?.isNotEmpty ?? false
+                        ? _dropdownRepair[index]
+                        : null,
+
+                    items: repairSteps.map<DropdownMenuItem<String>>(
+                      (step) {
+                        final stepId = step['Step_ID']?.toString() ?? '';
+                        final stepName = step['StepName'] ?? 'Unknown Step';
                         return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(fontSize: 14.0),
-                          ),
+                          value: stepId,
+                          child:
+                              Text(stepName, style: TextStyle(fontSize: 20.0)),
                         );
                       },
                     ).toList(),
                     onChanged: (String? newValue) {
+                      print(
+                          'Dropdown Changed: Index = $index, New Value = $newValue'); // Debug
                       setState(() {
                         _updateDropdownRepair(index, newValue);
                       });
@@ -136,80 +164,11 @@ class _DynamicListPageState extends State<DynamicListPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 25.0, vertical: 10.0),
                     borderRadius: BorderRadius.circular(12.0),
-                    border: const BorderSide(color: Colors.grey, width: 1.0),
+                    // border: const BorderSide(color: Colors.grey, width: 1.0),
                   ),
                 );
               },
             ),
-          ),
-          SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: StatefulBuilder(
-                  builder: (context, setState) {
-                    return DropdownButtonHideUnderline(
-                      child: GFDropdown(
-                        items:
-                            ['ถอด/ประกอบ', 'ช่างโป๊ว/ขัด', 'พ่นสี', 'ช่างเคาะ']
-                                .map((value) => DropdownMenuItem(
-                                      child: Text(
-                                        value,
-                                        style: TextStyle(fontSize: 14.0),
-                                      ),
-                                      value: value,
-                                    ))
-                                .toList(),
-                        value: _dropdowntechnician[index],
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _updateDropdowntechnician(index, newValue);
-                          });
-                        },
-                        hint: Text('ช่าง'),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15.0, vertical: 10.0),
-                        borderRadius: BorderRadius.circular(12.0),
-                        border:
-                            const BorderSide(color: Colors.grey, width: 1.0),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              SizedBox(width: 16),
-              Expanded(
-                child: StatefulBuilder(
-                  builder: (context, setState) {
-                    return DropdownButtonHideUnderline(
-                      child: GFDropdown(
-                        items: ['ชื่อ 1', 'ชื่อ 2', 'ชื่อ 3']
-                            .map((value) => DropdownMenuItem(
-                                  child: Text(
-                                    value,
-                                    style: TextStyle(fontSize: 14.0),
-                                  ),
-                                  value: value,
-                                ))
-                            .toList(),
-                        value: _dropdownname[index],
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _updateDropdownname(index, newValue);
-                          });
-                        },
-                        hint: Text('ชื่อ'),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15.0, vertical: 10.0),
-                        borderRadius: BorderRadius.circular(12.0),
-                        border:
-                            const BorderSide(color: Colors.grey, width: 1.0),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
           ),
           SizedBox(height: 16),
           Container(
@@ -273,14 +232,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
                     MaterialPageRoute(
                       builder: (context) => Partmain(),
                     ));
-                // if (selectedParts != null) {
-                //   _updateSelectedParts(selectedParts);
-                //   // if (_items.length > 0) {
-                //   //   // int nextIndex = _items.length + 1;
-                //   //   _clearSelectedParts();
-                //   //   _updateSelectedParts(selectedParts);
-                //   // }
-                // }
+
                 if (selectedParts != null) {
                   _updateSelectedParts(selectedParts);
                 } else {
@@ -363,7 +315,11 @@ class _DynamicListPageState extends State<DynamicListPage> {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => apppage(),
+                  builder: (context) => apppage(
+                    roleId: widget.roleId,
+                    username: widget.username,
+                    roleName: widget.roleName,
+                  ),
                 ));
           },
         ),

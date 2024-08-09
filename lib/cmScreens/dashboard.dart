@@ -6,7 +6,6 @@ import 'package:project2_fi/cmScreens/process2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-<<<<<<< HEAD
 class Dashboard extends StatefulWidget {
   @override
   _DashboardState createState() => _DashboardState();
@@ -16,25 +15,10 @@ class _DashboardState extends State<Dashboard> {
   List<Quotation> _quotations = [];
   bool _isLoading = true;
   String _errorMessage = '';
-=======
-class dashboard extends StatefulWidget {
-  final int roleId;
-  final String username;
-  final String roleName;
-  dashboard(
-      {required this.username, required this.roleName, required this.roleId});
-  @override
-  State<dashboard> createState() => _dashboardState();
-}
-
-class _dashboardState extends State<dashboard> {
-  List<dynamic> quotations = [];
->>>>>>> d5a255b77383ea95f477b1a4b1f83c9f30587deb
 
   @override
   void initState() {
     super.initState();
-<<<<<<< HEAD
     _fetchQuotations();
   }
 
@@ -70,25 +54,6 @@ class _dashboardState extends State<dashboard> {
         _errorMessage = 'Error: $e';
         print(e);
       });
-=======
-    fetchQuotations();
-  }
-
-  Future<void> fetchQuotations() async {
-    final url = 'https://bodyworkandpaint.pantook.com/api/quotations';
-    final response = await http.get(Uri.parse(url));
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      setState(() {
-        quotations = data['data'];
-      });
-    } else {
-      // Handle the error
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load quotations')),
-      );
->>>>>>> d5a255b77383ea95f477b1a4b1f83c9f30587deb
     }
   }
 
@@ -129,20 +94,6 @@ class _dashboardState extends State<dashboard> {
           ),
         ),
         Expanded(
-<<<<<<< HEAD
-          child: _isLoading
-              ? Center(child: CircularProgressIndicator())
-              : _errorMessage.isNotEmpty
-                  ? Center(child: Text(_errorMessage))
-                  : ListView.builder(
-                      padding: EdgeInsets.all(16.0),
-                      itemCount: _quotations.length,
-                      itemBuilder: (context, index) {
-                        return buildListItem(
-                            index, context, _quotations[index]);
-                      },
-                    ),
-=======
           child: ListView.builder(
             padding: EdgeInsets.all(16.0),
             itemCount: quotations.length,
@@ -150,7 +101,6 @@ class _dashboardState extends State<dashboard> {
               return buildListItem(quotations[index], context);
             },
           ),
->>>>>>> d5a255b77383ea95f477b1a4b1f83c9f30587deb
         ),
       ],
     );

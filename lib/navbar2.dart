@@ -41,13 +41,6 @@ class Navbar extends StatefulWidget {
 
 class _NavbarState extends State<Navbar> {
   int _selectedIndex = 0;
-<<<<<<< HEAD
-
-  static List<Widget> _pages = <Widget>[
-    Dashboard(),
-    history(),
-  ];
-=======
   late List<Widget> _pages;
   // static List<Widget> _pages = <Widget>[
   //   dashboard(),
@@ -65,7 +58,6 @@ class _NavbarState extends State<Navbar> {
       history(),
     ];
   }
->>>>>>> d5a255b77383ea95f477b1a4b1f83c9f30587deb
 
   void _onItemTapped(int index) {
     setState(() {

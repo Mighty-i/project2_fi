@@ -1,59 +1,42 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+// import 'package:getwidget/getwidget.dart';
 import 'package:project2_fi/cmScreens/process2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class Dashboard extends StatefulWidget {
+class dashboard extends StatefulWidget {
+  final int roleId;
+  final String username;
+  final String roleName;
+  dashboard(
+      {required this.username, required this.roleName, required this.roleId});
   @override
-  _DashboardState createState() => _DashboardState();
+  State<dashboard> createState() => _dashboardState();
 }
 
-class _DashboardState extends State<Dashboard> {
-  List<Quotation> _quotations = [];
-  bool _isLoading = true;
-  String _errorMessage = '';
+class _dashboardState extends State<dashboard> {
+  List<dynamic> quotations = [];
 
   @override
   void initState() {
     super.initState();
-    _fetchQuotations();
+    fetchQuotations();
   }
 
-  Future<void> _fetchQuotations() async {
-    try {
-      final url = Uri.parse('http://10.0.2.2:8000/api/quotations');
-      final response = await http.get(url);
+  Future<void> fetchQuotations() async {
+    final url = 'https://bodyworkandpaint.pantook.com/api/quotations';
+    final response = await http.get(Uri.parse(url));
 
-      if (response.statusCode == 200) {
-        final List<dynamic> jsonData = jsonDecode(response.body);
-        print('API Response: $jsonData'); // Debug print
-        if (jsonData != null && jsonData.isNotEmpty) {
-          setState(() {
-            _quotations =
-                jsonData.map((json) => Quotation.fromJson(json)).toList();
-            _isLoading = false;
-          });
-        } else {
-          setState(() {
-            _isLoading = false;
-            _errorMessage = 'No data received';
-          });
-        }
-      } else {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = 'Failed to load quotations: ${response.reasonPhrase}';
-        });
-      }
-    } catch (e) {
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
       setState(() {
-        _isLoading = false;
-        _errorMessage = 'Error: $e';
-        print(e);
+        quotations = data['data'];
       });
+    } else {
+      // Handle the error
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load quotations')),
+      );
     }
   }
 
@@ -106,11 +89,7 @@ class _DashboardState extends State<Dashboard> {
     );
   }
 
-<<<<<<< HEAD
-  Widget buildListItem(int index, BuildContext context, Quotation quotation) {
-=======
   Widget buildListItem(dynamic quotation, BuildContext context) {
->>>>>>> d5a255b77383ea95f477b1a4b1f83c9f30587deb
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8.0),
       padding: EdgeInsets.all(16.0),
@@ -138,21 +117,13 @@ class _DashboardState extends State<Dashboard> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Text(
-<<<<<<< HEAD
-                  'ทะเบียนรถ\n${quotation.licenseplate}',
-=======
                   'ทะเบียนรถ\n${quotation['licenseplate']}',
->>>>>>> d5a255b77383ea95f477b1a4b1f83c9f30587deb
                   textAlign: TextAlign.center,
                 ),
               ),
               SizedBox(width: 12),
               Text(
-<<<<<<< HEAD
-                'ความเสียหาย: ${quotation.damageassessment}',
-=======
                 'ความเสียหาย: ${quotation['damageassessment']}',
->>>>>>> d5a255b77383ea95f477b1a4b1f83c9f30587deb
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 10),
@@ -189,32 +160,6 @@ class _DashboardState extends State<Dashboard> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class Quotation {
-  final int id;
-  final String licenseplate;
-  final String damageassessment;
-  final String description;
-
-  Quotation({
-    required this.id,
-    required this.licenseplate,
-    required this.damageassessment,
-    required this.description,
-  });
-
-  factory Quotation.fromJson(Map<String, dynamic> json) {
-    return Quotation(
-      id: json['id'] ?? 0, // ใช้ค่าเริ่มต้นเป็น 0 ถ้าค่า id เป็น null
-      licenseplate: json['licenseplate'] ??
-          '', // ใช้ค่าเริ่มต้นเป็น empty string ถ้าค่า licenseplate เป็น null
-      damageassessment: json['damageassessment'] ??
-          '', // ใช้ค่าเริ่มต้นเป็น empty string ถ้าค่า damageassessment เป็น null
-      description: json['description'] ??
-          '', // ใช้ค่าเริ่มต้นเป็น empty string ถ้าค่า description เป็น null
     );
   }
 }

@@ -29,7 +29,7 @@ class _NavbarState extends State<Navbar> {
   int _selectedIndex = 0;
 
   static List<Widget> _pages = <Widget>[
-    dashboard(),
+    Dashboard(),
     history(),
   ];
 

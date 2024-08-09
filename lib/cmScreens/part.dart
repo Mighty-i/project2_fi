@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:project2_fi/cmScreens/process2.dart';
+// import 'package:project2_fi/cmScreens/process2.dart';
 
 class Mypart extends StatelessWidget {
   const Mypart({super.key});

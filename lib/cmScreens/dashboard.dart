@@ -139,6 +139,8 @@ class _dashboardState extends State<dashboard> {
                           username: widget.username,
                           roleName: widget.roleName,
                           quotationId: quotation['Quotation_ID'],
+                          licenseplate: quotation['licenseplate'],
+                          problemdetails: quotation['problemdetails'],
                         ),
                       ),
                     );

@@ -11,11 +11,16 @@ class Process extends StatelessWidget {
   final String username;
   final String roleName;
   final int quotationId;
-  Process(
-      {required this.roleId,
-      required this.username,
-      required this.roleName,
-      required this.quotationId});
+  final String licenseplate;
+  final String problemdetails;
+  Process({
+    required this.roleId,
+    required this.username,
+    required this.roleName,
+    required this.quotationId,
+    required this.licenseplate,
+    required this.problemdetails,
+  });
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -29,6 +34,8 @@ class Process extends StatelessWidget {
         username: username,
         roleName: roleName,
         quotationId: quotationId,
+        licenseplate: licenseplate,
+        problemdetails: problemdetails,
       ),
     );
   }
@@ -39,12 +46,17 @@ class DynamicListPage extends StatefulWidget {
   final String username;
   final String roleName;
   final int quotationId; // Accept quotationId
+  final String licenseplate;
+  final String problemdetails;
 
-  DynamicListPage(
-      {required this.roleId,
-      required this.username,
-      required this.roleName,
-      required this.quotationId});
+  DynamicListPage({
+    required this.roleId,
+    required this.username,
+    required this.roleName,
+    required this.quotationId,
+    required this.licenseplate,
+    required this.problemdetails,
+  });
   @override
   _DynamicListPageState createState() => _DynamicListPageState();
 }
@@ -58,8 +70,11 @@ class _DynamicListPageState extends State<DynamicListPage> {
   @override
   void initState() {
     super.initState();
-    _fetchRepairSteps();
-    _addItem(); // Add initial item
+    // _fetchRepairSteps();
+    // _addItem(); // Add initial item
+    _fetchRepairSteps().then((_) {
+      _addItem(); // Add initial item after data is fetched
+    });
   }
 
   void _updateSelectedParts(List<String> parts) {
@@ -81,11 +96,22 @@ class _DynamicListPageState extends State<DynamicListPage> {
       _items.add(_buildListItem(_items.length));
     });
   }
+  // void _addItem() {
+  //   setState(() {
+  //     // Check if this is the first item being added and repairSteps is not empty
+  //     if (_items.isEmpty && repairSteps.isNotEmpty) {
+  //       _dropdownRepair.add(repairSteps[0]['Step_ID'].toString());
+  //     } else {
+  //       _dropdownRepair.add(null);
+  //     }
+  //     _items.add(_buildListItem(_items.length));
+  //   });
+  // }
 
   void _updateDropdownRepair(int index, String? newValue) {
     setState(() {
       if (newValue != null) {
-        _dropdownRepair[index] = newValue ?? '';
+        _dropdownRepair[index] = newValue;
       } else {
         _dropdownRepair[index] = null; // Reset to null to show the hint
       }
@@ -139,9 +165,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
                 return DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     hint: Text(_dropdownRepair[index] ?? 'ขั้นตอนการซ่อม'),
-                    value: _dropdownRepair[index]?.isNotEmpty ?? false
-                        ? _dropdownRepair[index]
-                        : null,
+                    value: _dropdownRepair[index],
 
                     items: repairSteps.map<DropdownMenuItem<String>>(
                       (step) {
@@ -282,7 +306,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
                 style: TextStyle(fontSize: 16),
               ),
               Text(
-                "1กต6777",
+                widget.licenseplate,
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ],
@@ -290,9 +314,18 @@ class _DynamicListPageState extends State<DynamicListPage> {
           const SizedBox(height: 8),
           Text("Toyota Corolla 2018"),
           const SizedBox(height: 8),
-          const Text(
-            'รายละเอียด: มีรอยด่านข้างกันชนซ้าย',
-            style: TextStyle(fontSize: 14),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'รายละเอียด: ',
+                style: TextStyle(fontSize: 14),
+              ),
+              Text(
+                widget.problemdetails,
+                style: TextStyle(fontSize: 18),
+              )
+            ],
           ),
         ],
       ),
@@ -345,6 +378,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
               child: Text("ขั้นตอนการซ่อม"),
             ),
             ..._items,
+            SizedBox(height: 16),
             GFIconButton(
               padding: EdgeInsets.symmetric(horizontal: 180, vertical: 7),
               borderShape: RoundedRectangleBorder(

@@ -407,32 +407,71 @@ class Partmain extends StatefulWidget {
 
 class _PartmainState extends State<Partmain> {
   List<String> _selectedParts = [];
-  Widget partListview(BuildContext context, String partName) {
+  List<dynamic> partsData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchPartsData();
+  }
+
+  Future<void> _fetchPartsData() async {
+    final response = await http.get(
+      Uri.parse('https://bodyworkandpaint.pantook.com/api/parts'),
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      setState(() {
+        partsData = responseBody['data'];
+      });
+    } else {
+      throw Exception('Failed to load parts data');
+    }
+  }
+
+  Widget partListview(
+      BuildContext context, String partName, String description, int quantity) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 8.0),
-          padding: EdgeInsets.all(36.0),
-          decoration: BoxDecoration(
+        Flexible(
+          child: Container(
+            margin: EdgeInsets.symmetric(vertical: 8.0),
+            padding: EdgeInsets.all(36.0),
+            decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  spreadRadius: 5,
-                )
-              ]),
-          child: Row(
-            children: [
-              Text(partName),
-              SizedBox(
-                width: 20,
-              ),
-              Text('จำนวน: 10 ชิ้น'),
-            ],
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Colors.black12,
+              //     blurRadius: 10,
+              //     spreadRadius: 5,
+              //   )
+              // ],
+            ),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(partName),
+                    SizedBox(height: 8),
+                    // Text('รายละเอียด: $description'),
+                    Text(
+                      'รายละเอียด: \n${description.length > 29 ? '${description.substring(0, 29)}...' : description}',
+                      style: TextStyle(fontSize: 14),
+                    ),
+                    SizedBox(height: 8),
+                    Text('จำนวน: $quantity ชิ้น'),
+                  ],
+                ),
+              ],
+            ),
           ),
+        ),
+        SizedBox(
+          width: 10,
         ),
         OutlinedButton(
           onPressed: () {
@@ -517,11 +556,17 @@ class _PartmainState extends State<Partmain> {
               ],
             ),
             Expanded(
-              child: ListView(
-                padding: EdgeInsets.all(16.0),
-                children: List.generate(
-                        10, (index) => partListview(context, 'อะไหล่ $index'))
-                    .toList(),
+              child: ListView.builder(
+                itemCount: partsData.length,
+                itemBuilder: (context, index) {
+                  final part = partsData[index];
+                  return partListview(
+                    context,
+                    part['Name'] ?? 'Unknown',
+                    part['Description'] ?? 'No description available',
+                    part['Quantity'] ?? 0,
+                  );
+                },
               ),
             ),
           ],

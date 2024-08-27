@@ -10,19 +10,26 @@ class apppageM extends StatelessWidget {
   final String username;
   final String roleName;
   final int roleId;
+  final int userId;
 
   const apppageM(
       {super.key,
       required this.username,
       required this.roleName,
-      required this.roleId});
+      required this.roleId,
+      required this.userId});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.pink),
-      home: Navbar(username: username, roleName: roleName, roleId: roleId),
+      home: Navbar(
+        username: username,
+        roleName: roleName,
+        roleId: roleId,
+        userId: userId,
+      ),
     );
   }
 }
@@ -31,9 +38,13 @@ class Navbar extends StatefulWidget {
   final String username;
   final String roleName;
   final int roleId;
+  final int userId;
 
   Navbar(
-      {required this.username, required this.roleName, required this.roleId});
+      {required this.username,
+      required this.roleName,
+      required this.roleId,
+      required this.userId});
 
   @override
   _NavbarState createState() => _NavbarState();
@@ -59,8 +70,14 @@ class _NavbarState extends State<Navbar> {
         roleId: widget.roleId,
         username: widget.username,
         roleName: widget.roleName,
+        userId: widget.userId,
       ),
-      History(),
+      History(
+        roleId: widget.roleId,
+        username: widget.username,
+        roleName: widget.roleName,
+        userId: widget.userId,
+      ),
     ];
   }
 
@@ -79,6 +96,7 @@ class _NavbarState extends State<Navbar> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Text(widget.userId.toString(), style: TextStyle(fontSize: 20)),
             Text(widget.username, style: TextStyle(fontSize: 20)),
             Text('ตำแหน่ง: ${widget.roleName}', style: TextStyle(fontSize: 20)),
             GFAvatar(
@@ -130,7 +148,7 @@ class _NavbarState extends State<Navbar> {
               BottomNavigationBarItem(
                 icon: Icon(Icons.history,
                     color: _selectedIndex == 1 ? Colors.blue : Colors.grey),
-                label: 'รายการที่ดำเนินการอยู่',
+                label: 'ประวัติ',
               ),
             ],
             selectedItemColor: Colors.blue,

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:project2_fi/cmScreens/status.dart';
 
 class history extends StatefulWidget {
@@ -8,6 +12,48 @@ class history extends StatefulWidget {
 }
 
 class _historyState extends State<history> {
+  List<dynamic> quotations = [];
+  String formattedDate = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchQuotationsInProgress();
+    initializeDateFormatting('th_TH', null).then((_) {
+      setState(() {
+        DateTime now = DateTime.now();
+        var thaiDateFormatter = DateFormat('d MMMM yyyy', 'th_TH');
+        String thaiDate = thaiDateFormatter.format(now);
+
+        // เพิ่มปีเป็นพ.ศ.
+        int buddhistYear = now.year + 543;
+        formattedDate = thaiDate.replaceAll('${now.year}', '$buddhistYear');
+      });
+    });
+  }
+
+  Future<void> fetchQuotationsInProgress() async {
+    final response = await http.get(Uri.parse(
+        'https://bodyworkandpaint.pantook.com/api/quotationsInProgress'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      setState(() {
+        quotations = data['data'];
+      });
+    } else {
+      throw Exception('Failed to load quotations data');
+    }
+  }
+
+  double calculateProgress(List<dynamic> repairProcesses) {
+    int total = repairProcesses.length;
+    int completed = repairProcesses
+        .where((process) => process['Status'] == 'Completed')
+        .length;
+    return completed / total;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -28,7 +74,7 @@ class _historyState extends State<history> {
               ],
             ),
             child: Text(
-              '1 ม.ค. 2567',
+              formattedDate,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -45,17 +91,24 @@ class _historyState extends State<history> {
           ),
         ),
         Expanded(
-          child: ListView(
+          child: ListView.builder(
             padding: EdgeInsets.all(16.0),
-            children:
-                List.generate(10, (index) => buildListItem(index)).toList(),
+            itemCount: quotations.length,
+            itemBuilder: (context, index) {
+              return buildListItem(quotations[index]);
+            },
           ),
         ),
       ],
     );
   }
 
-  Widget buildListItem(int index) {
+  Widget buildListItem(dynamic quotation) {
+    List<dynamic> repairProcesses = quotation['repair_processes'];
+    double progress = calculateProgress(repairProcesses);
+
+    print('Repair Processes: $repairProcesses');
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8.0),
       padding: EdgeInsets.all(16.0),
@@ -83,7 +136,7 @@ class _historyState extends State<history> {
                   borderRadius: BorderRadius.circular(10.0),
                 ),
                 child: Text(
-                  'ทะเบียนรถ\n1กด6444',
+                  'ทะเบียนรถ\n${quotation['licenseplate']}',
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -91,14 +144,21 @@ class _historyState extends State<history> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  Text('ขั้นตอนรอตรวจสอบ'),
+                  // Check if the last step's status is 'verification'
                   Align(
                     alignment: AlignmentDirectional(0, 0),
                     child: Text(
-                      'ขั้นตอนรอตรวจสอบ: 2.โป๊ว',
+                      ':${repairProcesses.lastWhere((process) => process['Status'] == 'verification', orElse: () => null)?['StepName'] ?? ''}',
                     ),
                   ),
-                  Text(
-                    'ขั้นตอนล่าสุด: 3.พ่นสี',
+                  // Check if the second-to-last step's status is 'In Progress'
+                  Text('ขั้นตอนล่าสุด'),
+                  Align(
+                    alignment: AlignmentDirectional(0, 0),
+                    child: Text(
+                      ':${repairProcesses.lastWhere((process) => process['Status'] == 'In Progress', orElse: () => null)?['StepName'] ?? ''}',
+                    ),
                   ),
                 ],
               ),
@@ -108,7 +168,9 @@ class _historyState extends State<history> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MyStatus(),
+                      builder: (context) => MyStatus(
+                        quotationId: quotation['Quotation_ID'],
+                      ),
                     ),
                   );
                 },
@@ -119,15 +181,14 @@ class _historyState extends State<history> {
           ),
           SizedBox(height: 10),
           GFProgressBar(
-            // padding: EdgeInsets.fromLTRB(16, 20, 16, 16),\
-            percentage: 0.4,
+            percentage: progress,
             lineHeight: 30,
             backgroundColor: Colors.grey,
             progressBarColor: Colors.teal,
             child: Padding(
               padding: EdgeInsets.only(right: 5),
               child: Text(
-                '20%',
+                '${(progress * 100).toInt()}%',
                 textAlign: TextAlign.end,
                 style: TextStyle(color: Colors.white),
               ),

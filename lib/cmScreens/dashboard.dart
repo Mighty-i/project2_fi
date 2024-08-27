@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:project2_fi/cmScreens/process2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class dashboard extends StatefulWidget {
   final int roleId;
@@ -16,11 +18,23 @@ class dashboard extends StatefulWidget {
 
 class _dashboardState extends State<dashboard> {
   List<dynamic> quotations = [];
+  String formattedDate = '';
 
   @override
   void initState() {
     super.initState();
     fetchQuotations();
+    initializeDateFormatting('th_TH', null).then((_) {
+      setState(() {
+        DateTime now = DateTime.now();
+        var thaiDateFormatter = DateFormat('d MMMM yyyy', 'th_TH');
+        String thaiDate = thaiDateFormatter.format(now);
+
+        // เพิ่มปีเป็นพ.ศ.
+        int buddhistYear = now.year + 543;
+        formattedDate = thaiDate.replaceAll('${now.year}', '$buddhistYear');
+      });
+    });
   }
 
   Future<void> fetchQuotations() async {
@@ -59,8 +73,8 @@ class _dashboardState extends State<dashboard> {
                 ),
               ],
             ),
-            child: const Text(
-              '1 ม.ค. 2567',
+            child: Text(
+              formattedDate,
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

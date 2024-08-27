@@ -53,6 +53,7 @@ class _LoginpageState extends State<Loginpage> {
         final user = responseData['user'];
         final roleName = responseData['role_name'];
         final roleId = user['Role_ID'];
+        final userId = user['User_ID'];
 
         if (roleId == 7) {
           Navigator.push(
@@ -73,6 +74,7 @@ class _LoginpageState extends State<Loginpage> {
                 username: user['name'],
                 roleName: roleName,
                 roleId: roleId,
+                userId: user['User_ID'],
               ), // Navigate to default page for other roles
             ),
           );

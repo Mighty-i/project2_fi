@@ -5,6 +5,7 @@ import 'package:project2_fi/cmScreens/dashboard.dart';
 import 'package:project2_fi/navbar2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'selected_parts.dart';
 
 class Process extends StatelessWidget {
   final int roleId;
@@ -65,152 +66,30 @@ class _DynamicListPageState extends State<DynamicListPage> {
   late int quotationId;
   late String licenseplate;
   List<Widget> _items = [];
-  List<String?> _dropdownRepair = [];
-  // List<Map<String, dynamic>> _selectedParts = [];
+  final List<String?> _dropdownRepair = [];
   List<List<Map<String, dynamic>>> _selectedParts = [];
-  List<List<int>> quantities = [];
-  List<List<int>> _quantities = [];
   List<dynamic> repairSteps = [];
+  late int processId;
+  List<dynamic> selectedParts = [];
+  List<dynamic> partsData = [];
 
   @override
   void initState() {
     super.initState();
-    quotationId = widget.quotationId;
-    licenseplate = widget.licenseplate;
-    // _fetchRepairSteps();
-    // _addItem(); // Add initial item
     _fetchRepairSteps().then((_) {
       _addItem(); // Add initial item after data is fetched
     });
   }
 
-  // void _updateSelectedParts(
-  //     int index, List<Map<String, dynamic>> selectedParts) {
-  //   setState(() {
-  //     if (_selectedParts.length > index) {
-  //       _selectedParts[index] = selectedParts[index];
-  //     } else {
-  //       // กรณีที่รายการ _selectedParts ว่างหรือตำแหน่งนั้นอยู่นอกขอบเขต
-  //       // คุณสามารถเพิ่มสมาชิกใหม่เข้าไปในรายการ _selectedParts ได้
-  //       _selectedParts.add(selectedParts[index]);
-  //     }
-  //     print('_selectedParts updated at index $index: $selectedParts');
-  //   });
-  // }
-  // void _updateSelectedParts(
-  //     int index, List<Map<String, dynamic>> selectedParts) {
-  //   setState(() {
-  //     if (_selectedParts.length > index) {
-  //       // Update the existing selected parts at the given index
-  //       _selectedParts[index] = selectedParts;
-  //     } else {
-  //       // Add the entire List<Map<String, dynamic>> to _selectedParts
-  //       _selectedParts.add(selectedParts);
-  //     }
-  //     print('_selectedParts updated at index $index: $selectedParts');
-  //     // print(
-  //     //     'Selected Parts at index $index: ${_selectedParts[index]}'); // Debugging
-  //   });
-  // }
-  void _updateSelectedParts(
-      int index, List<Map<String, dynamic>> selectedParts) {
-    // ใช้ข้อมูลที่ได้รับจาก Partmain อัปเดต _selectedParts
-    if (index < _selectedParts.length) {
-      _selectedParts[index] = selectedParts;
-    }
-  }
-
-  void _clearSelectedParts() {
-    setState(() {
-      _selectedParts.clear(); // Clear the list of selected parts
-      print('Selected parts cleared');
-      _quantities.clear(); // Clear the list of quantities
-    });
-  }
-
-  // void _handleSelectedParts(
-  //     int index, List<Map<String, dynamic>>? selectedParts) {
-  //   setState(() {
-  //     if (selectedParts != null) {
-  //       _updateSelectedParts(index,
-  //           selectedParts); // Update the selected parts for the specific index
-  //     }
-  //   });
-  // }
-
-  // void _updateQuantities(int index, int partIndex, int newQuantity) {
-  //   setState(() {
-  //     quantities[index][partIndex] = newQuantity;
-  //     print(
-  //         '_quantities updated at index $index, partIndex $partIndex: $newQuantity');
-  //   });
-  // }
-  void _updateQuantities(int index, int partIndex, int newQuantity) {
-    setState(() {
-      // Ensure the index and partIndex are within bounds
-      if (_quantities.length > index && _quantities[index].length > partIndex) {
-        _quantities[index][partIndex] = newQuantity;
-        print(
-            '_quantities updated at index $index, partIndex $partIndex: $newQuantity');
-      } else {
-        // Handle out-of-bounds cases if necessary
-        print('Index or partIndex out of bounds');
-      }
-    });
-  }
-
-  Future<void> _navigateToPartMain(BuildContext context, int index) async {
-    final selectedPartsJson = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Partmain(index: index),
-      ),
-    );
-
-    if (selectedPartsJson != null) {
-      // ตรวจสอบว่า `selectedPartsJson` เป็น JSON ที่ถูกต้อง
-      try {
-        final List<dynamic> jsonList = jsonDecode(selectedPartsJson);
-        final List<Map<String, dynamic>> selectedParts =
-            jsonList.map((item) => item as Map<String, dynamic>).toList();
-
-        setState(() {
-          // ตรวจสอบว่า index อยู่ในช่วงที่ถูกต้อง
-          if (index < _selectedParts.length) {
-            setState(() {
-              _selectedParts[index] = selectedParts;
-            });
-          } else {
-            // เพิ่มความยืดหยุ่นในการจัดการกรณีที่ index เกินขอบเขต
-            _selectedParts.add(selectedParts);
-            print('Index out of range: $index');
-          }
-        });
-      } catch (e) {
-        print('Error decoding JSON: $e');
-      }
-    }
-  }
-
   void _addItem() {
+    SelectedPartsManager.clear();
     setState(() {
       _dropdownRepair.add(null);
-
+      _selectedParts.add([]);
       _items.add(_buildListItem(_items.length));
       // quantities.add([]);
     });
   }
-  // void _addItem() {
-  //   setState(() {
-  //     // Check if this is the first item being added and repairSteps is not empty
-  //     if (_items.isEmpty && repairSteps.isNotEmpty) {
-  //       _dropdownRepair.add(repairSteps[0]['Step_ID'].toString());
-  //     } else {
-  //       _dropdownRepair.add(null);
-  //     }
-  //     _items.add(_buildListItem(_items.length));
-  //   });
-  // }
 
   void _updateDropdownRepair(int index, String? newValue) {
     setState(() {
@@ -221,27 +100,45 @@ class _DynamicListPageState extends State<DynamicListPage> {
       }
       print('_updateDropdownRepair: index = $index, newValue = $newValue');
     });
+    _submitRepairProcess(index, newValue);
   }
 
-  Future<void> _submitRepairProcess(int index) async {
-    final url =
-        Uri.parse('https://bodyworkandpaint.pantook.com/api/repair_processes');
+  Future<void> _submitRepairProcess(int index, String? newValue) async {
+    final url = 'https://bodyworkandpaint.pantook.com/api/repair_processes';
 
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode({
-        'Quotation_ID': widget.quotationId,
-        'licenseplate': licenseplate,
-      }),
-    );
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'Quotation_ID': widget.quotationId,
+          'licenseplate': widget.licenseplate,
+          'Step_ID': newValue,
+          // เพิ่มฟิลด์อื่น ๆ ที่ต้องการส่งไปยัง API
+        }),
+      );
 
-    if (response.statusCode == 201) {
-      print("Successfully submitted repair process");
-    } else {
-      print("Failed to submit repair process: ${response.reasonPhrase}");
+      if (response.statusCode == 201) {
+        final responseBody = jsonDecode(response.body);
+        processId = responseBody['Process_ID'];
+        print("Successfully submitted repair process");
+        print("บันทึกข้อมูลการซ่อมสำเร็จพร้อมกับ Process_ID: $processId");
+        // await _fetchPartsByProcessId(processId);
+        setState(() {
+          if (index >= _selectedParts.length) {
+            _selectedParts.add([]);
+          }
+          _selectedParts[index].add({'Process_ID': processId});
+        });
+      } else {
+        print("Failed to submit repair process: ${response.reasonPhrase}");
+        print("Status code: ${response.statusCode}");
+        print("Response body: ${response.body}");
+      }
+    } catch (e) {
+      print("An error occurred: $e");
     }
   }
 
@@ -275,13 +172,6 @@ class _DynamicListPageState extends State<DynamicListPage> {
   }
 
   Widget _buildListItem(int index) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _submitRepairProcess(index);
-    });
-    if (index >= _dropdownRepair.length) {
-      return Container(); // Handle invalid index appropriately
-    }
-
     return Container(
       margin: EdgeInsets.symmetric(vertical: 8.0),
       padding: EdgeInsets.all(16.0),
@@ -291,40 +181,34 @@ class _DynamicListPageState extends State<DynamicListPage> {
       ),
       child: Column(
         children: [
-          SizedBox(height: 16), // ใช้ SizedBox แทน Expanded ที่นี่
+          SizedBox(height: 16), // Use SizedBox instead of Expanded here
           Center(
-            child: StatefulBuilder(
-              builder: (context, setState) {
-                return DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    hint: Text(_dropdownRepair[index] ?? 'ขั้นตอนการซ่อม'),
-                    value: _dropdownRepair[index],
-
-                    items: repairSteps.map<DropdownMenuItem<String>>(
-                      (step) {
-                        final stepId = step['Step_ID']?.toString() ?? '';
-                        final stepName = step['StepName'] ?? 'Unknown Step';
-                        return DropdownMenuItem<String>(
-                          value: stepId,
-                          child:
-                              Text(stepName, style: TextStyle(fontSize: 20.0)),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (String? newValue) {
-                      print(
-                          'Dropdown Changed: Index = $index, New Value = $newValue'); // Debug
-                      setState(() {
-                        _updateDropdownRepair(index, newValue);
-                      });
-                    },
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 25.0, vertical: 10.0),
-                    borderRadius: BorderRadius.circular(12.0),
-                    // border: const BorderSide(color: Colors.grey, width: 1.0),
-                  ),
-                );
-              },
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                hint: Text(_dropdownRepair[index] ?? 'ขั้นตอนการซ่อม'),
+                value: _dropdownRepair[index],
+                items: repairSteps.map<DropdownMenuItem<String>>(
+                  (step) {
+                    final stepId = step['Step_ID']?.toString() ?? '';
+                    final stepName = step['StepName'] ?? 'Unknown Step';
+                    return DropdownMenuItem<String>(
+                      value: stepId,
+                      child: Text(stepName, style: TextStyle(fontSize: 20.0)),
+                    );
+                  },
+                ).toList(),
+                onChanged: (String? newValue) {
+                  print(
+                      'Dropdown Changed: Index = $index, New Value = $newValue'); // Debug
+                  setState(() {
+                    _updateDropdownRepair(index, newValue);
+                    // _dropdownRepair[index] = newValue;
+                  });
+                },
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 25.0, vertical: 10.0),
+                borderRadius: BorderRadius.circular(12.0),
+              ),
             ),
           ),
           SizedBox(height: 16),
@@ -336,127 +220,52 @@ class _DynamicListPageState extends State<DynamicListPage> {
               style: TextStyle(fontSize: 14),
             ),
           ),
+          // Container(
+          //   height: 200.0, // กำหนดความสูงที่ต้องการ
+          //   child: partsData == null
+          //       ? Center(child: CircularProgressIndicator())
+          //       : ListView.builder(
+          //           itemCount: partsData.length,
+          //           itemBuilder: (context, index) {
+          //             final part = partsData[index];
+          //             return _buildPartItem(part);
+          //           },
+          //         ),
+          // ),
 
-          // Use ListView.builder to display selected parts
-          if (index < _selectedParts.length && _selectedParts[index].isNotEmpty)
-            Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _selectedParts[index].length,
-                itemBuilder: (context, i) {
-                  final part = _selectedParts[index][i];
-                  final quantities =
-                      _quantities.length > index ? _quantities[index] : [];
-
-                  return Container(
-                    margin: EdgeInsets.symmetric(vertical: 8.0),
-                    padding: EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 10,
-                          spreadRadius: 5,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'อะไหล่: ${part['Name'] ?? 'Unknown Part'}',
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: Icon(Icons.remove),
-                              onPressed: () {
-                                setState(() {
-                                  if (quantities.length > i &&
-                                      quantities[i] > 0) {
-                                    quantities[i]--;
-                                    _updateQuantities(index, i, quantities[i]);
-                                  }
-                                });
-                              },
-                            ),
-                            Text('${quantities[i]}'),
-                            IconButton(
-                              icon: Icon(Icons.add),
-                              onPressed: () {
-                                setState(() {
-                                  if (quantities.length > i) {
-                                    quantities[i]++;
-                                    _updateQuantities(index, i, quantities[i]);
-                                  }
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            )
-          else
-            Center(
-              child: Text('ไม่มีรายการอะไหล่'),
-            ),
-
-          Column(
-            children: [Text('iiiiii')],
-          ),
           SizedBox(height: 16),
           Align(
             alignment: Alignment.center,
             child: ElevatedButton(
               onPressed: () async {
-                final selectedPartsJson = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Partmain(index: index),
-                  ),
-                );
-
-                if (selectedPartsJson != null) {
-                  try {
-                    final List<dynamic> jsonList =
-                        jsonDecode(selectedPartsJson);
-                    final List<Map<String, dynamic>> selectedParts = jsonList
-                        .map((item) => item as Map<String, dynamic>)
-                        .toList();
-
-                    setState(() {
-                      if (index < _selectedParts.length) {
-                        _selectedParts[index] = selectedParts;
-                      } else {
-                        _selectedParts.add(selectedParts);
-                      }
-                    });
-                  } catch (e) {
-                    print('Error decoding JSON: $e');
-                  }
-                }
-                // final selectedParts = await Navigator.push(
+                // final result = await Navigator.push(
                 //   context,
                 //   MaterialPageRoute(
-                //     builder: (context) => Partmain(index: index),
+                //     builder: (context) =>
+                //         Partmain(index: index, processId: processId),
                 //   ),
                 // );
-                // _handleSelectedParts(index,
-                // selectedParts); // Update or clear parts based on the result
-                // if (selectedParts != null) {
-                //   _updateSelectedParts(index,
-                //       selectedParts); // Update the selected parts for the specific index
-                // } else {
-                //   _clearSelectedParts(); // Optional: Handle clearing of parts if needed
+                // SelectedPartsManager.clearPartsForIndex(index);
+                SelectedPartsManager.clear();
+                final currentProcessId = _selectedParts[index].isNotEmpty
+                    ? _selectedParts[index].last['Process_ID']
+                    : null;
+
+                if (currentProcessId != null) {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          Partmain(index: index, processId: currentProcessId),
+                    ),
+                  );
+                  print(
+                      'Navigating to Partmain with Process_ID: $currentProcessId');
+                } else {
+                  print('Process ID not found for index $index');
+                }
+                // if (result == true) {
+                //   await _fetchPartsByProcessId(processId); // Update parts data
                 // }
               },
               style: ElevatedButton.styleFrom(
@@ -483,6 +292,34 @@ class _DynamicListPageState extends State<DynamicListPage> {
       ),
     );
   }
+
+  // Widget _buildPartItem(Map<String, dynamic> part) {
+  //   return Container(
+  //     margin: EdgeInsets.symmetric(vertical: 8.0),
+  //     padding: EdgeInsets.all(16.0),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       borderRadius: BorderRadius.circular(16.0),
+  //       boxShadow: [
+  //         BoxShadow(
+  //           color: Colors.black12,
+  //           blurRadius: 10,
+  //           spreadRadius: 5,
+  //         ),
+  //       ],
+  //     ),
+  //     child: Row(
+  //       children: [
+  //         Expanded(
+  //           child: Text(
+  //             'Part: ${part['Name'] ?? 'Unknown Part'}',
+  //             style: TextStyle(fontSize: 18),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildVehicleInfo() {
     return Container(
@@ -596,98 +433,17 @@ class _DynamicListPageState extends State<DynamicListPage> {
   }
 }
 
-// class PartsListView extends StatefulWidget {
-//   final List<Map<String, dynamic>> selectedParts;
-//   final List<int> quantities;
-//   final ValueChanged<int> onQuantityChanged;
-
-//   PartsListView({
-//     required this.selectedParts,
-//     required this.quantities,
-//     required this.onQuantityChanged,
-//   });
-
-//   @override
-//   _PartsListViewState createState() => _PartsListViewState();
-// }
-
-// class _PartsListViewState extends State<PartsListView> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return SingleChildScrollView(
-//       child: Column(
-//         children: List.generate(widget.selectedParts.length, (i) {
-//           final part = widget.selectedParts[i];
-//           return Container(
-//             margin: EdgeInsets.symmetric(vertical: 8.0),
-//             padding: EdgeInsets.all(16.0),
-//             decoration: BoxDecoration(
-//               color: Colors.white,
-//               borderRadius: BorderRadius.circular(16.0),
-//               boxShadow: [
-//                 BoxShadow(
-//                   color: Colors.black12,
-//                   blurRadius: 10,
-//                   spreadRadius: 5,
-//                 ),
-//               ],
-//             ),
-//             child: Row(
-//               children: [
-//                 Expanded(
-//                   child: Text(
-//                     'อะไหล่: ${part['Name'] ?? 'Unknown Part'}',
-//                     style: TextStyle(fontSize: 18),
-//                   ),
-//                 ),
-//                 Row(
-//                   children: [
-//                     IconButton(
-//                       icon: Icon(Icons.remove),
-//                       onPressed: () {
-//                         setState(() {
-//                           if (widget.quantities.length > i &&
-//                               widget.quantities[i] > 0) {
-//                             widget.quantities[i]--;
-//                             widget.onQuantityChanged(i);
-//                           }
-//                         });
-//                       },
-//                     ),
-//                     Text('${widget.quantities[i]}'),
-//                     IconButton(
-//                       icon: Icon(Icons.add),
-//                       onPressed: () {
-//                         setState(() {
-//                           if (widget.quantities.length > i) {
-//                             widget.quantities[i]++;
-//                             widget.onQuantityChanged(i);
-//                           }
-//                         });
-//                       },
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           );
-//         }),
-//       ),
-//     );
-//   }
-// }
-
 class Partmain extends StatefulWidget {
   final int index; // Add index parameter
+  final int processId;
 
-  Partmain({required this.index});
+  Partmain({required this.index, required this.processId});
 
   @override
   State<Partmain> createState() => _PartmainState();
 }
 
 class _PartmainState extends State<Partmain> {
-  List<Map<String, dynamic>> _selectedParts = [];
   List<dynamic> partsData = [];
 
   @override
@@ -749,7 +505,7 @@ class _PartmainState extends State<Partmain> {
                       style: TextStyle(fontSize: 14),
                     ),
                     SizedBox(height: 8),
-                    Text('คงเหลือ: $quantity ชิ้น'),
+                    Text('คงเหลือ: $quantity'),
                   ],
                 ),
               ],
@@ -766,9 +522,8 @@ class _PartmainState extends State<Partmain> {
                 'Part_ID': partId,
                 'Name': partName,
               };
-              if (!_selectedParts.any((part) => part['Part_ID'] == partId)) {
-                _selectedParts.add(selectedPart);
-              }
+              SelectedPartsManager.addPart(
+                  selectedPart, widget.index, widget.processId);
               print('Added part: $selectedPart');
             });
           },
@@ -862,16 +617,17 @@ class _PartmainState extends State<Partmain> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {
-                // แปลง _selectedParts เป็น JSON
-                final selectedPartsJson = jsonEncode(_selectedParts);
-
-                // ส่ง JSON กลับไปยังหน้าจอหลัก
-                Navigator.pop(context, selectedPartsJson);
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        PartSummary(processId: widget.processId),
+                  ),
+                );
               },
-              child: Text('ยืนยัน'),
+              child: Text('สรุป'),
               style: ElevatedButton.styleFrom(
-                // backgroundColor: Colors.green,
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 textStyle: TextStyle(fontSize: 18),
               ),
@@ -882,3 +638,187 @@ class _PartmainState extends State<Partmain> {
     );
   }
 }
+
+class PartSummary extends StatefulWidget {
+  final int processId;
+
+  PartSummary({required this.processId});
+
+  @override
+  _PartSummaryState createState() => _PartSummaryState();
+}
+
+class _PartSummaryState extends State<PartSummary> {
+  void _removePart(int index, int partIndex) {
+    setState(() {
+      SelectedPartsManager.removePart(index, partIndex);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedParts = SelectedPartsManager.getSelectedParts();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('สรุปรายการอะไหล่ที่เลือก'),
+      ),
+      body: ListView.builder(
+        itemCount: selectedParts.length,
+        itemBuilder: (context, index) {
+          final part = selectedParts[index];
+          return ListTile(
+            title: Text(part['Name']),
+            subtitle: Text('Process ID: ${part['Process_ID']}'),
+            trailing: IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: () {
+                if (part['index'] != null) {
+                  // ใช้ index จาก part ถ้ามี
+                  SelectedPartsManager.removePart(part['index'], index);
+                } else {
+                  // ถ้า part['index'] เป็น null ให้ใช้ index ของ ListView.builder
+                  SelectedPartsManager.removePart(index, index);
+                }
+                setState(() {
+                  selectedParts.removeAt(index);
+                });
+              },
+            ),
+          );
+        },
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // กลับไปที่ Partmain
+              },
+              child: Text('เพิ่มอะไหล่'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                for (var part in selectedParts) {
+                  await _savePartUsage(part['Part_ID'], part['Process_ID']);
+                }
+                // Navigator.pop(context, true); // กลับไปที่หน้าจอก่อนหน้า
+                // Navigator.popUntil(context, ModalRoute.withName('/Process'));
+                Navigator.pop(context); // กลับไปที่หน้าจอ Partmain
+                Navigator.pop(context); // กลับไปที่หน้าจอ Process
+              },
+              child: Text('ยืนยันและบันทึก'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _savePartUsage(int partId, int processId) async {
+    final url = 'https://bodyworkandpaint.pantook.com/api/part_usage';
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'Part_ID': partId,
+          'Process_ID': processId,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        print("บันทึกการใช้อะไหล่สำเร็จ");
+      } else {
+        print("บันทึกการใช้อะไหล่ไม่สำเร็จ: ${response.reasonPhrase}");
+      }
+    } catch (e) {
+      print("เกิดข้อผิดพลาด: $e");
+    }
+  }
+}
+
+
+// class PartsListView extends StatefulWidget {
+//   final List<Map<String, dynamic>> selectedParts;
+//   final List<int> quantities;
+//   final ValueChanged<int> onQuantityChanged;
+
+//   PartsListView({
+//     required this.selectedParts,
+//     required this.quantities,
+//     required this.onQuantityChanged,
+//   });
+
+//   @override
+//   _PartsListViewState createState() => _PartsListViewState();
+// }
+
+// class _PartsListViewState extends State<PartsListView> {
+//   @override
+//   Widget build(BuildContext context) {
+//     return SingleChildScrollView(
+//       child: Column(
+//         children: List.generate(widget.selectedParts.length, (i) {
+//           final part = widget.selectedParts[i];
+//           return Container(
+//             margin: EdgeInsets.symmetric(vertical: 8.0),
+//             padding: EdgeInsets.all(16.0),
+//             decoration: BoxDecoration(
+//               color: Colors.white,
+//               borderRadius: BorderRadius.circular(16.0),
+//               boxShadow: [
+//                 BoxShadow(
+//                   color: Colors.black12,
+//                   blurRadius: 10,
+//                   spreadRadius: 5,
+//                 ),
+//               ],
+//             ),
+//             child: Row(
+//               children: [
+//                 Expanded(
+//                   child: Text(
+//                     'อะไหล่: ${part['Name'] ?? 'Unknown Part'}',
+//                     style: TextStyle(fontSize: 18),
+//                   ),
+//                 ),
+//                 Row(
+//                   children: [
+//                     IconButton(
+//                       icon: Icon(Icons.remove),
+//                       onPressed: () {
+//                         setState(() {
+//                           if (widget.quantities.length > i &&
+//                               widget.quantities[i] > 0) {
+//                             widget.quantities[i]--;
+//                             widget.onQuantityChanged(i);
+//                           }
+//                         });
+//                       },
+//                     ),
+//                     Text('${widget.quantities[i]}'),
+//                     IconButton(
+//                       icon: Icon(Icons.add),
+//                       onPressed: () {
+//                         setState(() {
+//                           if (widget.quantities.length > i) {
+//                             widget.quantities[i]++;
+//                             widget.onQuantityChanged(i);
+//                           }
+//                         });
+//                       },
+//                     ),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//           );
+//         }),
+//       ),
+//     );
+//   }
+// }

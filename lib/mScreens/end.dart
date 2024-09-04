@@ -193,6 +193,7 @@ class _TakePicturePageState extends State<end> {
                 // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Statusrepair()));
                 await _EuploadImages(userId, processId);
                 Navigator.pop(context);
+                Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green[300],

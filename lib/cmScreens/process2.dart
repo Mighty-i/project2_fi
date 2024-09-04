@@ -67,6 +67,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
   late String licenseplate;
   List<Widget> _items = [];
   final List<String?> _dropdownRepair = [];
+  final List<String?> _selectedStepNames = [];
   List<List<Map<String, dynamic>>> _selectedParts = [];
   List<dynamic> repairSteps = [];
   late int processId;
@@ -85,6 +86,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
     SelectedPartsManager.clear();
     setState(() {
       _dropdownRepair.add(null);
+      _selectedStepNames.add(null);
       _selectedParts.add([]);
       _items.add(_buildListItem(_items.length));
       // quantities.add([]);
@@ -96,11 +98,30 @@ class _DynamicListPageState extends State<DynamicListPage> {
       if (newValue != null) {
         _dropdownRepair[index] = newValue;
       } else {
-        _dropdownRepair[index] = null; // Reset to null to show the hint
+        _dropdownRepair[index] = null;
       }
-      print('_updateDropdownRepair: index = $index, newValue = $newValue');
     });
-    _submitRepairProcess(index, newValue);
+  }
+  // _submitRepairProcess(index, newValue);
+
+  String _getStepNameById(String? stepId) {
+    if (stepId == null) {
+      return 'Unknown Step';
+    }
+
+    if (repairSteps.isEmpty) {
+      return 'No repair steps available';
+    }
+
+    final step = repairSteps.firstWhere(
+      (step) => step['Step_ID']?.toString() == stepId,
+      orElse: () => null,
+    );
+
+    final stepName =
+        step != null ? step['StepName'] ?? 'Unknown Step' : 'Unknown Step';
+    print('_getStepNameById: stepId = $stepId, stepName = $stepName'); // Debug
+    return stepName;
   }
 
   Future<void> _submitRepairProcess(int index, String? newValue) async {
@@ -185,7 +206,8 @@ class _DynamicListPageState extends State<DynamicListPage> {
           Center(
             child: DropdownButtonHideUnderline(
               child: DropdownButton<String>(
-                hint: Text(_dropdownRepair[index] ?? 'ขั้นตอนการซ่อม'),
+                hint: Text(_selectedStepNames[index] ?? 'ขั้นตอนการซ่อม'),
+                // hint: Text(_dropdownRepair[index] ?? 'ขั้นตอนการซ่อม'),อันเดิม
                 value: _dropdownRepair[index],
                 items: repairSteps.map<DropdownMenuItem<String>>(
                   (step) {
@@ -202,8 +224,11 @@ class _DynamicListPageState extends State<DynamicListPage> {
                       'Dropdown Changed: Index = $index, New Value = $newValue'); // Debug
                   setState(() {
                     _updateDropdownRepair(index, newValue);
+                    _selectedStepNames[index] = _getStepNameById(newValue);
+                    print('_selectedStepNames $_selectedStepNames');
                     // _dropdownRepair[index] = newValue;
                   });
+                  // _updateDropdownRepair(index, newValue);
                 },
                 padding: const EdgeInsets.symmetric(
                     horizontal: 25.0, vertical: 10.0),
@@ -522,8 +547,8 @@ class _PartmainState extends State<Partmain> {
                 'Part_ID': partId,
                 'Name': partName,
               };
-              SelectedPartsManager.addPart(
-                  selectedPart, widget.index, widget.processId);
+              // SelectedPartsManager.addPart(
+              //     selectedPart, widget.index, widget.processId);
               print('Added part: $selectedPart');
             });
           },

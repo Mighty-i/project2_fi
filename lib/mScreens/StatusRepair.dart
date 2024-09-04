@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:project2_fi/mScreens/end.dart';
+
 import 'package:project2_fi/mScreens/start.dart';
 
 class Statusrepair extends StatefulWidget {
@@ -64,29 +65,121 @@ class _StatusrepairState extends State<Statusrepair> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: Text('รายการอะไหล่ที่ต้องใช้'),
-          content: Container(
-            width: double.maxFinite,
-            child: pu.isEmpty
-                ? Center(child: CircularProgressIndicator())
-                : ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: pu.length,
-                    itemBuilder: (context, index) {
-                      var part = pu[index];
-                      return ListTile(
-                        title: Text(part['Name']),
-                        subtitle: Text('จำนวน: ${part['Quantity']}'),
-                      );
-                    },
+          content: SizedBox(
+            height: 500,
+            child: Column(
+              children: [
+                Container(
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        width: 30,
+                      ),
+                      Text(
+                        'ชื่ออะไหล่',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 120,
+                      ),
+                      Text(
+                        'จำนวน',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
                   ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Expanded(
+                  child: Container(
+                    width: double.maxFinite,
+                    child: pu.isEmpty
+                        ? Center(child: CircularProgressIndicator())
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: pu.length,
+                            itemBuilder: (context, index) {
+                              var part = pu[index];
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  const SizedBox(
+                                    width: 30,
+                                  ),
+                                  Container(
+                                    width: 150,
+                                    child: Text(
+                                      part['Name'],
+                                      style: TextStyle(fontSize: 20),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 30,
+                                  ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        padding:
+                                            EdgeInsets.fromLTRB(20, 10, 20, 10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Colors.black12,
+                                              blurRadius: 5,
+                                              spreadRadius: 2,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Text('${part['Quantity']}',
+                                            style:
+                                                const TextStyle(fontSize: 18)),
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                ],
+                              );
+                              // return ListTile(
+                              //   title: Text(
+                              //     part['Name'],
+                              //     style: TextStyle(fontSize: 20),
+                              //   ),
+                              //   subtitle: Text(
+                              //     'จำนวน: ${part['Quantity']}',
+                              //     style: TextStyle(fontSize: 18),
+                              //   ),
+                              // );
+                            },
+                          ),
+                  ),
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(
+              style: TextButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18))),
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('ปิด'),
+              child: const Text('ปิด'),
             ),
           ],
         );
@@ -101,15 +194,16 @@ class _StatusrepairState extends State<Statusrepair> {
         backgroundColor: Colors.blue,
         automaticallyImplyLeading: false,
         leading: GFIconButton(
-          icon: Icon(
+          color: Colors.blue,
+          icon: const Icon(
             Icons.arrow_back_rounded,
-            // color: Colors.white,
+            color: Colors.white,
           ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
@@ -125,13 +219,12 @@ class _StatusrepairState extends State<Statusrepair> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 10),
               Container(
                 padding: EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16.0),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black12,
                       blurRadius: 10,
@@ -140,61 +233,20 @@ class _StatusrepairState extends State<Statusrepair> {
                   ],
                 ),
                 child: Text(
-                  // '1 ม.ค. 2567',
                   formattedDate,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Container(
                 padding: EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(16.0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10,
-                      spreadRadius: 5,
-                    ),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'ทะเบียนรถ ',
-                      // widget.licensePlate,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      widget.licensePlate,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-
-                    //testค่าprocessid
-                    Text(
-                      widget.processId.toString(),
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                padding: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.0),
-                  boxShadow: [
+                  boxShadow: const [
                     BoxShadow(
                       color: Colors.black12,
                       blurRadius: 10,
@@ -204,6 +256,32 @@ class _StatusrepairState extends State<Statusrepair> {
                 ),
                 child: Column(
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'ทะเบียนรถ ',
+                          // widget.licensePlate,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          widget.licensePlate,
+                          style: const TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+
+                        //testค่าprocessid
+                        Text(
+                          widget.processId.toString(),
+                          style: const TextStyle(
+                              fontSize: 10, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 5),
                     const Text(
                       'รายละเอียดงาน',
                       style: TextStyle(
@@ -211,61 +289,51 @@ class _StatusrepairState extends State<Statusrepair> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      widget.description,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.normal,
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      height: 340,
+                      child: SingleChildScrollView(
+                        child: Text(
+                          widget.description,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
                       ),
                     ),
+                    const SizedBox(height: 5),
                   ],
                 ),
               ),
-              SizedBox(height: 40),
-
+              const SizedBox(height: 10),
               Align(
-                child: ElevatedButton(
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 23),
+                  ),
                   onPressed: _showPartUsagePopup,
-                  child: Text('แสดงรายการอะไหล่'),
+                  icon: const Icon(
+                    Icons.settings,
+                    color: Colors.white,
+                  ),
+                  label: const Text(
+                    'แสดงรายการอะไหล่',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                    ),
+                  ),
                 ),
               ),
-              SizedBox(height: 40),
-              // Align(
-              //   alignment: Alignment.center,
-              //   child: ElevatedButton(
-              //     onPressed: () {
-              //       Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //           builder: (context) => Start(
-              //             processId: widget.processId,
-              //             userId: widget.userId,
-              //           ),
-              //         ),
-              //       );
-
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor: Colors.blue,
-              //       shape: RoundedRectangleBorder(
-              //         borderRadius: BorderRadius.circular(10.0),
-              //       ),
-              //       padding:
-              //           EdgeInsets.symmetric(horizontal: 150, vertical: 32),
-              //     ),
-              //     child: Text(
-              //       'เริ่มงาน',
-              //       style: TextStyle(
-              //         color: Colors.white,
-              //         fontSize: 20,
-              //         fontWeight: FontWeight.bold,
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              const SizedBox(height: 20),
               Align(
                 alignment: Alignment.center,
-                child: ElevatedButton(
+                child: ElevatedButton.icon(
                   onPressed: () async {
                     if (isJobStarted) {
                       Navigator.push(
@@ -301,11 +369,15 @@ class _StatusrepairState extends State<Statusrepair> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     padding:
-                        EdgeInsets.symmetric(horizontal: 150, vertical: 32),
+                        EdgeInsets.symmetric(horizontal: 130, vertical: 32),
                   ),
-                  child: Text(
+                  icon: const Icon(
+                    Icons.camera_enhance,
+                    color: Colors.white,
+                  ),
+                  label: Text(
                     isJobStarted ? 'ปิดงาน' : 'เริ่มงาน',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,

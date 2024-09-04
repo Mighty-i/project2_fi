@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:getwidget/getwidget.dart';
-import 'package:project2_fi/cmScreens/process2.dart';
+import 'package:project2_fi/cmScreens/process3.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
@@ -58,6 +58,9 @@ class _dashboardState extends State<dashboard> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        SizedBox(
+          height: 10,
+        ),
         Padding(
           padding: EdgeInsets.all(16.0),
           child: Container(
@@ -84,7 +87,7 @@ class _dashboardState extends State<dashboard> {
         ),
         Container(
           alignment: Alignment.centerLeft,
-          padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
+          padding: EdgeInsets.fromLTRB(30, 10, 0, 10),
           child: const Text(
             'รายการรถเข้าซ่อม',
             style: TextStyle(fontSize: 14),
@@ -135,9 +138,10 @@ class _dashboardState extends State<dashboard> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(width: 12),
+              SizedBox(width: 10),
               Text(
-                'ความเสียหาย: ${quotation['damageassessment']}',
+                'ความเสียหาย\n${quotation['damageassessment']}',
+                textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 18),
               ),
               SizedBox(height: 10),

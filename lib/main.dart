@@ -17,7 +17,7 @@ class MainPage extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: Loginpage(),
+      home: const Loginpage(),
     );
   }
 }
@@ -34,7 +34,7 @@ class _LoginpageState extends State<Loginpage> {
   final _passwordController = TextEditingController();
 
   Future<void> _login() async {
-    final url = 'https://bodyworkandpaint.pantook.com/api/login';
+    const url = 'https://bodyworkandpaint.pantook.com/api/login';
     final response = await http.post(
       Uri.parse(url),
       headers: {
@@ -112,12 +112,13 @@ class _LoginpageState extends State<Loginpage> {
               style: TextStyle(fontSize: 30),
             ),
             Container(
-              padding: EdgeInsets.only(top: 20, bottom: 20),
+              padding: EdgeInsets.only(top: 30, bottom: 10),
               child: TextField(
                 controller: _usernameController,
                 style: TextStyle(fontSize: 20),
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20)),
                   hintText: 'ป้อนชื่อผู้ใช้',
                 ),
               ),
@@ -128,7 +129,8 @@ class _LoginpageState extends State<Loginpage> {
                 controller: _passwordController,
                 style: TextStyle(fontSize: 20),
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20)),
                   hintText: 'ป้อนรหัสผ่าน',
                 ),
                 obscureText: true,

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:project2_fi/cmScreens/dashboard.dart';
 import 'package:project2_fi/cmScreens/OngoingList.dart';
-import 'package:project2_fi/main.dart';
+// import 'package:project2_fi/main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:project2_fi/profile.dart';
 
 class apppage extends StatelessWidget {
   final String username;
@@ -75,18 +77,30 @@ class _NavbarState extends State<Navbar> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(widget.username, style: TextStyle(fontSize: 20)),
-            Text('ตำแหน่ง: ${widget.roleName}', style: TextStyle(fontSize: 20)),
-            GFAvatar(
-              size: GFSize.SMALL,
-            ),
-            IconButton(
-              icon: Icon(Icons.logout),
-              onPressed: () {
-                _logout(context);
-              },
+            // Text('ตำแหน่ง: ${widget.roleName}', style: TextStyle(fontSize: 20)),
+            // GFAvatar(
+            //   size: GFSize.SMALL,
+            // ),
+            // IconButton(
+            //   icon: Icon(Icons.logout),
+            //   onPressed: () {
+            //     _logout(context);
+            //   },
+            // ),
+            Builder(
+              builder: (context) => IconButton(
+                icon: Icon(Icons.account_circle, size: 30),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer(); // Open the drawer
+                },
+              ),
             ),
           ],
         ),
+      ),
+      drawer: Myprofile(
+        username: widget.username,
+        roleName: widget.roleName,
       ),
       body: Center(
         child: _pages.elementAt(_selectedIndex),
@@ -138,33 +152,33 @@ class _NavbarState extends State<Navbar> {
     );
   }
 
-  Future<void> _logout(BuildContext context) async {
-    final url = 'https://bodyworkandpaint.pantook.com/api/logout';
-    final response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-        // Add necessary headers for authentication, e.g., token
-        // 'Authorization': 'Bearer YOUR_TOKEN',
-      },
-    );
+  // Future<void> _logout(BuildContext context) async {
+  //   final url = 'https://bodyworkandpaint.pantook.com/api/logout';
+  //   final response = await http.post(
+  //     Uri.parse(url),
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       // Add necessary headers for authentication, e.g., token
+  //       // 'Authorization': 'Bearer YOUR_TOKEN',
+  //     },
+  //   );
 
-    if (response.statusCode == 200) {
-      // Handle successful logout
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => Loginpage()), // Navigate back to login page
-      );
-    } else {
-      // Handle logout failure
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to logout. Please try again.'),
-        ),
-      );
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     // Handle successful logout
+  //     Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //           builder: (context) => Loginpage()), // Navigate back to login page
+  //     );
+  //   } else {
+  //     // Handle logout failure
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text('Failed to logout. Please try again.'),
+  //       ),
+  //     );
+  //   }
+  // }
 }
 
   // Widget _buildbottomNavigationBar() {

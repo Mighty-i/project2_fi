@@ -127,11 +127,11 @@ Future<void> _logout(BuildContext context) async {
 
   if (response.statusCode == 200) {
     // Handle successful logout
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-          builder: (context) => Loginpage()), // Navigate back to login page
-    );
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => Loginpage()),
+        (Route<dynamic> route) => false // Navigate back to login page
+        );
   } else {
     // Handle logout failure
     ScaffoldMessenger.of(context).showSnackBar(

@@ -647,6 +647,8 @@ class Partmain extends StatefulWidget {
 
 class _PartmainState extends State<Partmain> {
   List<dynamic> partsData = [];
+  List<dynamic> filteredParts = [];
+  String searchQuery = '';
 
   @override
   void initState() {
@@ -664,10 +666,24 @@ class _PartmainState extends State<Partmain> {
       final responseBody = json.decode(response.body);
       setState(() {
         partsData = responseBody['data'];
+        filteredParts = partsData;
       });
     } else {
       throw Exception('Failed to load parts data');
     }
+  }
+
+  void _filterPartsData() {
+    setState(() {
+      if (searchQuery.isEmpty) {
+        filteredParts = partsData; // ถ้าไม่มีการค้นหา แสดงผลทั้งหมด
+      } else {
+        filteredParts = partsData
+            .where((part) =>
+                part['Name'].toLowerCase().contains(searchQuery.toLowerCase()))
+            .toList(); // กรองข้อมูลตามคำค้นหา
+      }
+    });
   }
 
   Widget partListview(BuildContext context, int partId, String partName,
@@ -682,13 +698,13 @@ class _PartmainState extends State<Partmain> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20.0),
-              // boxShadow: [
-              //   BoxShadow(
-              //     color: Colors.black12,
-              //     blurRadius: 10,
-              //     spreadRadius: 5,
-              //   )
-              // ],
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  spreadRadius: 5,
+                )
+              ],
             ),
             child: Row(
               children: [
@@ -784,6 +800,11 @@ class _PartmainState extends State<Partmain> {
               children: [
                 Expanded(
                   child: TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        searchQuery = value; // อัปเดตคำค้นหาเมื่อพิมพ์
+                      });
+                    },
                     decoration: InputDecoration(
                       labelText: 'ค้นหา',
                       border: OutlineInputBorder(
@@ -795,17 +816,15 @@ class _PartmainState extends State<Partmain> {
                 SizedBox(width: 10),
                 IconButton(
                   icon: Icon(Icons.search),
-                  onPressed: () {
-                    // Handle search button press
-                  },
+                  onPressed: _filterPartsData,
                 ),
               ],
             ),
             Expanded(
               child: ListView.builder(
-                itemCount: partsData.length,
+                itemCount: filteredParts.length,
                 itemBuilder: (context, index) {
-                  final part = partsData[index];
+                  final part = filteredParts[index];
                   return partListview(
                     context,
                     part['Part_ID'],
@@ -818,7 +837,7 @@ class _PartmainState extends State<Partmain> {
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () async {
+              onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(

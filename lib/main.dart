@@ -81,14 +81,14 @@ class _LoginpageState extends State<Loginpage> {
         }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Invalid username or password'),
           ),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Failed to login. Please try again.'),
         ),
       );
@@ -107,7 +107,7 @@ class _LoginpageState extends State<Loginpage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'เข้าสู่ระบบ',
               style: TextStyle(fontSize: 30),
             ),

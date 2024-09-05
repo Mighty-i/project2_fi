@@ -186,11 +186,15 @@ class _historyState extends State<history> {
             backgroundColor: Colors.grey,
             progressBarColor: Colors.teal,
             child: Padding(
-              padding: EdgeInsets.only(right: 5),
+              padding: const EdgeInsets.fromLTRB(0, 2.5, 5, 5),
               child: Text(
                 '${(progress * 100).toInt()}%',
                 textAlign: TextAlign.end,
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),

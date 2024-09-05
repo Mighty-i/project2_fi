@@ -54,55 +54,62 @@ class _dashboardState extends State<dashboard> {
     }
   }
 
+  Future<void> _refresh() async {
+    await fetchQuotations(); // รีเฟรชข้อมูลใหม่
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 10,
-        ),
-        Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Container(
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10,
+          ),
+          Padding(
             padding: EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  spreadRadius: 5,
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    spreadRadius: 5,
+                  ),
+                ],
+              ),
+              child: Text(
+                formattedDate,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-            child: Text(
-              formattedDate,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.fromLTRB(30, 10, 0, 10),
-          child: const Text(
-            'รายการรถเข้าซ่อม',
-            style: TextStyle(fontSize: 14),
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.fromLTRB(30, 10, 0, 10),
+            child: const Text(
+              'รายการรถเข้าซ่อม',
+              style: TextStyle(fontSize: 14),
+            ),
           ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            padding: EdgeInsets.all(16.0),
-            itemCount: quotations.length,
-            itemBuilder: (context, index) {
-              return buildListItem(quotations[index], context);
-            },
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.all(16.0),
+              itemCount: quotations.length,
+              itemBuilder: (context, index) {
+                return buildListItem(quotations[index], context);
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

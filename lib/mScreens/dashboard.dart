@@ -59,52 +59,59 @@ class _MYdashboardState extends State<MYdashboard> {
     }
   }
 
+  Future<void> _refresh() async {
+    await fetchRepairProcesses(); // รีเฟรชข้อมูลใหม่
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Container(
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: Column(
+        children: [
+          Padding(
             padding: EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  spreadRadius: 5,
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    spreadRadius: 5,
+                  ),
+                ],
+              ),
+              child: Text(
+                formattedDate,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-            child: Text(
-              formattedDate,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
-          child: const Text(
-            'รายการซ่อม',
-            style: TextStyle(fontSize: 14),
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
+            child: const Text(
+              'รายการซ่อม',
+              style: TextStyle(fontSize: 14),
+            ),
           ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            padding: EdgeInsets.all(16.0),
-            itemCount: repairProcesses.length,
-            itemBuilder: (context, index) {
-              return buildListItem(repairProcesses[index], context);
-            },
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.all(16.0),
+              itemCount: repairProcesses.length,
+              itemBuilder: (context, index) {
+                return buildListItem(repairProcesses[index], context);
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -158,6 +165,9 @@ class _MYdashboardState extends State<MYdashboard> {
                             description: repairProcess['Description'],
                             processId: repairProcess['Process_ID'],
                             userId: widget.userId,
+                            username: widget.username,
+                            roleName: widget.roleName,
+                            roleId: widget.roleId,
                           ),
                         ));
                   },

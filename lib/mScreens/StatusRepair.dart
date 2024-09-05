@@ -8,17 +8,26 @@ import 'package:project2_fi/mScreens/end.dart';
 
 import 'package:project2_fi/mScreens/start.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class Statusrepair extends StatefulWidget {
   final String licensePlate;
   final String description;
   final int processId;
   final int userId;
+  final String username;
+  final String roleName;
+  final int roleId;
 
-  Statusrepair(
-      {required this.licensePlate,
-      required this.description,
-      required this.processId,
-      required this.userId});
+  Statusrepair({
+    required this.licensePlate,
+    required this.description,
+    required this.processId,
+    required this.userId,
+    required this.username,
+    required this.roleName,
+    required this.roleId,
+  });
 
   @override
   State<Statusrepair> createState() => _StatusrepairState();
@@ -43,6 +52,7 @@ class _StatusrepairState extends State<Statusrepair> {
         formattedDate = thaiDate.replaceAll('${now.year}', '$buddhistYear');
       });
     });
+    _loadJobStatus();
   }
 
   Future<void> fetchPartUsage() async {
@@ -185,6 +195,33 @@ class _StatusrepairState extends State<Statusrepair> {
         );
       },
     );
+  }
+
+  Future<void> _loadJobStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? storedProcessId = prefs.getInt('processId');
+    bool jobStarted = prefs.getBool('isJobStarted') ?? false;
+
+    if (storedProcessId == widget.processId) {
+      setState(() {
+        isJobStarted = jobStarted;
+      });
+    }
+  }
+
+  Future<void> _updateJobStatus(bool started) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isJobStarted', started);
+    await prefs.setInt('processId', widget.processId);
+  }
+
+  Future<void> _clearJobStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? storedProcessId = prefs.getInt('processId');
+    if (storedProcessId == widget.processId) {
+      await prefs.remove('isJobStarted');
+      await prefs.remove('processId');
+    }
   }
 
   @override
@@ -336,12 +373,16 @@ class _StatusrepairState extends State<Statusrepair> {
                 child: ElevatedButton.icon(
                   onPressed: () async {
                     if (isJobStarted) {
+                      await _clearJobStatus();
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => end(
                             processId: widget.processId,
                             userId: widget.userId,
+                            roleId: widget.roleId,
+                            username: widget.username,
+                            roleName: widget.roleName,
                           ),
                         ),
                       );
@@ -360,6 +401,7 @@ class _StatusrepairState extends State<Statusrepair> {
                         setState(() {
                           isJobStarted = true;
                         });
+                        await _updateJobStatus(true);
                       }
                     }
                   },

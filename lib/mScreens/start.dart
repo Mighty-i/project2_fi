@@ -106,9 +106,9 @@ class _TakePicturePageState extends State<Start> {
         color: Colors.white,
         child: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
-              padding: EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(12.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
@@ -247,7 +247,7 @@ class _TakePicturePageState extends State<Start> {
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 50, vertical: 14),
                 ),
-                child: Text(
+                child: const Text(
                   'ยืนยัน',
                   style: TextStyle(
                       color: Colors.white,

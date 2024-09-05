@@ -5,13 +5,21 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
+import 'package:project2_fi/navbar.dart';
+
 class end extends StatefulWidget {
   final int processId;
   final int userId;
+  final String username;
+  final String roleName;
+  final int roleId;
 
   end({
     required this.processId,
     required this.userId,
+    required this.username,
+    required this.roleName,
+    required this.roleId,
   });
   @override
   _TakePicturePageState createState() => _TakePicturePageState();
@@ -99,119 +107,169 @@ class _TakePicturePageState extends State<end> {
           ],
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(height: 20),
-          Text(
-            'เพิ่มภาพ 3 รูป',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 20),
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                childAspectRatio: 3 / 2,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 10,
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.all(12.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    spreadRadius: 5,
+                  )
+                ],
               ),
-              itemCount: _images.length,
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text('ลบรูปภาพ'),
-                          content: Text('แน่ใจใช่ไหม'),
-                          actions: [
-                            TextButton(
-                              child: Text('Cancel'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+              child: const Text(
+                'เพิ่มภาพ 3 รูป',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(height: 20),
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1,
+                  childAspectRatio: 2 / 2,
+                  mainAxisSpacing: 10,
+                  crossAxisSpacing: 10,
+                ),
+                itemCount: _images.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor: Colors.white,
+                            title: Text(
+                              'ลบรูปภาพ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            TextButton(
-                              child: Text('Delete'),
-                              onPressed: () {
-                                setState(() {
-                                  _images.removeAt(index);
-                                });
-                                Navigator.pop(context);
-                              },
+                            content: Text('แน่ใจใช่ไหม'),
+                            actions: [
+                              IconButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                icon: Icon(
+                                  Icons.cancel,
+                                  size: GFSize.SMALL,
+                                ),
+                              ),
+                              IconButton(
+                                color: Colors.red,
+                                onPressed: () {
+                                  setState(() {
+                                    _images.removeAt(index);
+                                  });
+                                  Navigator.pop(context);
+                                },
+                                icon: Icon(
+                                  Icons.delete_rounded,
+                                  size: GFSize.LARGE,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Center(
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.blueGrey, // Border color
+                                width: 8.0, // Border width
+                              ),
+                              borderRadius: BorderRadius.circular(
+                                  12.0), // Rounded corners
                             ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  child: Stack(
-                    children: [
-                      Container(
-                        child: Center(
-                          child: Image.file(
-                            File(_images[index].path),
-                            fit: BoxFit.cover,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(6.0),
+                              child: Image.file(
+                                File(_images[index].path),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 10),
+            if (_images.length < 3)
+              ElevatedButton(
+                onPressed: () {
+                  _pickImage();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
-                );
-              },
-            ),
-          ),
-          SizedBox(height: 20),
-          if (_images.length < 3)
-            ElevatedButton(
-              onPressed: () {
-                _pickImage();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 14),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 14),
-              ),
-              child: Text(
-                'ถ่ายรูป',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-          SizedBox(height: 20),
-          if (_images.length >= 3)
-            ElevatedButton(
-              onPressed: () async {
-                int userId = widget.userId;
-                int processId = widget.processId;
-                // Handle confirmation logic
-                // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Statusrepair()));
-                await _EuploadImages(userId, processId);
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green[300],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
+                child: Text(
+                  'ถ่ายรูป',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 14),
               ),
-              child: Text(
-                'ยืนยัน',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold),
+            SizedBox(height: 20),
+            if (_images.length >= 3)
+              ElevatedButton(
+                onPressed: () async {
+                  int userId = widget.userId;
+                  int processId = widget.processId;
+                  // Handle confirmation logic
+                  // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Statusrepair()));
+                  await _EuploadImages(userId, processId);
+                  // Navigator.pop(context);
+                  // Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => apppageM(
+                        roleId: widget.roleId,
+                        username: widget.username,
+                        roleName: widget.roleName,
+                        userId: widget.userId,
+                      ),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green[300],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 14),
+                ),
+                child: const Text(
+                  'ยืนยัน',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold),
+                ),
               ),
-            ),
-          SizedBox(height: 20),
-        ],
+            SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }

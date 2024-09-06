@@ -812,28 +812,6 @@ class _PartmainState extends State<Partmain> {
             ),
             SizedBox(height: 20),
             Row(
-              // children: [
-              //   Expanded(
-              //     child: TextField(
-              //       onChanged: (value) {
-              //         setState(() {
-              //           searchQuery = value; // อัปเดตคำค้นหาเมื่อพิมพ์
-              //         });
-              //       },
-              //       decoration: InputDecoration(
-              //         labelText: 'ค้นหา',
-              //         border: OutlineInputBorder(
-              //           borderRadius: BorderRadius.circular(10),
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              //   SizedBox(width: 10),
-              //   IconButton(
-              //     icon: Icon(Icons.search),
-              //     onPressed: _filterPartsData,
-              //   ),
-              // ],
               children: [
                 Expanded(
                   child: TextField(

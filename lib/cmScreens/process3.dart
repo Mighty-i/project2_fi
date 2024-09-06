@@ -673,15 +673,30 @@ class _PartmainState extends State<Partmain> {
     }
   }
 
-  void _filterPartsData() {
+  // void _filterPartsData() {
+  //   setState(() {
+  //     if (searchQuery.isEmpty) {
+  //       filteredParts = partsData; // ถ้าไม่มีการค้นหา แสดงผลทั้งหมด
+  //     } else {
+  //       filteredParts = partsData
+  //           .where((part) =>
+  //               part['Name'].toLowerCase().contains(searchQuery.toLowerCase()))
+  //           .toList(); // กรองข้อมูลตามคำค้นหา
+  //     }
+  //   });
+  // }
+
+  void _filterPartsData(String query) {
     setState(() {
+      searchQuery = query;
       if (searchQuery.isEmpty) {
-        filteredParts = partsData; // ถ้าไม่มีการค้นหา แสดงผลทั้งหมด
+        filteredParts = partsData; // ถ้าไม่มีคำค้นหาแสดงรายการทั้งหมด
       } else {
-        filteredParts = partsData
-            .where((part) =>
-                part['Name'].toLowerCase().contains(searchQuery.toLowerCase()))
-            .toList(); // กรองข้อมูลตามคำค้นหา
+        filteredParts = partsData.where((part) {
+          final partName = part['Name'].toLowerCase();
+          return partName
+              .contains(searchQuery.toLowerCase()); // ค้นหาโดยไม่สนตัวเล็กใหญ่
+        }).toList();
       }
     });
   }
@@ -797,26 +812,47 @@ class _PartmainState extends State<Partmain> {
             ),
             SizedBox(height: 20),
             Row(
+              // children: [
+              //   Expanded(
+              //     child: TextField(
+              //       onChanged: (value) {
+              //         setState(() {
+              //           searchQuery = value; // อัปเดตคำค้นหาเมื่อพิมพ์
+              //         });
+              //       },
+              //       decoration: InputDecoration(
+              //         labelText: 'ค้นหา',
+              //         border: OutlineInputBorder(
+              //           borderRadius: BorderRadius.circular(10),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              //   SizedBox(width: 10),
+              //   IconButton(
+              //     icon: Icon(Icons.search),
+              //     onPressed: _filterPartsData,
+              //   ),
+              // ],
               children: [
                 Expanded(
                   child: TextField(
-                    onChanged: (value) {
-                      setState(() {
-                        searchQuery = value; // อัปเดตคำค้นหาเมื่อพิมพ์
-                      });
-                    },
                     decoration: InputDecoration(
                       labelText: 'ค้นหา',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
+                    onChanged: _filterPartsData, // ค้นหาเมื่อพิมพ์ข้อความ
                   ),
                 ),
                 SizedBox(width: 10),
                 IconButton(
                   icon: Icon(Icons.search),
-                  onPressed: _filterPartsData,
+                  onPressed: () {
+                    // อัพเดตรายการเมื่อกดปุ่มค้นหา
+                    _filterPartsData(searchQuery);
+                  },
                 ),
               ],
             ),

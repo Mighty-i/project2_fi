@@ -12,6 +12,10 @@ class Process extends StatelessWidget {
   final int quotationId;
   final String licenseplate;
   final String problemdetails;
+  final String brand;
+  final String model;
+  final String year;
+
   Process({
     required this.roleId,
     required this.username,
@@ -19,6 +23,9 @@ class Process extends StatelessWidget {
     required this.quotationId,
     required this.licenseplate,
     required this.problemdetails,
+    required this.brand,
+    required this.model,
+    required this.year,
   });
   @override
   Widget build(BuildContext context) {
@@ -35,6 +42,9 @@ class Process extends StatelessWidget {
         quotationId: quotationId,
         licenseplate: licenseplate,
         problemdetails: problemdetails,
+        brand: brand,
+        model: model,
+        year: year,
       ),
     );
   }
@@ -47,6 +57,9 @@ class DynamicListPage extends StatefulWidget {
   final int quotationId; // Accept quotationId
   final String licenseplate;
   final String problemdetails;
+  final String brand;
+  final String model;
+  final String year;
 
   DynamicListPage({
     required this.roleId,
@@ -55,6 +68,9 @@ class DynamicListPage extends StatefulWidget {
     required this.quotationId,
     required this.licenseplate,
     required this.problemdetails,
+    required this.brand,
+    required this.model,
+    required this.year,
   });
   @override
   _DynamicListPageState createState() => _DynamicListPageState();
@@ -189,18 +205,25 @@ class _DynamicListPageState extends State<DynamicListPage> {
 
   Widget _buildVehicleInfo() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      padding: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            spreadRadius: 5,
+          )
+        ],
       ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
+              const Text(
                 "ทะเบียนรถ: ",
                 style: TextStyle(fontSize: 16),
               ),
@@ -211,7 +234,16 @@ class _DynamicListPageState extends State<DynamicListPage> {
             ],
           ),
           const SizedBox(height: 8),
-          Text("Toyota Corolla 2018"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(widget.brand),
+              const SizedBox(width: 5),
+              Text(widget.model),
+              const SizedBox(width: 5),
+              Text(widget.year),
+            ],
+          ),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +254,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
               ),
               Text(
                 widget.problemdetails,
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               )
             ],
           ),
@@ -270,7 +302,10 @@ class _DynamicListPageState extends State<DynamicListPage> {
           : Column(
               children: [
                 SizedBox(height: 16),
-                _buildVehicleInfo(),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                  child: _buildVehicleInfo(),
+                ),
                 SizedBox(height: 16),
                 Text(
                   'เลือกขั้นตอนการซ่อม',
@@ -291,6 +326,13 @@ class _DynamicListPageState extends State<DynamicListPage> {
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              blurRadius: 10,
+                              spreadRadius: 5,
+                            )
+                          ],
                         ),
                         child: CheckboxListTile(
                           title: Text(
@@ -342,6 +384,9 @@ class _DynamicListPageState extends State<DynamicListPage> {
                           username: widget.username,
                           roleName: widget.roleName,
                           quotationId: widget.quotationId,
+                          brand: widget.brand,
+                          model: widget.model,
+                          year: widget.year,
                         ),
                       ),
                     );
@@ -363,6 +408,9 @@ class TaskDetailScreen extends StatefulWidget {
   final String username;
   final String roleName;
   final int quotationId;
+  final String brand;
+  final String model;
+  final String year;
 
   TaskDetailScreen({
     required this.selectedTasks,
@@ -370,6 +418,9 @@ class TaskDetailScreen extends StatefulWidget {
     required this.username,
     required this.roleName,
     required this.quotationId,
+    required this.brand,
+    required this.model,
+    required this.year,
   });
 
   @override
@@ -383,7 +434,11 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
     for (var entry in widget.selectedTasks.entries) {
       if (entry.value['selected']) {
         final processId = entry.value['Process_ID'] ?? 0;
-        final taskDetail = taskDetails[processId] ?? '';
+        // final taskDetail = taskDetails[processId] ?? '';
+        // ตรวจสอบว่าขั้นตอนเป็น "ตรวจสอบคุณภาพ" หรือไม่
+        final taskDetail = entry.key == "ตรวจสอบคุณภาพ"
+            ? "ตรวจสอบคุณภาพ" // ถ้าใช่ ให้กำหนด taskDetail เป็น "ตรวจสอบคุณภาพ"
+            : taskDetails[processId] ?? '';
 
         // Send the taskDetail to the API for the given processId
         await _submitTaskDetail(processId, taskDetail);
@@ -477,6 +532,13 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16.0),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 10,
+                          spreadRadius: 5,
+                        )
+                      ],
                     ),
                     child: Column(
                       children: [
@@ -496,59 +558,67 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                         SizedBox(
                             height:
                                 16), // Use SizedBox instead of Expanded here
-                        Container(
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 2),
-                          child: Text(
-                            'เลือกอะไหล่ที่ต้องใช้',
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ),
-
-                        SizedBox(height: 16),
-                        Align(
-                          alignment: Alignment.center,
-                          child: ElevatedButton(
-                            onPressed: () async {
-                              SelectedPartsManager.clear();
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      Partmain(processId: processId),
-                                ),
-                              );
-                              SelectedPartsManager.clearPartsForProcessId(
-                                  processId);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue.withOpacity(0.5),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 24, vertical: 12),
+                        if (taskName != "ตรวจสอบคุณภาพ") ...[
+                          Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.fromLTRB(0, 0, 0, 2),
+                            child: Text(
+                              'เลือกอะไหล่ที่ต้องใช้',
+                              style: TextStyle(fontSize: 14),
                             ),
-                            child: Icon(Icons.add),
                           ),
-                        ),
-                        SizedBox(height: 16),
-                        Container(
-                          alignment: Alignment.center,
-                          child: Text("รายละเอียดงาน"),
-                        ),
-                        Container(
-                          child: TextFormField(
-                            initialValue: taskDetails[processId] ?? '',
-                            decoration:
-                                InputDecoration(labelText: 'กรอกรายละเอียดงาน'),
-                            onChanged: (value) {
-                              setState(() {
-                                taskDetails[processId] = value;
-                              });
-                            },
+                          SizedBox(height: 16),
+                          Align(
+                            alignment: Alignment.center,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                SelectedPartsManager.clear();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Partmain(
+                                      processId: processId,
+                                      brand: widget.brand,
+                                      model: widget.model,
+                                      year: widget.year,
+                                    ),
+                                  ),
+                                );
+                                SelectedPartsManager.clearPartsForProcessId(
+                                    processId);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.blue.withOpacity(0.5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 24, vertical: 12),
+                              ),
+                              child: Icon(Icons.add),
+                            ),
                           ),
-                        ),
+                          SizedBox(height: 16),
+                          Container(
+                            alignment: Alignment.center,
+                            child: Text("รายละเอียดงาน"),
+                          ),
+                          Container(
+                            child: TextFormField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines:
+                                  null, // สามารถพิมพ์หลายบรรทัดได้ไม่จำกัด
+                              initialValue: taskDetails[processId] ?? '',
+                              decoration: InputDecoration(
+                                  labelText: 'กรอกรายละเอียดงาน'),
+                              onChanged: (value) {
+                                setState(() {
+                                  taskDetails[processId] = value;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -638,8 +708,15 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
 class Partmain extends StatefulWidget {
   final int processId;
+  final String brand;
+  final String model;
+  final String year;
 
-  Partmain({required this.processId});
+  Partmain(
+      {required this.processId,
+      required this.brand,
+      required this.model,
+      required this.year});
 
   @override
   State<Partmain> createState() => _PartmainState();
@@ -673,15 +750,17 @@ class _PartmainState extends State<Partmain> {
     }
   }
 
-  // void _filterPartsData() {
+  // void _filterPartsData(String query) {
   //   setState(() {
+  //     searchQuery = query;
   //     if (searchQuery.isEmpty) {
-  //       filteredParts = partsData; // ถ้าไม่มีการค้นหา แสดงผลทั้งหมด
+  //       filteredParts = partsData; // ถ้าไม่มีคำค้นหาแสดงรายการทั้งหมด
   //     } else {
-  //       filteredParts = partsData
-  //           .where((part) =>
-  //               part['Name'].toLowerCase().contains(searchQuery.toLowerCase()))
-  //           .toList(); // กรองข้อมูลตามคำค้นหา
+  //       filteredParts = partsData.where((part) {
+  //         final partName = part['Name'].toLowerCase();
+  //         return partName
+  //             .contains(searchQuery.toLowerCase()); // ค้นหาโดยไม่สนตัวเล็กใหญ่
+  //       }).toList();
   //     }
   //   });
   // }
@@ -690,12 +769,24 @@ class _PartmainState extends State<Partmain> {
     setState(() {
       searchQuery = query;
       if (searchQuery.isEmpty) {
-        filteredParts = partsData; // ถ้าไม่มีคำค้นหาแสดงรายการทั้งหมด
-      } else {
+        // กรองรายการที่ตรงกับ brand, model และ year ก่อน
         filteredParts = partsData.where((part) {
-          final partName = part['Name'].toLowerCase();
-          return partName
-              .contains(searchQuery.toLowerCase()); // ค้นหาโดยไม่สนตัวเล็กใหญ่
+          return part['Brand'].toString().toLowerCase() ==
+                  widget.brand.toLowerCase() &&
+              part['Model'].toString().toLowerCase() ==
+                  widget.model.toLowerCase() &&
+              part['Year'].toString() == widget.year.toString();
+        }).toList();
+      } else {
+        // ค้นหาโดยใช้คำค้นหา และกรองตาม brand, model และ year
+        filteredParts = partsData.where((part) {
+          final partName = part['Name'].toString().toLowerCase();
+          return partName.contains(searchQuery.toLowerCase()) &&
+              part['Brand'].toString().toLowerCase() ==
+                  widget.brand.toLowerCase() &&
+              part['Model'].toString().toLowerCase() ==
+                  widget.model.toLowerCase() &&
+              part['Year'].toString() == widget.year.toString();
         }).toList();
       }
     });
@@ -805,9 +896,32 @@ class _PartmainState extends State<Partmain> {
           children: [
             Container(
               alignment: Alignment.center,
-              child: Text(
-                "Toyota Corolla 2018",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              child: Row(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        widget.brand,
+                        style: const TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        widget.model,
+                        style: const TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        widget.year,
+                        style: const TextStyle(
+                            fontSize: 30, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  //style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ],
               ),
             ),
             SizedBox(height: 20),
@@ -896,22 +1010,35 @@ class _PartSummaryState extends State<PartSummary> {
     return Scaffold(
       appBar: AppBar(
         title: Text('สรุปรายการอะไหล่ที่เลือก'),
+        automaticallyImplyLeading: false,
       ),
       body: ListView.builder(
         itemCount: selectedParts.length,
         itemBuilder: (context, index) {
           final part = selectedParts[index];
-          return ListTile(
-            title: Text(part['Name']),
-            subtitle: Text('Process ID: ${part['Process_ID']}'),
-            trailing: IconButton(
-              icon: Icon(Icons.delete),
-              onPressed: () {
-                _removePart(widget.processId, index);
-                setState(() {
-                  selectedParts.removeAt(index);
-                });
-              },
+          return Padding(
+            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+            child: Card(
+              color: Colors.white,
+              child: ListTile(
+                title: Text(
+                  part['Name'],
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                subtitle: Text('Process ID: ${part['Process_ID']}'),
+                trailing: IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
+                  onPressed: () {
+                    _removePart(widget.processId, index);
+                    setState(() {
+                      selectedParts.removeAt(index);
+                    });
+                  },
+                ),
+              ),
             ),
           );
         },
@@ -921,11 +1048,23 @@ class _PartSummaryState extends State<PartSummary> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            const SizedBox(
+              width: 2,
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context); // กลับไปที่ Partmain
               },
-              child: Text('เพิ่มอะไหล่'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+              ),
+              child: const Text(
+                'เพิ่มอะไหล่',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(
+              width: 5,
             ),
             ElevatedButton(
               onPressed: () async {
@@ -937,7 +1076,16 @@ class _PartSummaryState extends State<PartSummary> {
                 Navigator.pop(context); // กลับไปที่หน้าจอ Partmain
                 Navigator.pop(context); // กลับไปที่หน้าจอ Process
               },
-              child: Text('ยืนยันและบันทึก'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+              ),
+              child: const Text(
+                'ยืนยันและบันทึก',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            const SizedBox(
+              width: 2,
             ),
           ],
         ),
@@ -946,7 +1094,7 @@ class _PartSummaryState extends State<PartSummary> {
   }
 
   Future<void> _savePartUsage(int partId, int processId) async {
-    final url = 'https://bodyworkandpaint.pantook.com/api/part_usage';
+    const url = 'https://bodyworkandpaint.pantook.com/api/part_usage';
 
     try {
       final response = await http.post(

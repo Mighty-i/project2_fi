@@ -5,6 +5,7 @@ import 'package:project2_fi/cmScreens/OngoingList.dart';
 // import 'package:project2_fi/main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/services.dart';
 
 import 'package:project2_fi/profile.dart';
 
@@ -51,6 +52,9 @@ class _NavbarState extends State<Navbar> {
   @override
   void initState() {
     super.initState();
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: [SystemUiOverlay.top]);
     _pages = <Widget>[
       dashboard(
         roleId: widget.roleId,

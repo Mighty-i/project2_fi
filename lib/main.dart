@@ -4,8 +4,12 @@ import 'package:project2_fi/navbar.dart';
 import 'package:project2_fi/navbar2.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter/services.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.top]);
   runApp(const MainPage());
 }
 
@@ -16,7 +20,9 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
       home: const Loginpage(),
     );
   }

@@ -7,9 +7,18 @@ import 'package:project2_fi/cmScreens/stcomfi.dart';
 
 class MyStatus extends StatefulWidget {
   final int quotationId;
+  final String licenseplate;
+  final String brand;
+  final String model;
+  final String year;
 
-  MyStatus({
+  const MyStatus({
+    super.key,
     required this.quotationId,
+    required this.licenseplate,
+    required this.brand,
+    required this.model,
+    required this.year,
   });
   @override
   State<MyStatus> createState() => _MyWidgetState();
@@ -38,6 +47,81 @@ class _MyWidgetState extends State<MyStatus> {
       // Handle error
       print('Failed to load repair steps');
     }
+  }
+
+  Widget _buildVehicleInfo() {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.all(12.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            spreadRadius: 5,
+          )
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.all(6.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      "ทะเบียนรถ",
+                      style: TextStyle(fontSize: 16, fontFamily: 'Maitree'),
+                    ),
+                    Text(
+                      widget.licenseplate,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 35,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.brand,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    widget.model,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    widget.year,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+              // Text("Toyota Corolla 2018",
+              //     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Text('กำหนดเสร็จสิ้น: 15 ม.ค. 2567'),
+        ],
+      ),
+    );
   }
 
   @override
@@ -71,18 +155,18 @@ class _MyWidgetState extends State<MyStatus> {
         child: Column(
           children: [
             _buildVehicleInfo(),
-            const SizedBox(height: 8),
+            const SizedBox(height: 4),
             Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(16),
-              child: Text(
+              padding: EdgeInsets.all(10),
+              child: const Text(
                 "ขั้นตอน",
                 style: TextStyle(fontSize: 20),
               ),
             ),
             Expanded(
               child: ListView.builder(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(6.0),
                 itemCount: repairSteps.length,
                 itemBuilder: (context, index) {
                   return _step(repairSteps[index], context);
@@ -96,43 +180,10 @@ class _MyWidgetState extends State<MyStatus> {
   }
 }
 
-Widget _buildVehicleInfo() {
-  return Container(
-    margin: EdgeInsets.symmetric(vertical: 8.0),
-    padding: EdgeInsets.all(16.0),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(16.0),
-    ),
-    child: Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'ทะเบียนรถ\n1กด6444',
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(
-              width: 20,
-            ),
-            Text("Toyota Corolla 2018",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          ],
-        ),
-        SizedBox(
-          height: 10,
-        ),
-        Text('กำหนดเสร็จสิ้น: 15 ม.ค. 2567'),
-      ],
-    ),
-  );
-}
-
 Widget _step(dynamic process, BuildContext context) {
   return Container(
     margin: EdgeInsets.only(bottom: 16),
-    padding: EdgeInsets.all(16),
+    padding: EdgeInsets.all(10),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(8),
@@ -149,8 +200,9 @@ Widget _step(dynamic process, BuildContext context) {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            SizedBox(height: 4),
             Text(
               '${process['StepName']}',
               style: TextStyle(
@@ -158,13 +210,17 @@ Widget _step(dynamic process, BuildContext context) {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 8),
+            SizedBox(height: 4),
             Text(
+              textAlign: TextAlign.center,
               'สถานะ\n${process['Status']}',
               style: TextStyle(fontSize: 20),
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 10),
           ],
+        ),
+        SizedBox(
+          width: 5,
         ),
         Column(
           children: [
@@ -182,7 +238,7 @@ Widget _step(dynamic process, BuildContext context) {
                   : null,
               style: ElevatedButton.styleFrom(
                 backgroundColor: process['Status'] == 'Completed'
-                    ? Colors.red
+                    ? Colors.green
                     : process['Status'] == 'verification'
                         ? Colors.yellow[400]
                         : Colors.grey,

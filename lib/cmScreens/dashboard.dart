@@ -93,7 +93,7 @@ class _dashboardState extends State<dashboard> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            padding: EdgeInsets.fromLTRB(30, 10, 0, 10),
+            padding: EdgeInsets.fromLTRB(30, 5, 0, 0),
             child: const Text(
               'รายการรถเข้าซ่อม',
               style: TextStyle(fontSize: 14),
@@ -101,7 +101,7 @@ class _dashboardState extends State<dashboard> {
           ),
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(10.0),
               itemCount: quotations.length,
               itemBuilder: (context, index) {
                 return buildListItem(quotations[index], context);
@@ -115,12 +115,12 @@ class _dashboardState extends State<dashboard> {
 
   Widget buildListItem(dynamic quotation, BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      padding: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10,
@@ -143,6 +143,7 @@ class _dashboardState extends State<dashboard> {
                 child: Text(
                   'ทะเบียนรถ\n${quotation['licenseplate']}',
                   textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 22),
                 ),
               ),
               SizedBox(width: 10),
@@ -166,6 +167,9 @@ class _dashboardState extends State<dashboard> {
                           quotationId: quotation['Quotation_ID'],
                           licenseplate: quotation['licenseplate'],
                           problemdetails: quotation['problemdetails'],
+                          brand: quotation['Brand'],
+                          model: quotation['Model'],
+                          year: quotation['Year'],
                         ),
                       ),
                     );
@@ -177,7 +181,7 @@ class _dashboardState extends State<dashboard> {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
                   ),
-                  child: Text(
+                  child: const Text(
                     'Plan',
                     style: TextStyle(color: Colors.white),
                   ),

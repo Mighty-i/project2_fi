@@ -54,52 +54,59 @@ class _historyState extends State<history> {
     return completed / total;
   }
 
+  Future<void> _refresh() async {
+    await fetchQuotationsInProgress(); // รีเฟรชข้อมูลใหม่
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Container(
+    return RefreshIndicator(
+      onRefresh: _refresh,
+      child: Column(
+        children: [
+          Padding(
             padding: EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  spreadRadius: 5,
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    spreadRadius: 5,
+                  ),
+                ],
+              ),
+              child: Text(
+                formattedDate,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-            child: Text(
-              formattedDate,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
               ),
             ),
           ),
-        ),
-        Container(
-          alignment: Alignment.centerLeft,
-          padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
-          child: Text(
-            'รายการที่ดำเนินการซ่อม',
-            style: TextStyle(fontSize: 14),
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
+            child: Text(
+              'รายการที่ดำเนินการซ่อม',
+              style: TextStyle(fontSize: 14),
+            ),
           ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            padding: EdgeInsets.all(16.0),
-            itemCount: quotations.length,
-            itemBuilder: (context, index) {
-              return buildListItem(quotations[index]);
-            },
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.all(16.0),
+              itemCount: quotations.length,
+              itemBuilder: (context, index) {
+                return buildListItem(quotations[index]);
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -149,7 +156,7 @@ class _historyState extends State<history> {
                   Align(
                     alignment: AlignmentDirectional(0, 0),
                     child: Text(
-                      ':${repairProcesses.lastWhere((process) => process['Status'] == 'verification', orElse: () => null)?['StepName'] ?? ''}',
+                      ': ${repairProcesses.lastWhere((process) => process['Status'] == 'verification', orElse: () => null)?['StepName'] ?? 'ยังไม่มีขั้นตอนรอตรวจสอบ'}',
                     ),
                   ),
                   // Check if the second-to-last step's status is 'In Progress'
@@ -157,7 +164,7 @@ class _historyState extends State<history> {
                   Align(
                     alignment: AlignmentDirectional(0, 0),
                     child: Text(
-                      ':${repairProcesses.lastWhere((process) => process['Status'] == 'In Progress', orElse: () => null)?['StepName'] ?? ''}',
+                      ': ${repairProcesses.firstWhere((process) => process['Status'] == 'In Progress', orElse: () => null)?['StepName'] ?? ''}',
                     ),
                   ),
                 ],
@@ -170,6 +177,10 @@ class _historyState extends State<history> {
                     MaterialPageRoute(
                       builder: (context) => MyStatus(
                         quotationId: quotation['Quotation_ID'],
+                        licenseplate: quotation['licenseplate'],
+                        brand: quotation['Brand'],
+                        model: quotation['Model'],
+                        year: quotation['Year'],
                       ),
                     ),
                   );
@@ -183,8 +194,8 @@ class _historyState extends State<history> {
           GFProgressBar(
             percentage: progress,
             lineHeight: 30,
-            backgroundColor: Colors.grey,
-            progressBarColor: Colors.teal,
+            backgroundColor: Colors.black12,
+            progressBarColor: Colors.greenAccent.shade400,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(0, 2.5, 5, 5),
               child: Text(
@@ -192,7 +203,7 @@ class _historyState extends State<history> {
                 textAlign: TextAlign.end,
                 style: TextStyle(
                   fontSize: 18,
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),

@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:project2_fi/cmScreens/status.dart';
 
 class commain extends StatefulWidget {
   final int processId;
   final String stepname;
+  final int quotationId;
 
   commain({
     required this.processId,
     required this.stepname,
+    required this.quotationId,
   });
 
   @override
@@ -56,6 +59,48 @@ class _commainState extends State<commain> {
     }
   }
 
+  void _confirm() async {
+    await update_Completed(widget.processId);
+    print('Quotation_ID: ${widget.quotationId}');
+    await quotation_status();
+    Navigator.pop(context);
+  }
+
+  Future<void> quotation_status() async {
+    final response = await http.get(Uri.parse(
+        'https://bodyworkandpaint.pantook.com/api/check-quotation-status?Quotation_ID=${widget.quotationId}'));
+
+    if (response.statusCode == 200) {
+      final jsonData = jsonDecode(response.body);
+      print('เช็ค $jsonData');
+    } else {
+      final jsonData = jsonDecode(response.body);
+      print('เช็ค $jsonData');
+    }
+  }
+
+  Future<void> update_Completed(int processId) async {
+    try {
+      final response = await http.put(
+        Uri.parse(
+            'https://bodyworkandpaint.pantook.com/api/repair-update_Completed'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(
+          {
+            'Process_ID': processId,
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        print("บันทึกขั้นตอนสำเร็จ");
+      } else {
+        print("บันทึกขั้นตอนไม่สำเร็จ: ${response.reasonPhrase}");
+      }
+    } catch (e) {
+      print("เกิดข้อผิดพลาด: $e");
+    }
+  }
+
   void _showImageDialog(String imageUrl) {
     showDialog(
       context: context,
@@ -64,11 +109,15 @@ class _commainState extends State<commain> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.network(
-                imageUrl,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Text('Error loading image');
-                },
+              // Add a top padding or margin here
+              Container(
+                padding: const EdgeInsets.only(top: 40.0), // Top padding
+                child: Image.network(
+                  imageUrl,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Text('Error loading image');
+                  },
+                ),
               ),
               TextButton(
                 onPressed: () {
@@ -194,35 +243,53 @@ class _commainState extends State<commain> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
-                                          Image.network(
-                                            'https://bodyworkandpaint.pantook.com/storage/${item['Image1']}',
-                                            width: 100,
-                                            height: 100,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return const Text(
-                                                  'Error loading image');
+                                          GestureDetector(
+                                            onTap: () {
+                                              _showImageDialog(
+                                                  'https://bodyworkandpaint.pantook.com/storage/${item['Image1']}');
                                             },
+                                            child: Image.network(
+                                              'https://bodyworkandpaint.pantook.com/storage/${item['Image1']}',
+                                              width: 100,
+                                              height: 100,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                return const Text(
+                                                    'Error loading image');
+                                              },
+                                            ),
                                           ),
-                                          Image.network(
-                                            'https://bodyworkandpaint.pantook.com/storage/${item['Image2']}',
-                                            width: 100,
-                                            height: 100,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return const Text(
-                                                  'Error loading image');
+                                          GestureDetector(
+                                            onTap: () {
+                                              _showImageDialog(
+                                                  'https://bodyworkandpaint.pantook.com/storage/${item['Image2']}');
                                             },
+                                            child: Image.network(
+                                              'https://bodyworkandpaint.pantook.com/storage/${item['Image2']}',
+                                              width: 100,
+                                              height: 100,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                return const Text(
+                                                    'Error loading image');
+                                              },
+                                            ),
                                           ),
-                                          Image.network(
-                                            'https://bodyworkandpaint.pantook.com/storage/${item['Image3']}',
-                                            width: 100,
-                                            height: 100,
-                                            errorBuilder:
-                                                (context, error, stackTrace) {
-                                              return const Text(
-                                                  'Error loading image');
+                                          GestureDetector(
+                                            onTap: () {
+                                              _showImageDialog(
+                                                  'https://bodyworkandpaint.pantook.com/storage/${item['Image3']}');
                                             },
+                                            child: Image.network(
+                                              'https://bodyworkandpaint.pantook.com/storage/${item['Image3']}',
+                                              width: 100,
+                                              height: 100,
+                                              errorBuilder:
+                                                  (context, error, stackTrace) {
+                                                return const Text(
+                                                    'Error loading image');
+                                              },
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -243,7 +310,7 @@ class _commainState extends State<commain> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: _confirm,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.teal,
                 foregroundColor: Colors.white,

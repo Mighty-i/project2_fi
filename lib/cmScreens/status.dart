@@ -172,7 +172,7 @@ class _MyWidgetState extends State<MyStatus> {
                 padding: const EdgeInsets.all(6.0),
                 itemCount: repairSteps.length,
                 itemBuilder: (context, index) {
-                  return _step(repairSteps[index], context);
+                  return _step(repairSteps[index], context, widget.quotationId);
                 },
               ),
             ),
@@ -183,7 +183,7 @@ class _MyWidgetState extends State<MyStatus> {
   }
 }
 
-Widget _step(dynamic process, BuildContext context) {
+Widget _step(dynamic process, BuildContext context, int quotationId) {
   return Container(
     margin: const EdgeInsets.only(bottom: 16),
     padding: const EdgeInsets.all(10),
@@ -236,6 +236,7 @@ Widget _step(dynamic process, BuildContext context) {
                             builder: (context) => commain(
                               processId: process['Process_ID'],
                               stepname: process['StepName'],
+                              quotationId: quotationId,
                             ),
                           ));
                     }

@@ -51,12 +51,12 @@ class _MyWidgetState extends State<MyStatus> {
 
   Widget _buildVehicleInfo() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      padding: EdgeInsets.all(12.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10,
@@ -70,7 +70,7 @@ class _MyWidgetState extends State<MyStatus> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.all(6.0),
+                padding: const EdgeInsets.all(6.0),
                 decoration: BoxDecoration(
                   color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(10.0),
@@ -84,12 +84,12 @@ class _MyWidgetState extends State<MyStatus> {
                     ),
                     Text(
                       widget.licenseplate,
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 35,
               ),
               Row(
@@ -97,17 +97,20 @@ class _MyWidgetState extends State<MyStatus> {
                 children: [
                   Text(
                     widget.brand,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 5),
                   Text(
                     widget.model,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 5),
                   Text(
                     widget.year,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -115,10 +118,10 @@ class _MyWidgetState extends State<MyStatus> {
               //     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
-          Text('กำหนดเสร็จสิ้น: 15 ม.ค. 2567'),
+          const Text('กำหนดเสร็จสิ้น: 15 ม.ค. 2567'),
         ],
       ),
     );
@@ -151,14 +154,14 @@ class _MyWidgetState extends State<MyStatus> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             _buildVehicleInfo(),
             const SizedBox(height: 4),
             Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: const Text(
                 "ขั้นตอน",
                 style: TextStyle(fontSize: 20),
@@ -166,7 +169,7 @@ class _MyWidgetState extends State<MyStatus> {
             ),
             Expanded(
               child: ListView.builder(
-                padding: EdgeInsets.all(6.0),
+                padding: const EdgeInsets.all(6.0),
                 itemCount: repairSteps.length,
                 itemBuilder: (context, index) {
                   return _step(repairSteps[index], context);
@@ -182,8 +185,8 @@ class _MyWidgetState extends State<MyStatus> {
 
 Widget _step(dynamic process, BuildContext context) {
   return Container(
-    margin: EdgeInsets.only(bottom: 16),
-    padding: EdgeInsets.all(10),
+    margin: const EdgeInsets.only(bottom: 16),
+    padding: const EdgeInsets.all(10),
     decoration: BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.circular(8),
@@ -192,7 +195,7 @@ Widget _step(dynamic process, BuildContext context) {
           color: Colors.grey.withOpacity(0.2),
           spreadRadius: 2,
           blurRadius: 5,
-          offset: Offset(0, 3),
+          offset: const Offset(0, 3),
         ),
       ],
     ),
@@ -202,24 +205,24 @@ Widget _step(dynamic process, BuildContext context) {
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               '${process['StepName']}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               textAlign: TextAlign.center,
               'สถานะ\n${process['Status']}',
-              style: TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           width: 5,
         ),
         Column(
@@ -244,8 +247,9 @@ Widget _step(dynamic process, BuildContext context) {
                         ? Colors.yellow[700]
                         : Colors.grey,
                 foregroundColor: Colors.black54,
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                textStyle: TextStyle(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                textStyle: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),

@@ -56,34 +56,50 @@ class _commainState extends State<commain> {
     }
   }
 
-  // void _groupByUser(List<dynamic> data) {
-  //   for (var item in data) {
-  //     var userId = item['User_ID'];
-
-  //     if (!groupedData.containsKey(userId)) {
-  //       groupedData[userId] = [];
-  //     }
-  //     groupedData[userId]?.add(item);
-  //   }
-  // }
+  void _showImageDialog(String imageUrl) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.network(
+                imageUrl,
+                errorBuilder: (context, error, stackTrace) {
+                  return const Text('Error loading image');
+                },
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Close'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GFAppBar(
         backgroundColor: Colors.blue,
-        title: Text(
+        title: const Text(
           'ตรวจสอบสถานะการซ่อม',
           style: TextStyle(fontSize: 20),
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             Container(
-              margin: EdgeInsets.symmetric(vertical: 8.0),
-              padding: EdgeInsets.all(16.0),
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16.0),
@@ -109,9 +125,9 @@ class _commainState extends State<commain> {
               child: Scrollbar(
                 thumbVisibility: true, // Optionally set thumb visibility
                 thickness: 6.0, // Adjust thickness if needed
-                radius: Radius.circular(10),
+                radius: const Radius.circular(10),
                 child: ListView.builder(
-                  padding: EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(8.0),
                   itemCount: groupedData.keys.length,
                   itemBuilder: (context, index) {
                     var key = groupedData.keys.elementAt(index);
@@ -123,8 +139,8 @@ class _commainState extends State<commain> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Container(
-                          margin: EdgeInsets.symmetric(vertical: 8.0),
-                          padding: EdgeInsets.all(8.0),
+                          margin: const EdgeInsets.symmetric(vertical: 8.0),
+                          padding: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16.0),
@@ -231,9 +247,10 @@ class _commainState extends State<commain> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.teal,
                 foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 38, vertical: 14),
                 textStyle: const TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
                 shape: RoundedRectangleBorder(
@@ -241,6 +258,9 @@ class _commainState extends State<commain> {
                 ),
               ),
               child: const Text('ยืนยัน'),
+            ),
+            const SizedBox(
+              height: 30,
             ),
           ],
         ),

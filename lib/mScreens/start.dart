@@ -27,9 +27,10 @@ class _TakePicturePageState extends State<Start> {
       final pickedFile = await _picker.pickImage(source: ImageSource.camera);
 
       if (pickedFile != null) {
-        setState(() {
-          _images.add(pickedFile);
-        });
+        // setState(() {
+        // _images.add(pickedFile);
+        // });
+        await _compressAndAddImage(pickedFile);
       }
     } catch (e) {
       print('Error picking image: $e');
@@ -39,9 +40,10 @@ class _TakePicturePageState extends State<Start> {
   Future<void> _compressAndAddImage(XFile pickedFile) async {
     final compressedImage = await FlutterImageCompress.compressAndGetFile(
       pickedFile.path,
-      pickedFile.path + '_compressed.jpg',
+      '${pickedFile.path}_compressed.jpg',
       quality: 50, // Adjust quality to reduce size
     );
+    print('path imageStart: ${compressedImage!.path}');
 
     if (compressedImage != null) {
       setState(() {
@@ -125,12 +127,12 @@ class _TakePicturePageState extends State<Start> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
               child: Scrollbar(
                 thumbVisibility: true, // Always show the scrollbar
                 thickness: 9.0, // Thickness of the scrollbar
-                radius: Radius.circular(10), // Rounded corners
+                radius: const Radius.circular(10), // Rounded corners
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 1,
@@ -151,13 +153,13 @@ class _TakePicturePageState extends State<Start> {
                                 'ลบรูปภาพ',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),
-                              content: Text('แน่ใจใช่ไหม'),
+                              content: const Text('แน่ใจใช่ไหม'),
                               actions: [
                                 IconButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.cancel,
                                     size: GFSize.SMALL,
                                   ),
@@ -170,7 +172,7 @@ class _TakePicturePageState extends State<Start> {
                                     });
                                     Navigator.pop(context);
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.delete_rounded,
                                     size: GFSize.LARGE,
                                   ),
@@ -208,7 +210,7 @@ class _TakePicturePageState extends State<Start> {
                 ),
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             if (_images.length < 3)
               ElevatedButton(
                 onPressed: () {
@@ -219,9 +221,10 @@ class _TakePicturePageState extends State<Start> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 14),
                 ),
-                child: Text(
+                child: const Text(
                   'ถ่ายรูป',
                   style: TextStyle(
                       color: Colors.white,
@@ -229,7 +232,7 @@ class _TakePicturePageState extends State<Start> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             if (_images.length >= 3)
               ElevatedButton(
                 onPressed: () async {
@@ -245,7 +248,8 @@ class _TakePicturePageState extends State<Start> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 14),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 50, vertical: 14),
                 ),
                 child: const Text(
                   'ยืนยัน',
@@ -255,7 +259,7 @@ class _TakePicturePageState extends State<Start> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
           ],
         ),
       ),

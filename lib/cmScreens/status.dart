@@ -132,7 +132,7 @@ class _MyWidgetState extends State<MyStatus> {
         automaticallyImplyLeading: false,
         leading: GFIconButton(
           color: Colors.blue,
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_rounded,
             color: Colors.white,
           ),
@@ -140,7 +140,7 @@ class _MyWidgetState extends State<MyStatus> {
             Navigator.pop(context);
           },
         ),
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
@@ -232,6 +232,7 @@ Widget _step(dynamic process, BuildContext context) {
                           MaterialPageRoute(
                             builder: (context) => commain(
                               processId: process['Process_ID'],
+                              stepname: process['StepName'],
                             ),
                           ));
                     }
@@ -240,9 +241,9 @@ Widget _step(dynamic process, BuildContext context) {
                 backgroundColor: process['Status'] == 'Completed'
                     ? Colors.green
                     : process['Status'] == 'verification'
-                        ? Colors.yellow[400]
+                        ? Colors.yellow[700]
                         : Colors.grey,
-                foregroundColor: Colors.white,
+                foregroundColor: Colors.black54,
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 textStyle: TextStyle(
                   fontSize: 16,

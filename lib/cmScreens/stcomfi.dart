@@ -5,9 +5,11 @@ import 'package:http/http.dart' as http;
 
 class commain extends StatefulWidget {
   final int processId;
+  final String stepname;
 
   commain({
     required this.processId,
+    required this.stepname,
   });
 
   @override
@@ -76,7 +78,7 @@ class _commainState extends State<commain> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.all(6.0),
+        padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
             Container(
@@ -95,10 +97,10 @@ class _commainState extends State<commain> {
               ),
               child: Center(
                 child: Text(
-                  'ขั้นตอนที่ ${widget.processId}',
-                  style: TextStyle(
+                  'ขั้นตอน ${widget.stepname}',
+                  style: const TextStyle(
                     fontSize: 25,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
@@ -106,9 +108,10 @@ class _commainState extends State<commain> {
             Expanded(
               child: Scrollbar(
                 thumbVisibility: true, // Optionally set thumb visibility
-                thickness: 9.0, // Adjust thickness if needed
+                thickness: 6.0, // Adjust thickness if needed
                 radius: Radius.circular(10),
                 child: ListView.builder(
+                  padding: EdgeInsets.all(8.0),
                   itemCount: groupedData.keys.length,
                   itemBuilder: (context, index) {
                     var key = groupedData.keys.elementAt(index);
@@ -138,7 +141,7 @@ class _commainState extends State<commain> {
                             children: [
                               Row(
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 20,
                                   ),
                                   Text(
@@ -169,7 +172,7 @@ class _commainState extends State<commain> {
                                         ),
                                       ),
                                       const SizedBox(
-                                        height: 5,
+                                        height: 10,
                                       ),
                                       Row(
                                         mainAxisAlignment:
@@ -181,7 +184,7 @@ class _commainState extends State<commain> {
                                             height: 100,
                                             errorBuilder:
                                                 (context, error, stackTrace) {
-                                              return Text(
+                                              return const Text(
                                                   'Error loading image');
                                             },
                                           ),
@@ -191,7 +194,7 @@ class _commainState extends State<commain> {
                                             height: 100,
                                             errorBuilder:
                                                 (context, error, stackTrace) {
-                                              return Text(
+                                              return const Text(
                                                   'Error loading image');
                                             },
                                           ),
@@ -201,11 +204,14 @@ class _commainState extends State<commain> {
                                             height: 100,
                                             errorBuilder:
                                                 (context, error, stackTrace) {
-                                              return Text(
+                                              return const Text(
                                                   'Error loading image');
                                             },
                                           ),
                                         ],
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
                                       ),
                                     ],
                                   );
@@ -226,7 +232,7 @@ class _commainState extends State<commain> {
                 backgroundColor: Colors.teal,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                textStyle: TextStyle(
+                textStyle: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
@@ -234,7 +240,7 @@ class _commainState extends State<commain> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              child: Text('ยืนยัน'),
+              child: const Text('ยืนยัน'),
             ),
           ],
         ),

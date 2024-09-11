@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter/services.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
@@ -59,7 +61,12 @@ class _LoginpageState extends State<Loginpage> {
         final user = responseData['user'];
         final roleName = responseData['role_name'];
         final roleId = user['Role_ID'];
-        final userId = user['User_ID'];
+        // final Image = user['image'];
+
+        final logindata = await SharedPreferences.getInstance();
+        await logindata.setInt('user_id', user['User_ID']);
+        await logindata.setString('username', user['username']);
+        await logindata.setString('image', user['image']);
 
         if (roleId == 7) {
           Navigator.push(
@@ -67,6 +74,7 @@ class _LoginpageState extends State<Loginpage> {
             MaterialPageRoute(
               builder: (context) => apppage(
                 username: user['name'],
+                // userlogin: user['username'],
                 roleName: roleName,
                 roleId: roleId,
               ), // Navigate to specific page for Role_ID 7
@@ -78,6 +86,7 @@ class _LoginpageState extends State<Loginpage> {
             MaterialPageRoute(
               builder: (context) => apppageM(
                 username: user['name'],
+                // userlogin: user['username'],
                 roleName: roleName,
                 roleId: roleId,
                 userId: user['User_ID'],

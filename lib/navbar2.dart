@@ -11,14 +11,16 @@ import 'package:project2_fi/profile.dart';
 
 class apppage extends StatelessWidget {
   final String username;
+  // final String userlogin;
   final String roleName;
   final int roleId;
 
-  const apppage(
-      {super.key,
-      required this.username,
-      required this.roleName,
-      required this.roleId});
+  const apppage({
+    super.key,
+    required this.username,
+    required this.roleName,
+    required this.roleId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +80,7 @@ class _NavbarState extends State<Navbar> {
         backgroundColor: Colors.blue,
         automaticallyImplyLeading: false,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Text(widget.username, style: TextStyle(fontSize: 20)),
             // Text('ตำแหน่ง: ${widget.roleName}', style: TextStyle(fontSize: 20)),

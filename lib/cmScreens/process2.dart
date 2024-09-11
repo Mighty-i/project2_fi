@@ -403,15 +403,15 @@ class _DynamicListPageState extends State<DynamicListPage> {
             color: Colors.white,
           ),
           onPressed: () {
-            Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => apppage(
-                    roleId: widget.roleId,
-                    username: widget.username,
-                    roleName: widget.roleName,
-                  ),
-                ));
+            // Navigator.pushReplacement(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => apppage(
+            //         roleId: widget.roleId,
+            //         username: widget.username,
+            //         roleName: widget.roleName,
+            //       ),
+            //     ));
           },
         ),
         title: Row(

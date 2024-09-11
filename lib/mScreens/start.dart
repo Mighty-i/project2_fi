@@ -91,7 +91,7 @@ class _TakePicturePageState extends State<Start> {
       appBar: GFAppBar(
         backgroundColor: Colors.blue,
         automaticallyImplyLeading: false,
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
@@ -132,7 +132,7 @@ class _TakePicturePageState extends State<Start> {
                 thickness: 9.0, // Thickness of the scrollbar
                 radius: Radius.circular(10), // Rounded corners
                 child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 1,
                     childAspectRatio: 2 / 2,
                     mainAxisSpacing: 10,
@@ -147,7 +147,7 @@ class _TakePicturePageState extends State<Start> {
                           builder: (context) {
                             return AlertDialog(
                               backgroundColor: Colors.white,
-                              title: Text(
+                              title: const Text(
                                 'ลบรูปภาพ',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               ),

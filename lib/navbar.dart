@@ -12,13 +12,13 @@ class apppageM extends StatelessWidget {
   final int roleId;
   final int userId;
 
-  const apppageM(
-      {super.key,
-      required this.username,
-      required this.roleName,
-      required this.roleId,
-      required this.userId,
-      });
+  const apppageM({
+    super.key,
+    required this.username,
+    required this.roleName,
+    required this.roleId,
+    required this.userId,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -124,50 +124,56 @@ class _NavbarState extends State<Navbar> {
         username: widget.username,
         roleName: widget.roleName,
       ),
-      body: Center(
-        child: _pages.elementAt(_selectedIndex),
+      body: Container(
+        color: Colors.white,
+        child: Center(
+          child: _pages.elementAt(_selectedIndex),
+        ),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0), // Adjust padding as needed
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.8),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30.0),
-              topRight: Radius.circular(30.0),
-              bottomLeft: Radius.circular(30.0),
-              bottomRight: Radius.circular(30.0),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0), // Adjust padding as needed
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.8),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(30.0),
+                topRight: Radius.circular(30.0),
+                bottomLeft: Radius.circular(30.0),
+                bottomRight: Radius.circular(30.0),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 5,
+                  spreadRadius: 2,
+                )
+              ],
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 5,
-                spreadRadius: 2,
-              )
-            ],
-          ),
-          child: BottomNavigationBar(
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.car_repair_outlined,
-                    color: _selectedIndex == 0 ? Colors.blue : Colors.grey),
-                label: 'รายการซ่อม',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.history,
-                    color: _selectedIndex == 1 ? Colors.blue : Colors.grey),
-                label: 'ประวัติ',
-              ),
-            ],
-            selectedItemColor: Colors.blue,
-            unselectedItemColor: Colors.grey,
-            selectedLabelStyle: TextStyle(color: Colors.blue),
-            unselectedLabelStyle: TextStyle(color: Colors.grey),
+            child: BottomNavigationBar(
+              currentIndex: _selectedIndex,
+              onTap: _onItemTapped,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              type: BottomNavigationBarType.fixed,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.car_repair_outlined,
+                      color: _selectedIndex == 0 ? Colors.blue : Colors.grey),
+                  label: 'รายการซ่อม',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.history,
+                      color: _selectedIndex == 1 ? Colors.blue : Colors.grey),
+                  label: 'ประวัติ',
+                ),
+              ],
+              selectedItemColor: Colors.blue,
+              unselectedItemColor: Colors.grey,
+              selectedLabelStyle: TextStyle(color: Colors.blue),
+              unselectedLabelStyle: TextStyle(color: Colors.grey),
+            ),
           ),
         ),
       ),
@@ -176,6 +182,7 @@ class _NavbarState extends State<Navbar> {
 
   Widget _buildbottomNavigationBar() {
     return Container(
+      color: Colors.white,
       child: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

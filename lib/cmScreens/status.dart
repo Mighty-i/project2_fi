@@ -153,30 +153,34 @@ class _MyWidgetState extends State<MyStatus> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            _buildVehicleInfo(),
-            const SizedBox(height: 4),
-            Container(
-              alignment: Alignment.center,
-              padding: const EdgeInsets.all(10),
-              child: const Text(
-                "ขั้นตอน",
-                style: TextStyle(fontSize: 20),
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              _buildVehicleInfo(),
+              const SizedBox(height: 4),
+              Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(10),
+                child: const Text(
+                  "ขั้นตอน",
+                  style: TextStyle(fontSize: 20),
+                ),
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                padding: const EdgeInsets.all(6.0),
-                itemCount: repairSteps.length,
-                itemBuilder: (context, index) {
-                  return _step(repairSteps[index], context, widget.quotationId);
-                },
+              Expanded(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(6.0),
+                  itemCount: repairSteps.length,
+                  itemBuilder: (context, index) {
+                    return _step(
+                        repairSteps[index], context, widget.quotationId);
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

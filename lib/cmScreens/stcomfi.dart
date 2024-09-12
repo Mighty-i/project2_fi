@@ -142,194 +142,200 @@ class _commainState extends State<commain> {
           style: TextStyle(fontSize: 20),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 8.0),
-              padding: const EdgeInsets.all(16.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16.0),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 10,
-                    spreadRadius: 5,
-                  )
-                ],
-              ),
-              child: Center(
-                child: Text(
-                  'ขั้นตอน ${widget.stepname}',
-                  style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.bold,
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.0),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 10,
+                      spreadRadius: 5,
+                    )
+                  ],
+                ),
+                child: Center(
+                  child: Text(
+                    'ขั้นตอน ${widget.stepname}',
+                    style: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: Scrollbar(
-                thumbVisibility: true, // Optionally set thumb visibility
-                thickness: 6.0, // Adjust thickness if needed
-                radius: const Radius.circular(10),
-                child: ListView.builder(
-                  padding: const EdgeInsets.all(8.0),
-                  itemCount: groupedData.keys.length,
-                  itemBuilder: (context, index) {
-                    var key = groupedData.keys.elementAt(index);
-                    var group = groupedData[key]!;
+              Expanded(
+                child: Scrollbar(
+                  thumbVisibility: true, // Optionally set thumb visibility
+                  thickness: 6.0, // Adjust thickness if needed
+                  radius: const Radius.circular(10),
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    itemCount: groupedData.keys.length,
+                    itemBuilder: (context, index) {
+                      var key = groupedData.keys.elementAt(index);
+                      var group = groupedData[key]!;
 
-                    var userName = group[0]['name'];
+                      var userName = group[0]['name'];
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 8.0),
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(16.0),
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 10,
-                                spreadRadius: 5,
-                              )
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Text(
-                                    // 'User ID: $key',
-                                    '$userName',
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue,
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 8.0),
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(16.0),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 10,
+                                  spreadRadius: 5,
+                                )
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const SizedBox(
+                                      width: 20,
                                     ),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                children: group.map<Widget>((item) {
-                                  return Column(
-                                    children: [
-                                      const SizedBox(
-                                        height: 5,
+                                    Text(
+                                      // 'User ID: $key',
+                                      '$userName',
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blue,
                                       ),
-                                      Text(
-                                        item['StatusType'] == 'ก่อน'
-                                            ? 'ก่อนทำงาน'
-                                            : 'หลังทำงาน',
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                    ),
+                                  ],
+                                ),
+                                Column(
+                                  children: group.map<Widget>((item) {
+                                    return Column(
+                                      children: [
+                                        const SizedBox(
+                                          height: 5,
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              _showImageDialog(
-                                                  'https://bodyworkandpaint.pantook.com/storage/${item['Image1']}');
-                                            },
-                                            child: Image.network(
-                                              'https://bodyworkandpaint.pantook.com/storage/${item['Image1']}',
-                                              width: 100,
-                                              height: 100,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                return const Text(
-                                                    'Error loading image');
-                                              },
-                                            ),
+                                        Text(
+                                          item['StatusType'] == 'ก่อน'
+                                              ? 'ก่อนทำงาน'
+                                              : 'หลังทำงาน',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              _showImageDialog(
-                                                  'https://bodyworkandpaint.pantook.com/storage/${item['Image2']}');
-                                            },
-                                            child: Image.network(
-                                              'https://bodyworkandpaint.pantook.com/storage/${item['Image2']}',
-                                              width: 100,
-                                              height: 100,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                return const Text(
-                                                    'Error loading image');
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                _showImageDialog(
+                                                    'https://bodyworkandpaint.pantook.com/storage/${item['Image1']}');
                                               },
+                                              child: Image.network(
+                                                'https://bodyworkandpaint.pantook.com/storage/${item['Image1']}',
+                                                width: 100,
+                                                height: 100,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return const Text(
+                                                      'Error loading image');
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              _showImageDialog(
-                                                  'https://bodyworkandpaint.pantook.com/storage/${item['Image3']}');
-                                            },
-                                            child: Image.network(
-                                              'https://bodyworkandpaint.pantook.com/storage/${item['Image3']}',
-                                              width: 100,
-                                              height: 100,
-                                              errorBuilder:
-                                                  (context, error, stackTrace) {
-                                                return const Text(
-                                                    'Error loading image');
+                                            GestureDetector(
+                                              onTap: () {
+                                                _showImageDialog(
+                                                    'https://bodyworkandpaint.pantook.com/storage/${item['Image2']}');
                                               },
+                                              child: Image.network(
+                                                'https://bodyworkandpaint.pantook.com/storage/${item['Image2']}',
+                                                width: 100,
+                                                height: 100,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return const Text(
+                                                      'Error loading image');
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(
-                                        height: 5,
-                                      ),
-                                    ],
-                                  );
-                                }).toList(),
-                              ),
-                            ],
+                                            GestureDetector(
+                                              onTap: () {
+                                                _showImageDialog(
+                                                    'https://bodyworkandpaint.pantook.com/storage/${item['Image3']}');
+                                              },
+                                              child: Image.network(
+                                                'https://bodyworkandpaint.pantook.com/storage/${item['Image3']}',
+                                                width: 100,
+                                                height: 100,
+                                                errorBuilder: (context, error,
+                                                    stackTrace) {
+                                                  return const Text(
+                                                      'Error loading image');
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                      ],
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    );
-                  },
+                        ],
+                      );
+                    },
+                  ),
                 ),
               ),
-            ),
-            ElevatedButton(
-              onPressed: _confirm,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
-                foregroundColor: Colors.white,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 38, vertical: 14),
-                textStyle: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
+              const SizedBox(
+                height: 10,
               ),
-              child: const Text('ยืนยัน'),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-          ],
+              ElevatedButton(
+                onPressed: _confirm,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.teal,
+                  foregroundColor: Colors.white,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 38, vertical: 14),
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: const Text('ยืนยัน'),
+              ),
+              const SizedBox(
+                height: 30,
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -297,107 +297,111 @@ class _DynamicListPageState extends State<DynamicListPage> {
           ],
         ),
       ),
-      body: repairSteps.isEmpty
-          ? Center(child: CircularProgressIndicator())
-          : Column(
-              children: [
-                SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                  child: _buildVehicleInfo(),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'เลือกขั้นตอนการซ่อม',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w500,
+      body: Container(
+        color: Colors.white,
+        child: repairSteps.isEmpty
+            ? Center(child: CircularProgressIndicator())
+            : Column(
+                children: [
+                  SizedBox(height: 16),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                    child: _buildVehicleInfo(),
                   ),
-                ),
-                SizedBox(height: 16),
-                // แสดงรายการงานซ่อมทั้งหมดพร้อม Checkbox
-                Expanded(
-                  child: ListView(
-                    padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
-                    children: repairSteps.map((step) {
-                      return Container(
-                        margin: EdgeInsets.symmetric(vertical: 4.0),
-                        padding: EdgeInsets.all(6.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16.0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 10,
-                              spreadRadius: 5,
-                            )
-                          ],
-                        ),
-                        child: CheckboxListTile(
-                          title: Text(
-                            step['StepName'],
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
+                  SizedBox(height: 16),
+                  Text(
+                    'เลือกขั้นตอนการซ่อม',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  // แสดงรายการงานซ่อมทั้งหมดพร้อม Checkbox
+                  Expanded(
+                    child: ListView(
+                      padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      children: repairSteps.map((step) {
+                        return Container(
+                          margin: EdgeInsets.symmetric(vertical: 4.0),
+                          padding: EdgeInsets.all(6.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16.0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 10,
+                                spreadRadius: 5,
+                              )
+                            ],
                           ),
-                          value: selectedTasks[step['StepName']]?['selected'],
-                          onChanged: (bool? value) {
-                            setState(() {
-                              selectedTasks[step['StepName']]?['selected'] =
-                                  value ?? false;
-                            });
-                          },
-                          activeColor: Colors.green,
-                          checkColor: Colors.black,
+                          child: CheckboxListTile(
+                            title: Text(
+                              step['StepName'],
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            value: selectedTasks[step['StepName']]?['selected'],
+                            onChanged: (bool? value) {
+                              setState(() {
+                                selectedTasks[step['StepName']]?['selected'] =
+                                    value ?? false;
+                              });
+                            },
+                            activeColor: Colors.green,
+                            checkColor: Colors.black,
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  // ปุ่มสำหรับดำเนินการต่อ
+                  ElevatedButton(
+                    child: const Text(
+                      "ถัดไป",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(19.0),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                    ),
+                    onPressed: () async {
+                      await _submitRepairProcess();
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TaskDetailScreen(
+                            selectedTasks: selectedTasks,
+                            roleId: widget.roleId,
+                            username: widget.username,
+                            roleName: widget.roleName,
+                            quotationId: widget.quotationId,
+                            brand: widget.brand,
+                            model: widget.model,
+                            year: widget.year,
+                          ),
                         ),
                       );
-                    }).toList(),
+                      // print(selectedTasks);
+                    },
                   ),
-                ),
-                // ปุ่มสำหรับดำเนินการต่อ
-                ElevatedButton(
-                  child: const Text(
-                    "ถัดไป",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  SizedBox(
+                    height: 20,
                   ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(19.0),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                  ),
-                  onPressed: () async {
-                    await _submitRepairProcess();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TaskDetailScreen(
-                          selectedTasks: selectedTasks,
-                          roleId: widget.roleId,
-                          username: widget.username,
-                          roleName: widget.roleName,
-                          quotationId: widget.quotationId,
-                          brand: widget.brand,
-                          model: widget.model,
-                          year: widget.year,
-                        ),
-                      ),
-                    );
-                    // print(selectedTasks);
-                  },
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
+                ],
+              ),
+      ),
     );
   }
 }
@@ -515,142 +519,147 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
       appBar: AppBar(
         title: Text("รายละเอียดงานที่เลือก"),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              children: selectedTaskList.map((entry) {
-                final taskName = entry.key;
-                final stepId = entry.value['Step_ID'];
-                final processId = entry.value['Process_ID'] ?? 'ไม่มีการบันทึก';
+      body: Container(
+        color: Colors.white,
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView(
+                children: selectedTaskList.map((entry) {
+                  final taskName = entry.key;
+                  final stepId = entry.value['Step_ID'];
+                  final processId =
+                      entry.value['Process_ID'] ?? 'ไม่มีการบันทึก';
 
-                return Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Container(
-                    margin: EdgeInsets.all(10.0),
-                    padding: EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 10,
-                          spreadRadius: 5,
-                        )
-                      ],
-                    ),
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Column(
-                            children: [
-                              Text(
-                                taskName,
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              Text("Step ID: $stepId"),
-                              Text("Process ID: $processId"),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                            height:
-                                16), // Use SizedBox instead of Expanded here
-                        if (taskName != "ตรวจสอบคุณภาพ") ...[
-                          Container(
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.fromLTRB(0, 0, 0, 2),
-                            child: Text(
-                              'เลือกอะไหล่ที่ต้องใช้',
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          Align(
-                            alignment: Alignment.center,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                SelectedPartsManager.clear();
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => Partmain(
-                                      processId: processId,
-                                      brand: widget.brand,
-                                      model: widget.model,
-                                      year: widget.year,
-                                    ),
-                                  ),
-                                );
-                                SelectedPartsManager.clearPartsForProcessId(
-                                    processId);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue.withOpacity(0.5),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 12),
-                              ),
-                              child: Icon(Icons.add),
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          Container(
-                            alignment: Alignment.center,
-                            child: Text("รายละเอียดงาน"),
-                          ),
-                          Container(
-                            child: TextFormField(
-                              keyboardType: TextInputType.multiline,
-                              maxLines:
-                                  null, // สามารถพิมพ์หลายบรรทัดได้ไม่จำกัด
-                              initialValue: taskDetails[processId] ?? '',
-                              decoration: InputDecoration(
-                                  labelText: 'กรอกรายละเอียดงาน'),
-                              onChanged: (value) {
-                                setState(() {
-                                  taskDetails[processId] = value;
-                                });
-                              },
-                            ),
-                          ),
+                  return Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Container(
+                      margin: EdgeInsets.all(10.0),
+                      padding: EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16.0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 10,
+                            spreadRadius: 5,
+                          )
                         ],
-                      ],
+                      ),
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Column(
+                              children: [
+                                Text(
+                                  taskName,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text("Step ID: $stepId"),
+                                Text("Process ID: $processId"),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                              height:
+                                  16), // Use SizedBox instead of Expanded here
+                          if (taskName != "ตรวจสอบคุณภาพ") ...[
+                            Container(
+                              alignment: Alignment.center,
+                              padding: EdgeInsets.fromLTRB(0, 0, 0, 2),
+                              child: Text(
+                                'เลือกอะไหล่ที่ต้องใช้',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Align(
+                              alignment: Alignment.center,
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  SelectedPartsManager.clear();
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Partmain(
+                                        processId: processId,
+                                        brand: widget.brand,
+                                        model: widget.model,
+                                        year: widget.year,
+                                      ),
+                                    ),
+                                  );
+                                  SelectedPartsManager.clearPartsForProcessId(
+                                      processId);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.blue.withOpacity(0.5),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 24, vertical: 12),
+                                ),
+                                child: Icon(Icons.add),
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Container(
+                              alignment: Alignment.center,
+                              child: Text("รายละเอียดงาน"),
+                            ),
+                            Container(
+                              child: TextFormField(
+                                keyboardType: TextInputType.multiline,
+                                maxLines:
+                                    null, // สามารถพิมพ์หลายบรรทัดได้ไม่จำกัด
+                                initialValue: taskDetails[processId] ?? '',
+                                decoration: InputDecoration(
+                                    labelText: 'กรอกรายละเอียดงาน'),
+                                onChanged: (value) {
+                                  setState(() {
+                                    taskDetails[processId] = value;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          ElevatedButton(
-            onPressed: _confirmAndSubmit,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(19.0),
-              ),
-              padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-            ),
-            child: Text(
-              'ยืนยัน',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+                  );
+                }).toList(),
               ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-        ],
+            SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+              onPressed: _confirmAndSubmit,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(19.0),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+              ),
+              child: Text(
+                'ยืนยัน',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -890,97 +899,100 @@ class _PartmainState extends State<Partmain> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Container(
-              alignment: Alignment.center,
-              child: Row(
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              Container(
+                alignment: Alignment.center,
+                child: Row(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.brand,
+                          style: const TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          widget.model,
+                          style: const TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 5),
+                        Text(
+                          widget.year,
+                          style: const TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    //style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.brand,
-                        style: const TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        labelText: 'ค้นหา',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      const SizedBox(width: 5),
-                      Text(
-                        widget.model,
-                        style: const TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        widget.year,
-                        style: const TextStyle(
-                            fontSize: 30, fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                      onChanged: _filterPartsData, // ค้นหาเมื่อพิมพ์ข้อความ
+                    ),
                   ),
-                  //style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  SizedBox(width: 10),
+                  IconButton(
+                    icon: Icon(Icons.search),
+                    onPressed: () {
+                      // อัพเดตรายการเมื่อกดปุ่มค้นหา
+                      _filterPartsData(searchQuery);
+                    },
+                  ),
                 ],
               ),
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: 'ค้นหา',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    onChanged: _filterPartsData, // ค้นหาเมื่อพิมพ์ข้อความ
-                  ),
-                ),
-                SizedBox(width: 10),
-                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    // อัพเดตรายการเมื่อกดปุ่มค้นหา
-                    _filterPartsData(searchQuery);
+              Expanded(
+                child: ListView.builder(
+                  itemCount: filteredParts.length,
+                  itemBuilder: (context, index) {
+                    final part = filteredParts[index];
+                    return partListview(
+                      context,
+                      part['Part_ID'],
+                      part['Name'] ?? 'Unknown',
+                      part['Description'] ?? 'No description available',
+                      part['Quantity'] ?? 0,
+                    );
                   },
                 ),
-              ],
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: filteredParts.length,
-                itemBuilder: (context, index) {
-                  final part = filteredParts[index];
-                  return partListview(
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
                     context,
-                    part['Part_ID'],
-                    part['Name'] ?? 'Unknown',
-                    part['Description'] ?? 'No description available',
-                    part['Quantity'] ?? 0,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          PartSummary(processId: widget.processId),
+                    ),
                   );
                 },
+                child: Text('สรุป'),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  textStyle: TextStyle(fontSize: 18),
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        PartSummary(processId: widget.processId),
-                  ),
-                );
-              },
-              child: Text('สรุป'),
-              style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                textStyle: TextStyle(fontSize: 18),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -1012,36 +1024,39 @@ class _PartSummaryState extends State<PartSummary> {
         title: Text('สรุปรายการอะไหล่ที่เลือก'),
         automaticallyImplyLeading: false,
       ),
-      body: ListView.builder(
-        itemCount: selectedParts.length,
-        itemBuilder: (context, index) {
-          final part = selectedParts[index];
-          return Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Card(
-              color: Colors.white,
-              child: ListTile(
-                title: Text(
-                  part['Name'],
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text('Process ID: ${part['Process_ID']}'),
-                trailing: IconButton(
-                  icon: Icon(
-                    Icons.delete,
-                    color: Colors.red,
+      body: Container(
+        color: Colors.white,
+        child: ListView.builder(
+          itemCount: selectedParts.length,
+          itemBuilder: (context, index) {
+            final part = selectedParts[index];
+            return Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+              child: Card(
+                color: Colors.white,
+                child: ListTile(
+                  title: Text(
+                    part['Name'],
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                  onPressed: () {
-                    _removePart(widget.processId, index);
-                    setState(() {
-                      selectedParts.removeAt(index);
-                    });
-                  },
+                  subtitle: Text('Process ID: ${part['Process_ID']}'),
+                  trailing: IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      color: Colors.red,
+                    ),
+                    onPressed: () {
+                      _removePart(widget.processId, index);
+                      setState(() {
+                        selectedParts.removeAt(index);
+                      });
+                    },
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(16.0),

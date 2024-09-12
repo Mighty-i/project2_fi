@@ -250,184 +250,188 @@ class _StatusrepairState extends State<Statusrepair> {
           ],
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                padding: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.0),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10,
-                      spreadRadius: 5,
-                    ),
-                  ],
-                ),
-                child: Text(
-                  formattedDate,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                padding: EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16.0),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10,
-                      spreadRadius: 5,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'ทะเบียนรถ ',
-                          // widget.licensePlate,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          widget.licensePlate,
-                          style: const TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-
-                        //testค่าprocessid
-                        Text(
-                          widget.processId.toString(),
-                          style: const TextStyle(
-                              fontSize: 10, fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    const Text(
-                      'รายละเอียดงาน',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      height: 340,
-                      child: SingleChildScrollView(
-                        child: Text(
-                          widget.description,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.normal,
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              Align(
-                child: ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 23),
-                  ),
-                  onPressed: _showPartUsagePopup,
-                  icon: const Icon(
-                    Icons.settings,
+      body: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
                     color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 10,
+                        spreadRadius: 5,
+                      ),
+                    ],
                   ),
-                  label: const Text(
-                    'แสดงรายการอะไหล่',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Align(
-                alignment: Alignment.center,
-                child: ElevatedButton.icon(
-                  onPressed: () async {
-                    if (isJobStarted) {
-                      await _clearJobStatus();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => end(
-                            processId: widget.processId,
-                            userId: widget.userId,
-                            roleId: widget.roleId,
-                            username: widget.username,
-                            roleName: widget.roleName,
-                          ),
-                        ),
-                      );
-                    } else {
-                      final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Start(
-                            processId: widget.processId,
-                            userId: widget.userId,
-                          ),
-                        ),
-                      );
-                      // ถ้าเริ่มงานเสร็จแล้ว เปลี่ยนสถานะปุ่ม
-                      if (result == 'job_started') {
-                        setState(() {
-                          isJobStarted = true;
-                        });
-                        await _updateJobStatus(true);
-                      }
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 130, vertical: 32),
-                  ),
-                  icon: const Icon(
-                    Icons.camera_enhance,
-                    color: Colors.white,
-                  ),
-                  label: Text(
-                    isJobStarted ? 'ปิดงาน' : 'เริ่มงาน',
+                  child: Text(
+                    formattedDate,
                     style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                Container(
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16.0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 10,
+                        spreadRadius: 5,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            'ทะเบียนรถ ',
+                            // widget.licensePlate,
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            widget.licensePlate,
+                            style: const TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
+
+                          //testค่าprocessid
+                          Text(
+                            widget.processId.toString(),
+                            style: const TextStyle(
+                                fontSize: 10, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 5),
+                      const Text(
+                        'รายละเอียดงาน',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: 340,
+                        child: SingleChildScrollView(
+                          child: Text(
+                            widget.description,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Align(
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 30, vertical: 23),
+                    ),
+                    onPressed: _showPartUsagePopup,
+                    icon: const Icon(
+                      Icons.settings,
+                      color: Colors.white,
+                    ),
+                    label: const Text(
+                      'แสดงรายการอะไหล่',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.center,
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      if (isJobStarted) {
+                        await _clearJobStatus();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => end(
+                              processId: widget.processId,
+                              userId: widget.userId,
+                              roleId: widget.roleId,
+                              username: widget.username,
+                              roleName: widget.roleName,
+                            ),
+                          ),
+                        );
+                      } else {
+                        final result = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Start(
+                              processId: widget.processId,
+                              userId: widget.userId,
+                            ),
+                          ),
+                        );
+                        // ถ้าเริ่มงานเสร็จแล้ว เปลี่ยนสถานะปุ่ม
+                        if (result == 'job_started') {
+                          setState(() {
+                            isJobStarted = true;
+                          });
+                          await _updateJobStatus(true);
+                        }
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 130, vertical: 32),
+                    ),
+                    icon: const Icon(
+                      Icons.camera_enhance,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      isJobStarted ? 'ปิดงาน' : 'เริ่มงาน',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

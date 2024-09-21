@@ -49,7 +49,7 @@ class _dashboardState extends State<dashboard> {
     } else {
       // Handle the error
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load quotations')),
+        const SnackBar(content: Text('Failed to load quotations')),
       );
     }
   }
@@ -64,27 +64,27 @@ class _dashboardState extends State<dashboard> {
       onRefresh: _refresh,
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             height: 10,
           ),
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16.0),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
-                    blurRadius: 10,
-                    spreadRadius: 5,
+                    blurRadius: 5,
+                    spreadRadius: 3,
                   ),
                 ],
               ),
               child: Text(
                 formattedDate,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -93,7 +93,7 @@ class _dashboardState extends State<dashboard> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            padding: EdgeInsets.fromLTRB(30, 5, 0, 0),
+            padding: const EdgeInsets.fromLTRB(30, 5, 0, 0),
             child: const Text(
               'รายการรถเข้าซ่อม',
               style: TextStyle(fontSize: 14),
@@ -116,15 +116,16 @@ class _dashboardState extends State<dashboard> {
   Widget buildListItem(dynamic quotation, BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
-      padding: const EdgeInsets.all(12.0),
+      // padding: const EdgeInsets.all(12.0),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10.0),
         boxShadow: const [
           BoxShadow(
             color: Colors.black12,
-            blurRadius: 10,
-            spreadRadius: 5,
+            blurRadius: 2,
+            spreadRadius: 2,
           ),
         ],
       ),
@@ -132,27 +133,51 @@ class _dashboardState extends State<dashboard> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Text(
-                  'ทะเบียนรถ\n${quotation['licenseplate']}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 22),
+              Expanded(
+                child: Container(
+                  // padding:
+                  //     const EdgeInsets.symmetric(horizontal: 36, vertical: 10),
+
+                  padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
+                  // padding:
+                  //     const EdgeInsets.symmetric(horizontal: 44, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'ทะเบียน: ',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 22),
+                      ),
+                      Text(
+                        ' ${quotation['licenseplate']}',
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 22),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(width: 10),
+              // const SizedBox(width: 10),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
               Text(
                 'ความเสียหาย\n${quotation['damageassessment']}',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
-              SizedBox(height: 10),
+              const SizedBox(
+                width: 80,
+              ),
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
@@ -179,13 +204,17 @@ class _dashboardState extends State<dashboard> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 20),
                   ),
                   child: const Text(
-                    'Plan',
-                    style: TextStyle(color: Colors.white),
+                    'ตรวจสอบ',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                 ),
+              ),
+              const SizedBox(
+                width: 10,
               ),
             ],
           ),

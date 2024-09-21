@@ -232,7 +232,7 @@ class _TakePicturePageState extends State<Start> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-            const SizedBox(height: 20),
+            // const SizedBox(height: 10),
             if (_images.length >= 3)
               ElevatedButton(
                 onPressed: () async {
@@ -240,8 +240,9 @@ class _TakePicturePageState extends State<Start> {
                   int processId = widget.processId;
                   // Handle confirmation logic
                   // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Statusrepair()));
-                  await _uploadImages(userId, processId);
+
                   Navigator.pop(context, 'job_started');
+                  await _uploadImages(userId, processId);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green[600],
@@ -259,7 +260,7 @@ class _TakePicturePageState extends State<Start> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
           ],
         ),
       ),

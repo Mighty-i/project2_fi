@@ -65,14 +65,14 @@ class _historyState extends State<history> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16.0),
                 boxShadow: [
-                  BoxShadow(
+                  const BoxShadow(
                     color: Colors.black12,
                     blurRadius: 10,
                     spreadRadius: 5,
@@ -81,7 +81,7 @@ class _historyState extends State<history> {
               ),
               child: Text(
                 formattedDate,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -90,15 +90,15 @@ class _historyState extends State<history> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
-            child: Text(
+            padding: const EdgeInsets.fromLTRB(30, 0, 0, 5),
+            child: const Text(
               'รายการที่ดำเนินการซ่อม',
               style: TextStyle(fontSize: 14),
             ),
           ),
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(10.0),
               itemCount: quotations.length,
               itemBuilder: (context, index) {
                 return buildListItem(quotations[index]);
@@ -117,12 +117,12 @@ class _historyState extends State<history> {
     print('Repair Processes: $repairProcesses');
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      padding: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10,
@@ -136,41 +136,47 @@ class _historyState extends State<history> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                padding: EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Text(
-                  'ทะเบียนรถ\n${quotation['licenseplate']}',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('ขั้นตอนรอตรวจสอบ'),
-                  // Check if the last step's status is 'verification'
-                  Align(
-                    alignment: AlignmentDirectional(0, 0),
-                    child: Text(
-                      ': ${repairProcesses.lastWhere((process) => process['Status'] == 'verification', orElse: () => null)?['StepName'] ?? 'ยังไม่มีขั้นตอนรอตรวจสอบ'}',
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      topLeft: Radius.circular(10),
                     ),
                   ),
-                  // Check if the second-to-last step's status is 'In Progress'
-                  Text('ขั้นตอนล่าสุด'),
-                  Align(
-                    alignment: AlignmentDirectional(0, 0),
-                    child: Text(
-                      ': ${repairProcesses.firstWhere((process) => process['Status'] == 'In Progress', orElse: () => null)?['StepName'] ?? ''}',
-                    ),
+                  child: Text(
+                    'ทะเบียน\n${quotation['licenseplate']}',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16),
                   ),
-                ],
+                ),
               ),
-              SizedBox(height: 10),
-              GFIconButton(
+              // Column(
+              //   mainAxisSize: MainAxisSize.max,
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     const Text('รอตรวจสอบ'),
+              //     // Check if the last step's status is 'verification'
+              //     Align(
+              //       alignment: const AlignmentDirectional(0, 0),
+              //       child: Text(
+              //         ': ${repairProcesses.lastWhere((process) => process['Status'] == 'verification', orElse: () => null)?['StepName'] ?? 'ไม่มีขั้นตอนรอตรวจสอบ'}',
+              //       ),
+              //     ),
+              //     // Check if the second-to-last step's status is 'In Progress'
+              //     const Text('ล่าสุด'),
+              //     Align(
+              //       alignment: const AlignmentDirectional(0, 0),
+              //       child: Text(
+              //         ': ${repairProcesses.firstWhere((process) => process['Status'] == 'In Progress', orElse: () => null)?['StepName'] ?? 'ไม่มีขั้นตอนล่าสุด'}',
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              const SizedBox(height: 10),
+              IconButton(
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -181,16 +187,66 @@ class _historyState extends State<history> {
                         brand: quotation['Brand'],
                         model: quotation['Model'],
                         year: quotation['Year'],
+                        quotationDate: quotation['QuotationDate'],
                       ),
                     ),
                   );
                 },
-                icon: Icon(Icons.chevron_right_outlined),
-                shape: GFIconButtonShape.circle,
+                icon: const Icon(
+                  Icons.chevron_right_outlined,
+                  color: Colors.white,
+                  size: 30,
+                ),
+                hoverColor: Colors.blue,
+                style: IconButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
+                  backgroundColor: Colors.blueAccent,
+                  shape: const RoundedRectangleBorder(
+                    // ใช้ปรับให้เป็นเหลี่ยม
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(10),
+                      topRight: Radius.circular(10),
+                    ), // ปรับให้มุมเป็น 0
+                  ),
+                ),
               ),
             ],
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
+          Column(
+            // mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const SizedBox(width: 10),
+                  const Text('รอตรวจสอบ'),
+                  // Check if the last step's status is 'verification'
+                  Align(
+                    alignment: const AlignmentDirectional(0, 0),
+                    child: Text(
+                      ': ${repairProcesses.lastWhere((process) => process['Status'] == 'verification', orElse: () => null)?['StepName'] ?? 'ไม่มีขั้นตอนรอตรวจสอบ'}',
+                    ),
+                  ),
+                ],
+              ),
+              // Check if the second-to-last step's status is 'In Progress'
+              Row(
+                children: [
+                  const SizedBox(width: 10),
+                  const Text('ล่าสุด'),
+                  Align(
+                    alignment: const AlignmentDirectional(0, 0),
+                    child: Text(
+                      ': ${repairProcesses.firstWhere((process) => process['Status'] == 'In Progress', orElse: () => null)?['StepName'] ?? 'ไม่มีขั้นตอนล่าสุด'}',
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
           GFProgressBar(
             percentage: progress,
             lineHeight: 30,
@@ -201,7 +257,7 @@ class _historyState extends State<history> {
               child: Text(
                 '${(progress * 100).toInt()}%',
                 textAlign: TextAlign.end,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,

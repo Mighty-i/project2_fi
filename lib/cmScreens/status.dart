@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 import 'package:project2_fi/cmScreens/stcomfi.dart';
 
@@ -11,6 +12,7 @@ class MyStatus extends StatefulWidget {
   final String brand;
   final String model;
   final String year;
+  final String quotationDate;
 
   const MyStatus({
     super.key,
@@ -19,6 +21,7 @@ class MyStatus extends StatefulWidget {
     required this.brand,
     required this.model,
     required this.year,
+    required this.quotationDate,
   });
   @override
   State<MyStatus> createState() => _MyWidgetState();
@@ -50,6 +53,13 @@ class _MyWidgetState extends State<MyStatus> {
   }
 
   Widget _buildVehicleInfo() {
+    // แปลงวันที่จาก quotationDate
+    DateTime dateTime = DateTime.parse(widget.quotationDate);
+    String formattedDate = DateFormat('dd MMMM', 'th_TH').format(dateTime);
+
+    // เพิ่มปีเป็นพ.ศ.
+    int buddhistYear = dateTime.year + 543;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       padding: const EdgeInsets.all(16.0),
@@ -66,31 +76,42 @@ class _MyWidgetState extends State<MyStatus> {
       ),
       child: Column(
         children: [
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: const EdgeInsets.all(6.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      "ทะเบียนรถ",
-                      style: TextStyle(fontSize: 16, fontFamily: 'Maitree'),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(6.0),
+                      decoration: BoxDecoration(
+                        // color: Colors.grey[100],
+                        color: Colors.blue[100],
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text(
+                            "ทะเบียน",
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            widget.licenseplate,
+                            style: const TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
-                    Text(
-                      widget.licenseplate,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               const SizedBox(
-                width: 35,
+                height: 5,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -119,9 +140,10 @@ class _MyWidgetState extends State<MyStatus> {
             ],
           ),
           const SizedBox(
-            height: 10,
+            height: 5,
           ),
-          const Text('กำหนดเสร็จสิ้น: 15 ม.ค. 2567'),
+          // const Text('กำหนดเสร็จสิ้น: 15 ม.ค. 2567'),
+          Text('กำหนดเสร็จสิ้น: $formattedDate $buddhistYear'),
         ],
       ),
     );
@@ -187,6 +209,19 @@ class _MyWidgetState extends State<MyStatus> {
   }
 }
 
+String getStatusText(String status) {
+  switch (status) {
+    case 'In Progress':
+      return 'กำลังดำเนินการ';
+    case 'verification':
+      return 'รอตรวจสอบ';
+    case 'Completed':
+      return 'เสร็จสิ้น';
+    default:
+      return status; // หรือคืนค่าเป็นข้อความอื่นตามต้องการ
+  }
+}
+
 Widget _step(dynamic process, BuildContext context, int quotationId) {
   return Container(
     margin: const EdgeInsets.only(bottom: 16),
@@ -220,7 +255,7 @@ Widget _step(dynamic process, BuildContext context, int quotationId) {
             const SizedBox(height: 4),
             Text(
               textAlign: TextAlign.center,
-              'สถานะ\n${process['Status']}',
+              getStatusText(process['Status']),
               style: const TextStyle(fontSize: 20),
             ),
             const SizedBox(height: 10),

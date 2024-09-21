@@ -82,20 +82,10 @@ class _NavbarState extends State<Navbar> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(widget.username, style: TextStyle(fontSize: 20)),
-            // Text('ตำแหน่ง: ${widget.roleName}', style: TextStyle(fontSize: 20)),
-            // GFAvatar(
-            //   size: GFSize.SMALL,
-            // ),
-            // IconButton(
-            //   icon: Icon(Icons.logout),
-            //   onPressed: () {
-            //     _logout(context);
-            //   },
-            // ),
+            Text(widget.username, style: const TextStyle(fontSize: 20)),
             Builder(
               builder: (context) => IconButton(
-                icon: Icon(Icons.account_circle, size: 30),
+                icon: const Icon(Icons.account_circle, size: 30),
                 onPressed: () {
                   Scaffold.of(context).openDrawer(); // Open the drawer
                 },
@@ -117,17 +107,18 @@ class _NavbarState extends State<Navbar> {
       bottomNavigationBar: Container(
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.all(8.0), // Adjust padding as needed
+          padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 20.0),
           child: Container(
+            margin: const EdgeInsets.only(bottom: 4.0),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.8),
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30.0),
                 topRight: Radius.circular(30.0),
                 bottomLeft: Radius.circular(30.0),
                 bottomRight: Radius.circular(30.0),
               ),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 5,
@@ -155,8 +146,8 @@ class _NavbarState extends State<Navbar> {
               ],
               selectedItemColor: Colors.blue,
               unselectedItemColor: Colors.grey,
-              selectedLabelStyle: TextStyle(color: Colors.blue),
-              unselectedLabelStyle: TextStyle(color: Colors.grey),
+              selectedLabelStyle: const TextStyle(color: Colors.blue),
+              unselectedLabelStyle: const TextStyle(color: Colors.grey),
             ),
           ),
         ),

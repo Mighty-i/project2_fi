@@ -210,7 +210,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10,
@@ -229,7 +229,8 @@ class _DynamicListPageState extends State<DynamicListPage> {
               ),
               Text(
                 widget.licenseplate,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -271,7 +272,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
         automaticallyImplyLeading: false,
         leading: GFIconButton(
           color: Colors.blue,
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_rounded,
             color: Colors.white,
           ),
@@ -287,7 +288,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
                 ));
           },
         ),
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
@@ -300,35 +301,35 @@ class _DynamicListPageState extends State<DynamicListPage> {
       body: Container(
         color: Colors.white,
         child: repairSteps.isEmpty
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : Column(
                 children: [
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                     child: _buildVehicleInfo(),
                   ),
-                  SizedBox(height: 16),
-                  Text(
+                  const SizedBox(height: 16),
+                  const Text(
                     'เลือกขั้นตอนการซ่อม',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   // แสดงรายการงานซ่อมทั้งหมดพร้อม Checkbox
                   Expanded(
                     child: ListView(
-                      padding: EdgeInsets.fromLTRB(16, 0, 16, 0),
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                       children: repairSteps.map((step) {
                         return Container(
-                          margin: EdgeInsets.symmetric(vertical: 4.0),
-                          padding: EdgeInsets.all(6.0),
+                          margin: const EdgeInsets.symmetric(vertical: 4.0),
+                          padding: const EdgeInsets.all(6.0),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16.0),
-                            boxShadow: [
+                            boxShadow: const [
                               BoxShadow(
                                 color: Colors.black12,
                                 blurRadius: 10,
@@ -339,7 +340,7 @@ class _DynamicListPageState extends State<DynamicListPage> {
                           child: CheckboxListTile(
                             title: Text(
                               step['StepName'],
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -360,21 +361,13 @@ class _DynamicListPageState extends State<DynamicListPage> {
                   ),
                   // ปุ่มสำหรับดำเนินการต่อ
                   ElevatedButton(
-                    child: const Text(
-                      "ถัดไป",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(19.0),
                       ),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 20),
                     ),
                     onPressed: () async {
                       await _submitRepairProcess();
@@ -395,8 +388,16 @@ class _DynamicListPageState extends State<DynamicListPage> {
                       );
                       // print(selectedTasks);
                     },
+                    child: const Text(
+                      "ถัดไป",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                 ],
@@ -517,7 +518,14 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("รายละเอียดงานที่เลือก"),
+        title: const Text(
+          "รายละเอียดงานที่เลือก",
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.blue,
       ),
       body: Container(
         color: Colors.white,
@@ -534,12 +542,12 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                   return Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Container(
-                      margin: EdgeInsets.all(10.0),
-                      padding: EdgeInsets.all(16.0),
+                      margin: const EdgeInsets.all(10.0),
+                      padding: const EdgeInsets.all(16.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(16.0),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Colors.black12,
                             blurRadius: 10,
@@ -554,28 +562,24 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                               children: [
                                 Text(
                                   taskName,
-                                  style: TextStyle(
-                                      fontSize: 20,
+                                  style: const TextStyle(
+                                      fontSize: 26,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Text("Step ID: $stepId"),
-                                Text("Process ID: $processId"),
                               ],
                             ),
                           ),
-                          SizedBox(
-                              height:
-                                  16), // Use SizedBox instead of Expanded here
+                          const SizedBox(height: 16),
                           if (taskName != "ตรวจสอบคุณภาพ") ...[
                             Container(
                               alignment: Alignment.center,
-                              padding: EdgeInsets.fromLTRB(0, 0, 0, 2),
-                              child: Text(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
+                              child: const Text(
                                 'เลือกอะไหล่ที่ต้องใช้',
                                 style: TextStyle(fontSize: 14),
                               ),
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             Align(
                               alignment: Alignment.center,
                               child: ElevatedButton(
@@ -600,16 +604,16 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       horizontal: 24, vertical: 12),
                                 ),
-                                child: Icon(Icons.add),
+                                child: const Icon(Icons.add),
                               ),
                             ),
-                            SizedBox(height: 16),
+                            const SizedBox(height: 16),
                             Container(
                               alignment: Alignment.center,
-                              child: Text("รายละเอียดงาน"),
+                              child: const Text("รายละเอียดงาน"),
                             ),
                             Container(
                               child: TextFormField(
@@ -617,7 +621,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                 maxLines:
                                     null, // สามารถพิมพ์หลายบรรทัดได้ไม่จำกัด
                                 initialValue: taskDetails[processId] ?? '',
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     labelText: 'กรอกรายละเอียดงาน'),
                                 onChanged: (value) {
                                   setState(() {
@@ -634,7 +638,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 }).toList(),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
@@ -644,9 +648,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(19.0),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
               ),
-              child: Text(
+              child: const Text(
                 'ยืนยัน',
                 style: TextStyle(
                   color: Colors.white,
@@ -655,7 +660,7 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
           ],
@@ -665,56 +670,282 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
   }
 }
 
-// Widget _buildListItem(int index) {
-//   return Container(
-//     margin: EdgeInsets.symmetric(vertical: 8.0),
-//     padding: EdgeInsets.all(16.0),
-//     decoration: BoxDecoration(
-//       color: Colors.white,
-//       borderRadius: BorderRadius.circular(16.0),
-//     ),
-//     child: Column(
-//       children: [
-//         SizedBox(height: 16), // Use SizedBox instead of Expanded here
-//         Container(
-//           alignment: Alignment.centerLeft,
-//           padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
-//           child: Text(
-//             'เลือกอะไหล่ที่ต้องใช้',
-//             style: TextStyle(fontSize: 14),
-//           ),
-//         ),
+// class Partmain extends StatefulWidget {
+//   final int processId;
+//   final String brand;
+//   final String model;
+//   final String year;
 
-//         SizedBox(height: 16),
-//         Align(
-//           alignment: Alignment.center,
-//           child: ElevatedButton(
-//             onPressed: () async {},
-//             style: ElevatedButton.styleFrom(
-//               backgroundColor: Colors.blue.withOpacity(0.5),
-//               shape: RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(20.0),
-//               ),
-//               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-//             ),
-//             child: Icon(Icons.add),
-//           ),
-//         ),
-//         SizedBox(height: 16),
-//         Container(
-//           alignment: Alignment.center,
-//           child: Text("รายละเอียดงาน"),
-//         ),
-//         Container(
-//           child: TextFormField(
-//             decoration: InputDecoration(labelText: 'รายละเอียดงาน'),
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
+//   Partmain(
+//       {required this.processId,
+//       required this.brand,
+//       required this.model,
+//       required this.year});
+
+//   @override
+//   State<Partmain> createState() => _PartmainState();
 // }
 
+// class _PartmainState extends State<Partmain> {
+//   List<dynamic> partsData = [];
+//   List<dynamic> filteredParts = [];
+//   String searchQuery = '';
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     print("Navigated to Partmain with index: ${widget.processId}");
+//     _fetchPartsData();
+//   }
+
+//   Future<void> _fetchPartsData() async {
+//     final response = await http.get(
+//       Uri.parse('https://bodyworkandpaint.pantook.com/api/parts'),
+//     );
+
+//     if (response.statusCode == 200) {
+//       final responseBody = json.decode(response.body);
+//       setState(() {
+//         partsData = responseBody['data'];
+//         filteredParts = partsData;
+//       });
+//     } else {
+//       throw Exception('Failed to load parts data');
+//     }
+//   }
+
+//   void _filterPartsData(String query) {
+//     setState(() {
+//       searchQuery = query;
+//       if (searchQuery.isEmpty) {
+//         // กรองรายการที่ตรงกับ brand, model และ year ก่อน
+//         filteredParts = partsData.where((part) {
+//           return part['Brand'].toString().toLowerCase() ==
+//                   widget.brand.toLowerCase() &&
+//               part['Model'].toString().toLowerCase() ==
+//                   widget.model.toLowerCase() &&
+//               part['Year'].toString() == widget.year.toString();
+//         }).toList();
+//       } else {
+//         // ค้นหาโดยใช้คำค้นหา และกรองตาม brand, model และ year
+//         filteredParts = partsData.where((part) {
+//           final partName = part['Name'].toString().toLowerCase();
+//           return partName.contains(searchQuery.toLowerCase()) &&
+//               part['Brand'].toString().toLowerCase() ==
+//                   widget.brand.toLowerCase() &&
+//               part['Model'].toString().toLowerCase() ==
+//                   widget.model.toLowerCase() &&
+//               part['Year'].toString() == widget.year.toString();
+//         }).toList();
+//       }
+//     });
+//   }
+
+//   Widget partListview(BuildContext context, int partId, String partName,
+//       String description, int quantity) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//       children: [
+//         SizedBox(
+//           width: 10,
+//         ),
+//         Flexible(
+//           child: Container(
+//             margin: const EdgeInsets.symmetric(vertical: 8.0),
+//             padding: const EdgeInsets.all(16.0),
+//             decoration: BoxDecoration(
+//               color: Colors.white,
+//               borderRadius: BorderRadius.circular(10.0),
+//               boxShadow: const [
+//                 BoxShadow(
+//                   color: Colors.black12,
+//                   blurRadius: 5,
+//                   spreadRadius: 2,
+//                 )
+//               ],
+//             ),
+//             child: Row(
+//               children: [
+//                 Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Text(
+//                       partName,
+//                       style: const TextStyle(
+//                           fontWeight: FontWeight.bold, fontSize: 18),
+//                     ),
+//                     const SizedBox(height: 8),
+//                     // Text('รายละเอียด: $description'),
+//                     Text(
+//                       'รายละเอียด: \n${description.length > 29 ? '${description.substring(0, 29)}...' : description}',
+//                       style: const TextStyle(fontSize: 14),
+//                     ),
+//                     const SizedBox(height: 8),
+//                     Text('คงเหลือ: $quantity'),
+//                   ],
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//         const SizedBox(
+//           width: 10,
+//         ),
+//         OutlinedButton(
+//           onPressed: () {
+//             setState(() {
+//               final selectedPart = {
+//                 'Part_ID': partId,
+//                 'Name': partName,
+//               };
+//               SelectedPartsManager.addPart(selectedPart, widget.processId);
+//               print('Added part: $selectedPart');
+//             });
+//           },
+//           style: OutlinedButton.styleFrom(
+//             padding: const EdgeInsets.all(22.0),
+//             foregroundColor: const Color.fromARGB(255, 247, 24, 255),
+//             backgroundColor: const Color.fromARGB(255, 134, 199, 252),
+//             side: const BorderSide(color: Color.fromARGB(255, 0, 104, 189)),
+//             shape: RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(20.0)),
+//           ),
+//           child: const Icon(Icons.add, size: 36, color: Colors.black),
+//         )
+//       ],
+//     );
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: GFAppBar(
+//         backgroundColor: Colors.blue,
+//         automaticallyImplyLeading: false,
+//         leading: GFIconButton(
+//           color: Colors.blue,
+//           icon: const Icon(
+//             Icons.arrow_back_rounded,
+//             color: Colors.white,
+//           ),
+//           onPressed: () {
+//             Navigator.pop(context); // Return selected parts
+//           },
+//         ),
+//         title: const Row(
+//           mainAxisAlignment: MainAxisAlignment.start,
+//           children: [
+//             Text(
+//               'รายการอะไหล่',
+//               style: TextStyle(fontSize: 20),
+//             ),
+//           ],
+//         ),
+//       ),
+//       body: Container(
+//         color: Colors.white,
+//         child: Padding(
+//           padding: const EdgeInsets.all(16.0),
+//           child: Column(
+//             children: [
+//               Container(
+//                 alignment: Alignment.center,
+//                 child: Row(
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   children: [
+//                     Text(
+//                       widget.brand,
+//                       style: const TextStyle(
+//                           fontSize: 30, fontWeight: FontWeight.bold),
+//                     ),
+//                     const SizedBox(width: 5),
+//                     Text(
+//                       widget.model,
+//                       style: const TextStyle(
+//                           fontSize: 30, fontWeight: FontWeight.bold),
+//                     ),
+//                     const SizedBox(width: 5),
+//                     Text(
+//                       widget.year,
+//                       style: const TextStyle(
+//                           fontSize: 30, fontWeight: FontWeight.bold),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//               const SizedBox(height: 10),
+//               Row(
+//                 children: [
+//                   Expanded(
+//                     child: TextField(
+//                       decoration: InputDecoration(
+//                         labelText: 'ค้นหา',
+//                         border: OutlineInputBorder(
+//                           borderRadius: BorderRadius.circular(10),
+//                         ),
+//                       ),
+//                       onChanged: _filterPartsData, // ค้นหาเมื่อพิมพ์ข้อความ
+//                     ),
+//                   ),
+//                   const SizedBox(width: 10),
+//                   IconButton(
+//                     icon: const Icon(Icons.search_sharp),
+//                     onPressed: () {
+//                       // อัพเดตรายการเมื่อกดปุ่มค้นหา
+//                       _filterPartsData(searchQuery);
+//                     },
+//                   ),
+//                 ],
+//               ),
+//               const SizedBox(height: 10),
+//               Expanded(
+//                 child: ListView.builder(
+//                   itemCount: filteredParts.length,
+//                   itemBuilder: (context, index) {
+//                     final part = filteredParts[index];
+//                     return partListview(
+//                       context,
+//                       part['Part_ID'],
+//                       part['Name'] ?? 'Unknown',
+//                       part['Description'] ?? 'No description available',
+//                       part['Quantity'] ?? 0,
+//                     );
+//                   },
+//                 ),
+//               ),
+//               const SizedBox(height: 10),
+//               ElevatedButton(
+//                 onPressed: () {
+//                   Navigator.push(
+//                     context,
+//                     MaterialPageRoute(
+//                       builder: (context) =>
+//                           PartSummary(processId: widget.processId),
+//                     ),
+//                   );
+//                 },
+//                 style: ElevatedButton.styleFrom(
+//                   padding:
+//                       const EdgeInsets.symmetric(horizontal: 42, vertical: 12),
+//                   backgroundColor: Colors.blue[600],
+//                   shape: RoundedRectangleBorder(
+//                     borderRadius: BorderRadius.circular(19.0),
+//                   ),
+//                   textStyle: const TextStyle(fontSize: 18),
+//                 ),
+//                 child: const Text(
+//                   'สรุปรายการอะไหล่',
+//                   style: TextStyle(color: Colors.white),
+//                 ),
+//               ),
+//               const SizedBox(height: 20),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 class Partmain extends StatefulWidget {
   final int processId;
   final String brand;
@@ -739,7 +970,7 @@ class _PartmainState extends State<Partmain> {
   @override
   void initState() {
     super.initState();
-    print("Navigated to Partmain with index: ${widget.processId}");
+    print("Navigated to Partmain with process ID: ${widget.processId}");
     _fetchPartsData();
   }
 
@@ -758,21 +989,6 @@ class _PartmainState extends State<Partmain> {
       throw Exception('Failed to load parts data');
     }
   }
-
-  // void _filterPartsData(String query) {
-  //   setState(() {
-  //     searchQuery = query;
-  //     if (searchQuery.isEmpty) {
-  //       filteredParts = partsData; // ถ้าไม่มีคำค้นหาแสดงรายการทั้งหมด
-  //     } else {
-  //       filteredParts = partsData.where((part) {
-  //         final partName = part['Name'].toLowerCase();
-  //         return partName
-  //             .contains(searchQuery.toLowerCase()); // ค้นหาโดยไม่สนตัวเล็กใหญ่
-  //       }).toList();
-  //     }
-  //   });
-  // }
 
   void _filterPartsData(String query) {
     setState(() {
@@ -806,18 +1022,21 @@ class _PartmainState extends State<Partmain> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
+        SizedBox(
+          width: 10,
+        ),
         Flexible(
           child: Container(
-            margin: EdgeInsets.symmetric(vertical: 8.0),
-            padding: EdgeInsets.all(36.0),
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
+            padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(20.0),
-              boxShadow: [
+              borderRadius: BorderRadius.circular(10.0),
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
-                  blurRadius: 10,
-                  spreadRadius: 5,
+                  blurRadius: 5,
+                  spreadRadius: 2,
                 )
               ],
             ),
@@ -828,16 +1047,15 @@ class _PartmainState extends State<Partmain> {
                   children: [
                     Text(
                       partName,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18),
                     ),
-                    SizedBox(height: 8),
-                    // Text('รายละเอียด: $description'),
+                    const SizedBox(height: 8),
                     Text(
                       'รายละเอียด: \n${description.length > 29 ? '${description.substring(0, 29)}...' : description}',
-                      style: TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 14),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     Text('คงเหลือ: $quantity'),
                   ],
                 ),
@@ -845,7 +1063,7 @@ class _PartmainState extends State<Partmain> {
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         OutlinedButton(
@@ -859,15 +1077,15 @@ class _PartmainState extends State<Partmain> {
               print('Added part: $selectedPart');
             });
           },
-          child: Icon(Icons.add, size: 36, color: Colors.black),
           style: OutlinedButton.styleFrom(
-            padding: EdgeInsets.all(22.0),
-            foregroundColor: Color.fromARGB(255, 247, 24, 255),
-            backgroundColor: Color.fromARGB(255, 134, 199, 252),
-            side: BorderSide(color: Color.fromARGB(255, 0, 104, 189)),
+            padding: const EdgeInsets.all(22.0),
+            foregroundColor: const Color.fromARGB(255, 247, 24, 255),
+            backgroundColor: const Color.fromARGB(255, 134, 199, 252),
+            side: const BorderSide(color: Color.fromARGB(255, 0, 104, 189)),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
           ),
+          child: const Icon(Icons.add, size: 36, color: Colors.black),
         )
       ],
     );
@@ -881,7 +1099,7 @@ class _PartmainState extends State<Partmain> {
         automaticallyImplyLeading: false,
         leading: GFIconButton(
           color: Colors.blue,
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_rounded,
             color: Colors.white,
           ),
@@ -889,7 +1107,7 @@ class _PartmainState extends State<Partmain> {
             Navigator.pop(context); // Return selected parts
           },
         ),
-        title: Row(
+        title: const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
@@ -908,34 +1126,29 @@ class _PartmainState extends State<Partmain> {
               Container(
                 alignment: Alignment.center,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          widget.brand,
-                          style: const TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
-                          widget.model,
-                          style: const TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(width: 5),
-                        Text(
-                          widget.year,
-                          style: const TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold),
-                        ),
-                      ],
+                    Text(
+                      widget.brand,
+                      style: const TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.bold),
                     ),
-                    //style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    const SizedBox(width: 5),
+                    Text(
+                      widget.model,
+                      style: const TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      widget.year,
+                      style: const TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 10),
               Row(
                 children: [
                   Expanded(
@@ -949,16 +1162,16 @@ class _PartmainState extends State<Partmain> {
                       onChanged: _filterPartsData, // ค้นหาเมื่อพิมพ์ข้อความ
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   IconButton(
-                    icon: Icon(Icons.search),
+                    icon: const Icon(Icons.search_sharp),
                     onPressed: () {
-                      // อัพเดตรายการเมื่อกดปุ่มค้นหา
                       _filterPartsData(searchQuery);
                     },
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
                   itemCount: filteredParts.length,
@@ -974,7 +1187,7 @@ class _PartmainState extends State<Partmain> {
                   },
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -985,12 +1198,21 @@ class _PartmainState extends State<Partmain> {
                     ),
                   );
                 },
-                child: Text('สรุป'),
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                  textStyle: TextStyle(fontSize: 18),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 42, vertical: 12),
+                  backgroundColor: Colors.blue[600],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(19.0),
+                  ),
+                  textStyle: const TextStyle(fontSize: 18),
+                ),
+                child: const Text(
+                  'สรุปรายการอะไหล่',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
@@ -999,6 +1221,119 @@ class _PartmainState extends State<Partmain> {
   }
 }
 
+// class PartSummary extends StatefulWidget {
+//   final int processId;
+
+//   PartSummary({required this.processId});
+
+//   @override
+//   _PartSummaryState createState() => _PartSummaryState();
+// }
+
+// class _PartSummaryState extends State<PartSummary> {
+//   void _removePart(int processId, int partIndex) {
+//     setState(() {
+//       SelectedPartsManager.removePart(processId, partIndex);
+//     });
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     final selectedParts = SelectedPartsManager.getSelectedParts();
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text(
+//           'สรุปรายการอะไหล่ที่เลือก',
+//           style: TextStyle(color: Colors.white),
+//         ),
+//         backgroundColor: Colors.blue,
+//         automaticallyImplyLeading: false,
+//       ),
+//       body: Container(
+//         color: Colors.white,
+//         child: ListView.builder(
+//           itemCount: selectedParts.length,
+//           itemBuilder: (context, index) {
+//             final part = selectedParts[index];
+//             return Padding(
+//               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+//               child: Card(
+//                 color: Colors.white,
+//                 child: ListTile(
+//                   title: Text(
+//                     part['Name'],
+//                     style: const TextStyle(
+//                         fontSize: 20, fontWeight: FontWeight.bold),
+//                   ),
+//                   // subtitle: Text('Process ID: ${part['Process_ID']}'),
+//                   trailing: IconButton(
+//                     icon: const Icon(
+//                       Icons.delete,
+//                       color: Colors.red,
+//                     ),
+//                     onPressed: () {
+//                       _removePart(widget.processId, index);
+//                       setState(() {
+//                         selectedParts.removeAt(index);
+//                       });
+//                     },
+//                   ),
+//                 ),
+//               ),
+//             );
+//           },
+//         ),
+//       ),
+//       bottomNavigationBar: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//           children: [
+//             const SizedBox(
+//               width: 2,
+//             ),
+//             ElevatedButton(
+//               onPressed: () {
+//                 Navigator.pop(context); // กลับไปที่ Partmain
+//               },
+//               style: ElevatedButton.styleFrom(
+//                 backgroundColor: Colors.blue,
+//               ),
+//               child: const Text(
+//                 'เพิ่มอะไหล่',
+//                 style: TextStyle(color: Colors.white),
+//               ),
+//             ),
+//             const SizedBox(
+//               width: 5,
+//             ),
+//             ElevatedButton(
+//               onPressed: () async {
+//                 for (var part in selectedParts) {
+//                   await _savePartUsage(part['Part_ID'], part['Process_ID']);
+//                 }
+//                 // Navigator.pop(context, true); // กลับไปที่หน้าจอก่อนหน้า
+//                 // Navigator.popUntil(context, ModalRoute.withName('/Process'));
+//                 Navigator.pop(context); // กลับไปที่หน้าจอ Partmain
+//                 Navigator.pop(context); // กลับไปที่หน้าจอ Process
+//               },
+//               style: ElevatedButton.styleFrom(
+//                 backgroundColor: Colors.green,
+//               ),
+//               child: const Text(
+//                 'ยืนยัน',
+//                 style: TextStyle(color: Colors.white),
+//               ),
+//             ),
+//             const SizedBox(
+//               width: 2,
+//             ),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
 class PartSummary extends StatefulWidget {
   final int processId;
 
@@ -1009,106 +1344,180 @@ class PartSummary extends StatefulWidget {
 }
 
 class _PartSummaryState extends State<PartSummary> {
-  void _removePart(int processId, int partIndex) {
+  List<Map<String, dynamic>> selectedParts = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSelectedParts();
+  }
+
+  // โหลดข้อมูลอะไหล่ที่เลือกจาก SharedPreferences
+  void _loadSelectedParts() async {
+    List<Map<String, dynamic>> parts =
+        await SelectedPartsManager.getSelectedParts();
     setState(() {
-      SelectedPartsManager.removePart(processId, partIndex);
+      selectedParts = parts;
+    });
+  }
+
+  void _removePart(int processId, int partIndex) async {
+    await SelectedPartsManager.removePart(processId, partIndex);
+    _loadSelectedParts(); // โหลดข้อมูลใหม่หลังจากลบ
+  }
+
+  void _updatePartQuantity(int index, int change) {
+    setState(() {
+      int currentQuantity = selectedParts[index]['quantity'] ?? 1;
+      int newQuantity = currentQuantity + change;
+
+      if (newQuantity > 0) {
+        selectedParts[index]['quantity'] = newQuantity;
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final selectedParts = SelectedPartsManager.getSelectedParts();
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('สรุปรายการอะไหล่ที่เลือก'),
+        title: const Text(
+          'สรุปรายการอะไหล่ที่เลือก',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.blue,
         automaticallyImplyLeading: false,
       ),
       body: Container(
         color: Colors.white,
-        child: ListView.builder(
-          itemCount: selectedParts.length,
-          itemBuilder: (context, index) {
-            final part = selectedParts[index];
-            return Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: Card(
-                color: Colors.white,
-                child: ListTile(
-                  title: Text(
-                    part['Name'],
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text('Process ID: ${part['Process_ID']}'),
-                  trailing: IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: Colors.red,
-                    ),
-                    onPressed: () {
-                      _removePart(widget.processId, index);
-                      setState(() {
-                        selectedParts.removeAt(index);
-                      });
-                    },
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           children: [
             const SizedBox(
-              width: 2,
+              height: 10,
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context); // กลับไปที่ Partmain
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blue,
+            Expanded(
+              child: ListView.builder(
+                itemCount: selectedParts.length,
+                itemBuilder: (context, index) {
+                  final part = selectedParts[index];
+                  int quantity =
+                      part['quantity'] ?? 1; // กำหนดค่าเริ่มต้นเป็น 1
+
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                    child: Card(
+                      color: Colors.white,
+                      child: ListTile(
+                        title: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              part['Name'],
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              width: 60,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.remove_circle,
+                                    color: Colors.red,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+                                    _updatePartQuantity(index, -1); // ลดจำนวน
+                                  },
+                                ),
+                                Text(
+                                  '$quantity',
+                                  style: const TextStyle(fontSize: 18),
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.add_circle,
+                                    color: Colors.green,
+                                    size: 30,
+                                  ),
+                                  onPressed: () {
+                                    _updatePartQuantity(index, 1); // เพิ่มจำนวน
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        trailing: IconButton(
+                          icon: const Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                            size: 40,
+                          ),
+                          onPressed: () {
+                            _removePart(widget.processId, index);
+                          },
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-              child: const Text(
-                'เพิ่มอะไหล่',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            const SizedBox(
-              width: 5,
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                for (var part in selectedParts) {
-                  await _savePartUsage(part['Part_ID'], part['Process_ID']);
-                }
-                // Navigator.pop(context, true); // กลับไปที่หน้าจอก่อนหน้า
-                // Navigator.popUntil(context, ModalRoute.withName('/Process'));
-                Navigator.pop(context); // กลับไปที่หน้าจอ Partmain
-                Navigator.pop(context); // กลับไปที่หน้าจอ Process
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-              ),
-              child: const Text(
-                'ยืนยันและบันทึก',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            const SizedBox(
-              width: 2,
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 40.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // กลับไปที่ Partmain
+                },
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 42, vertical: 12),
+                  backgroundColor: Colors.blue,
+                ),
+                child: const Text(
+                  'เพิ่มอะไหล่',
+                  style: TextStyle(fontSize: 22, color: Colors.white),
+                ),
+              ),
+              const SizedBox(width: 30),
+              ElevatedButton(
+                onPressed: () async {
+                  for (var part in selectedParts) {
+                    await _savePartUsage(
+                        part['Part_ID'], part['Process_ID'], part['quantity']);
+                  }
+                  Navigator.pop(context); // กลับไปที่หน้าจอ Partmain
+                  Navigator.pop(context); // กลับไปที่หน้าจอ Process
+                },
+                style: ElevatedButton.styleFrom(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 42, vertical: 12),
+                  backgroundColor: Colors.green,
+                ),
+                child: const Text(
+                  'ยืนยัน',
+                  style: TextStyle(fontSize: 22, color: Colors.white),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Future<void> _savePartUsage(int partId, int processId) async {
+  Future<void> _savePartUsage(int partId, int processId, int quantity) async {
     const url = 'https://bodyworkandpaint.pantook.com/api/part_usage';
 
     try {
@@ -1118,6 +1527,7 @@ class _PartSummaryState extends State<PartSummary> {
         body: jsonEncode({
           'Part_ID': partId,
           'Process_ID': processId,
+          'Quantity': quantity,
         }),
       );
 

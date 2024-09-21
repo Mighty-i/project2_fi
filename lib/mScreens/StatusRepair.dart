@@ -299,11 +299,10 @@ class _StatusrepairState extends State<Statusrepair> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            'ทะเบียนรถ ',
+                            'ทะเบียน ',
                             // widget.licensePlate,
                             style: TextStyle(
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           Text(
@@ -312,12 +311,12 @@ class _StatusrepairState extends State<Statusrepair> {
                                 fontSize: 24, fontWeight: FontWeight.bold),
                           ),
 
-                          //testค่าprocessid
-                          Text(
-                            widget.processId.toString(),
-                            style: const TextStyle(
-                                fontSize: 10, fontWeight: FontWeight.bold),
-                          ),
+                          // //testค่าprocessid
+                          // Text(
+                          //   widget.processId.toString(),
+                          //   style: const TextStyle(
+                          //       fontSize: 10, fontWeight: FontWeight.bold),
+                          // ),
                         ],
                       ),
                       const SizedBox(height: 5),

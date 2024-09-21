@@ -54,7 +54,7 @@ class _MYdashboardState extends State<MYdashboard> {
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load repair processes')),
+        const SnackBar(content: Text('Failed to load repair processes')),
       );
     }
   }
@@ -70,13 +70,13 @@ class _MYdashboardState extends State<MYdashboard> {
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             child: Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16.0),
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.black12,
                     blurRadius: 10,
@@ -86,7 +86,7 @@ class _MYdashboardState extends State<MYdashboard> {
               ),
               child: Text(
                 formattedDate,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                 ),
@@ -95,15 +95,15 @@ class _MYdashboardState extends State<MYdashboard> {
           ),
           Container(
             alignment: Alignment.centerLeft,
-            padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
+            padding: const EdgeInsets.fromLTRB(30, 0, 0, 0),
             child: const Text(
               'รายการซ่อม',
-              style: TextStyle(fontSize: 14),
+              style: TextStyle(fontSize: 18),
             ),
           ),
           Expanded(
             child: ListView.builder(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               itemCount: repairProcesses.length,
               itemBuilder: (context, index) {
                 return buildListItem(repairProcesses[index], context);
@@ -115,14 +115,27 @@ class _MYdashboardState extends State<MYdashboard> {
     );
   }
 
+  String getStatusText(String status) {
+    switch (status) {
+      case 'In Progress':
+        return 'รอดำเนินการ';
+      case 'verification':
+        return 'รอตรวจสอบ';
+      case 'Completed':
+        return 'เสร็จสิ้น';
+      default:
+        return status; // หรือคืนค่าเป็นข้อความอื่นตามต้องการ
+    }
+  }
+
   Widget buildListItem(dynamic repairProcess, BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      padding: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10,
@@ -131,28 +144,27 @@ class _MYdashboardState extends State<MYdashboard> {
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                padding: EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Text(
-                  'ทะเบียนรถ\n${repairProcess['licenseplate']}',
-                  textAlign: TextAlign.center,
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(18.0),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      topLeft: Radius.circular(10),
+                    ),
+                  ),
+                  child: Text(
+                    'ทะเบียนรถ\n${repairProcess['licenseplate']}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 16),
+                  ),
                 ),
               ),
-              SizedBox(width: 12),
-              Text(
-                'สถานะ\n${repairProcess['Status']}',
-                style: TextStyle(fontSize: 18),
-              ),
-              SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton(
@@ -173,18 +185,26 @@ class _MYdashboardState extends State<MYdashboard> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(10),
+                        topRight: Radius.circular(10),
+                      ),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 31),
                   ),
-                  child: Text(
+                  child: const Text(
                     'งาน',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
             ],
+          ),
+          Text(
+            'สถานะ: ${getStatusText(repairProcess['Status'])}',
+            style: const TextStyle(fontSize: 18),
           ),
         ],
       ),

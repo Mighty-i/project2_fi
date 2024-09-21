@@ -97,7 +97,8 @@ class _NavbarState extends State<Navbar> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Text(widget.username.toString(), style: TextStyle(fontSize: 20)),
+            Text(widget.username.toString(),
+                style: const TextStyle(fontSize: 20)),
             // Text(widget.username, style: TextStyle(fontSize: 20)),
             // Text('ตำแหน่ง: ${widget.roleName}', style: TextStyle(fontSize: 20)),
             // const GFAvatar(
@@ -105,7 +106,7 @@ class _NavbarState extends State<Navbar> {
             // ),
             Builder(
               builder: (context) => IconButton(
-                icon: Icon(Icons.account_circle, size: 30),
+                icon: const Icon(Icons.account_circle, size: 30),
                 onPressed: () {
                   Scaffold.of(context).openDrawer(); // Open the drawer
                 },
@@ -135,15 +136,16 @@ class _NavbarState extends State<Navbar> {
         child: Padding(
           padding: const EdgeInsets.all(8.0), // Adjust padding as needed
           child: Container(
+            margin: const EdgeInsets.only(bottom: 20.0),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.8),
-              borderRadius: BorderRadius.only(
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(30.0),
                 topRight: Radius.circular(30.0),
                 bottomLeft: Radius.circular(30.0),
                 bottomRight: Radius.circular(30.0),
               ),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 5,
@@ -171,8 +173,8 @@ class _NavbarState extends State<Navbar> {
               ],
               selectedItemColor: Colors.blue,
               unselectedItemColor: Colors.grey,
-              selectedLabelStyle: TextStyle(color: Colors.blue),
-              unselectedLabelStyle: TextStyle(color: Colors.grey),
+              selectedLabelStyle: const TextStyle(color: Colors.blue),
+              unselectedLabelStyle: const TextStyle(color: Colors.grey),
             ),
           ),
         ),
@@ -203,8 +205,8 @@ class _NavbarState extends State<Navbar> {
         ],
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
-        selectedLabelStyle: TextStyle(color: Colors.blue),
-        unselectedLabelStyle: TextStyle(color: Colors.grey),
+        selectedLabelStyle: const TextStyle(color: Colors.blue),
+        unselectedLabelStyle: const TextStyle(color: Colors.grey),
       ),
     );
   }

@@ -202,6 +202,9 @@ class _MYdashboardState extends State<MYdashboard> {
               ),
             ],
           ),
+          const SizedBox(
+            height: 6,
+          ),
           Text(
             'สถานะ: ${getStatusText(repairProcess['Status'])}',
             style: const TextStyle(fontSize: 18),

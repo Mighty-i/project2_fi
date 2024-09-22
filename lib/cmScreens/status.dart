@@ -92,13 +92,13 @@ class _MyWidgetState extends State<MyStatus> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text(
-                            "ทะเบียน",
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          ),
+                          // const Text(
+                          //   "ทะเบียน",
+                          //   style: TextStyle(
+                          //     fontSize: 18,
+                          //     color: Colors.black,
+                          //   ),
+                          // ),
                           Text(
                             widget.licenseplate,
                             style: const TextStyle(

@@ -107,7 +107,7 @@ class _NavbarState extends State<Navbar> {
       bottomNavigationBar: Container(
         color: Colors.white,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 20.0),
+          padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 24.0),
           child: Container(
             margin: const EdgeInsets.only(bottom: 4.0),
             decoration: BoxDecoration(

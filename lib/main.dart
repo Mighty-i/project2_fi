@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:getwidget/getwidget.dart';
 import 'package:project2_fi/navbar.dart';
 // import 'package:getwidget/getwidget.dart';
 import 'package:project2_fi/navbar2.dart';
@@ -40,6 +41,7 @@ class Loginpage extends StatefulWidget {
 class _LoginpageState extends State<Loginpage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  int _failedLoginAttempts = 0; // ตัวแปรเก็บจำนวนครั้งที่ล็อกอินผิด
 
   Future<void> _login() async {
     const url = 'https://bodyworkandpaint.pantook.com/api/login';
@@ -58,6 +60,9 @@ class _LoginpageState extends State<Loginpage> {
       final responseData = jsonDecode(response.body);
 
       if (responseData['message'] == 'Login successful') {
+        setState(() {
+          _failedLoginAttempts = 0; // รีเซ็ตจำนวนครั้งที่ล็อกอินผิด
+        });
         final user = responseData['user'];
         final roleName = responseData['role_name'];
         final roleId = user['Role_ID'];
@@ -95,16 +100,22 @@ class _LoginpageState extends State<Loginpage> {
           );
         }
       } else {
+        setState(() {
+          _failedLoginAttempts++; // เพิ่มจำนวนครั้งที่ล็อกอินผิด
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Invalid username or password'),
+            content: Text('ชื่อผู้ใช้หรือเบอร์โทรหรือรหัสผ่านผิดพลาด'),
           ),
         );
       }
     } else {
+      setState(() {
+        _failedLoginAttempts++; // เพิ่มจำนวนครั้งที่ล็อกอินผิด
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Failed to login. Please try again.'),
+          content: Text('เข้าสู่ระบบใหม่อีกครั้ง'),
         ),
       );
     }
@@ -115,7 +126,7 @@ class _LoginpageState extends State<Loginpage> {
     return Scaffold(
       // appBar: AppBar(),
       body: Container(
-        padding: EdgeInsets.all(50),
+        padding: const EdgeInsets.all(50),
         width: double.infinity,
         height: double.infinity,
         color: Colors.white,
@@ -127,22 +138,22 @@ class _LoginpageState extends State<Loginpage> {
               style: TextStyle(fontSize: 30),
             ),
             Container(
-              padding: EdgeInsets.only(top: 30, bottom: 10),
+              padding: const EdgeInsets.only(top: 30, bottom: 10),
               child: TextField(
                 controller: _usernameController,
-                style: TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20)),
-                  hintText: 'ป้อนชื่อผู้ใช้',
+                  hintText: 'ป้อนชื่อผู้ใช้ หรือ เบอร์โทร',
                 ),
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 20, bottom: 20),
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: TextField(
                 controller: _passwordController,
-                style: TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20)),
@@ -151,20 +162,152 @@ class _LoginpageState extends State<Loginpage> {
                 obscureText: true,
               ),
             ),
+            if (_failedLoginAttempts >= 2)
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ResetPasswordPage()));
+                },
+                child: const Text('ลืมรหัสผ่านหรือไม่'),
+              ),
             Container(
-              padding: EdgeInsets.only(top: 20, bottom: 20),
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: TextButton(
                 onPressed: _login,
-                child: Text(
+                style: TextButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    fixedSize: const Size.fromWidth(250)),
+                child: const Text(
                   'LOGIN',
                   style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
-                style: TextButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    fixedSize: Size.fromWidth(250)),
               ),
             )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ResetPasswordPage extends StatefulWidget {
+  @override
+  _ResetPasswordPageState createState() => _ResetPasswordPageState();
+}
+
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _usernameOrPhoneController =
+      TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
+
+  Future<void> _resetPassword() async {
+    const url = 'https://bodyworkandpaint.pantook.com/api/reset-password';
+    final response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'username': _usernameOrPhoneController.text,
+        'new_password': _newPasswordController.text,
+        'new_password_confirmation': _confirmPasswordController.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password reset successful.'),
+        ),
+      );
+      // นำผู้ใช้ไปที่หน้าเข้าสู่ระบบ
+      Navigator.pop(context);
+    } else {
+      final responseData = jsonDecode(response.body);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(responseData['message'] ?? 'An error occurred.'),
+        ),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: GFAppBar(
+        title: const Text('รีเซ็ต รหัสผ่าน'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Container(
+        color: Colors.white,
+        height: 850,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                const SizedBox(height: 10.0),
+                const Text(
+                  'ชื่อผู้ใช้ หรือ เบอร์โทร',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  child: TextFormField(
+                    controller: _usernameOrPhoneController,
+                    decoration: const InputDecoration(
+                      labelText: 'ชื่อผู้ใช้ หรือ เบอร์โทร',
+                      border: OutlineInputBorder(),
+                    ),
+                    obscureText: true,
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                const Text(
+                  'รหัสผ่านใหม่',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  child: TextFormField(
+                    controller: _newPasswordController,
+                    decoration: const InputDecoration(
+                      labelText: 'รหัสผ่านใหม่',
+                      border: OutlineInputBorder(),
+                    ),
+                    obscureText: true,
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  child: TextFormField(
+                    controller: _confirmPasswordController,
+                    decoration: const InputDecoration(
+                      labelText: 'ยืนยันรหัสผ่านใหม่',
+                      border: OutlineInputBorder(),
+                    ),
+                    obscureText: true,
+                  ),
+                ),
+                const SizedBox(height: 26.0),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                  onPressed: _resetPassword,
+                  child: const Text(
+                    'บันทึกรหัสผ่านใหม่',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

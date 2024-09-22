@@ -296,27 +296,39 @@ class _StatusrepairState extends State<Statusrepair> {
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          const Text(
-                            'ทะเบียน ',
-                            // widget.licensePlate,
-                            style: TextStyle(
-                              fontSize: 24,
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(10),
+                                  topLeft: Radius.circular(10),
+                                  bottomRight: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'ทะเบียน ',
+                                    // widget.licensePlate,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.licensePlate,
+                                    style: const TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Text(
-                            widget.licensePlate,
-                            style: const TextStyle(
-                                fontSize: 24, fontWeight: FontWeight.bold),
-                          ),
-
-                          // //testค่าprocessid
-                          // Text(
-                          //   widget.processId.toString(),
-                          //   style: const TextStyle(
-                          //       fontSize: 10, fontWeight: FontWeight.bold),
-                          // ),
                         ],
                       ),
                       const SizedBox(height: 5),

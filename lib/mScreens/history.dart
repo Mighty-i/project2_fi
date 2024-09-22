@@ -38,7 +38,7 @@ class _HistoryState extends State<History> {
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load repair processes')),
+        const SnackBar(content: Text('Failed to load repair processes')),
       );
     }
   }
@@ -47,17 +47,17 @@ class _HistoryState extends State<History> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Container(
             alignment: Alignment.center,
             // padding: EdgeInsets.fromLTRB(30, 0, 0, 10),
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(16.0),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 10,
@@ -76,7 +76,7 @@ class _HistoryState extends State<History> {
         ),
         Expanded(
           child: ListView.builder(
-            padding: EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12.0),
             itemCount: repairProcesses.length,
             itemBuilder: (context, index) {
               return buildListItem(repairProcesses[index], context);
@@ -89,12 +89,12 @@ class _HistoryState extends State<History> {
 
   Widget buildListItem(dynamic repairProcess, BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8.0),
-      padding: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20.0),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10,
@@ -108,23 +108,27 @@ class _HistoryState extends State<History> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Container(
-                padding: EdgeInsets.all(10.0),
-                // padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Text(
-                  'ทะเบียนรถ\n${repairProcess['licenseplate']}',
-                  textAlign: TextAlign.center,
+              Expanded(
+                child: Container(
+                  padding: const EdgeInsets.all(10.0),
+                  // padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Text(
+                    'ทะเบียน\n${repairProcess['licenseplate']}',
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 18),
+                  ),
                 ),
               ),
-              SizedBox(width: 12),
+              const SizedBox(width: 22),
               Text(
                 'สถานะ\n${repairProcess['Status']}',
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
+              const SizedBox(width: 12),
             ],
           ),
         ],

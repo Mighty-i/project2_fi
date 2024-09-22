@@ -150,7 +150,7 @@ class _MYdashboardState extends State<MYdashboard> {
             children: [
               Expanded(
                 child: Container(
-                  padding: const EdgeInsets.all(18.0),
+                  padding: const EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
                     color: Colors.grey[300],
                     borderRadius: const BorderRadius.only(
@@ -161,7 +161,7 @@ class _MYdashboardState extends State<MYdashboard> {
                   child: Text(
                     'ทะเบียนรถ\n${repairProcess['licenseplate']}',
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 20),
                   ),
                 ),
               ),

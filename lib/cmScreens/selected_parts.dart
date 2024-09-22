@@ -62,6 +62,37 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SelectedPartsManager {
   static const _selectedPartsKey = 'selected_parts';
 
+  static Future<void> togglePart(
+      Map<String, dynamic> part, int processId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final selectedParts = await _getSelectedPartsFromPrefs();
+
+    final partWithProcessId = {
+      ...part,
+      'Process_ID': processId,
+    };
+
+    if (selectedParts.containsKey(processId)) {
+      bool partExists = selectedParts[processId]!
+          .any((existingPart) => existingPart['Part_ID'] == part['Part_ID']);
+
+      if (partExists) {
+        selectedParts[processId]!.removeWhere(
+            (existingPart) => existingPart['Part_ID'] == part['Part_ID']);
+        if (selectedParts[processId]!.isEmpty) {
+          selectedParts.remove(processId);
+        }
+      } else {
+        selectedParts[processId]!.add(partWithProcessId);
+      }
+    } else {
+      selectedParts[processId] = [partWithProcessId];
+    }
+
+    // บันทึกข้อมูลที่อัปเดตไปยัง SharedPreferences
+    await _saveSelectedPartsToPrefs(selectedParts);
+  }
+
   static Future<void> addPart(Map<String, dynamic> part, int processId) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final selectedParts = await _getSelectedPartsFromPrefs();

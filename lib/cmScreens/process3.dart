@@ -625,7 +625,10 @@ class _TaskDetailScreenState extends State<TaskDetailScreen> {
                                     labelText: 'กรอกรายละเอียดงาน'),
                                 onChanged: (value) {
                                   setState(() {
-                                    taskDetails[processId] = value;
+                                    // taskDetails[processId] = value;
+                                    taskDetails[processId] = value.isEmpty
+                                        ? "ไม่ระบุรายละเอียดงาน"
+                                        : value;
                                   });
                                 },
                               ),
@@ -966,12 +969,15 @@ class _PartmainState extends State<Partmain> {
   List<dynamic> partsData = [];
   List<dynamic> filteredParts = [];
   String searchQuery = '';
+  Set<dynamic> selectedPartIds =
+      {}; // เก็บ Part_ID ของอะไหล่ที่ถูกเลือก //อันใหม่
 
   @override
   void initState() {
     super.initState();
     print("Navigated to Partmain with process ID: ${widget.processId}");
     _fetchPartsData();
+    _loadSelectedParts();
   }
 
   Future<void> _fetchPartsData() async {
@@ -983,12 +989,27 @@ class _PartmainState extends State<Partmain> {
       final responseBody = json.decode(response.body);
       setState(() {
         partsData = responseBody['data'];
-        filteredParts = partsData;
+        // filteredParts = partsData;
+        filteredParts = partsData
+            .where((part) =>
+                part['Brand'] == widget.brand &&
+                part['Model'] == widget.model &&
+                part['Year'] == widget.year)
+            .toList();
       });
     } else {
       throw Exception('Failed to load parts data');
     }
   }
+
+  Future<void> _loadSelectedParts() async {
+    final selectedParts =
+        await SelectedPartsManager.getSelectedPartsByProcessId(
+            widget.processId);
+    setState(() {
+      selectedPartIds = selectedParts.map((part) => part['Part_ID']).toSet();
+    });
+  } //อันใหม่
 
   void _filterPartsData(String query) {
     setState(() {
@@ -1019,10 +1040,12 @@ class _PartmainState extends State<Partmain> {
 
   Widget partListview(BuildContext context, int partId, String partName,
       String description, int quantity) {
+    final bool isSelected = selectedPartIds.contains(partId);
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         Flexible(
@@ -1066,6 +1089,34 @@ class _PartmainState extends State<Partmain> {
         const SizedBox(
           width: 10,
         ),
+        // OutlinedButton(
+        //   onPressed: () {
+        //     setState(() {
+        //       final selectedPart = {
+        //         'Part_ID': partId,
+        //         'Name': partName,
+        //       };
+        //       SelectedPartsManager.addPart(selectedPart, widget.processId);
+        //       print('Added part: $selectedPart');
+        //       selectedPartIds.add(partId);
+        //     });
+        //   },
+        //   style: OutlinedButton.styleFrom(
+        //     padding: const EdgeInsets.all(22.0),
+        //     // foregroundColor: const Color.fromARGB(255, 247, 24, 255),
+        //     // backgroundColor: const Color.fromARGB(255, 134, 199, 252),
+        //     foregroundColor: isSelected
+        //         ? Colors.green
+        //         : const Color.fromARGB(255, 247, 24, 255),
+        //     backgroundColor: isSelected
+        //         ? Colors.greenAccent
+        //         : const Color.fromARGB(255, 134, 199, 252),
+        //     side: const BorderSide(color: Color.fromARGB(255, 0, 104, 189)),
+        //     shape: RoundedRectangleBorder(
+        //         borderRadius: BorderRadius.circular(20.0)),
+        //   ),
+        //   child: const Icon(Icons.add, size: 36, color: Colors.black),
+        // )//อันเดิม
         OutlinedButton(
           onPressed: () {
             setState(() {
@@ -1073,14 +1124,24 @@ class _PartmainState extends State<Partmain> {
                 'Part_ID': partId,
                 'Name': partName,
               };
-              SelectedPartsManager.addPart(selectedPart, widget.processId);
-              print('Added part: $selectedPart');
+              SelectedPartsManager.togglePart(selectedPart, widget.processId);
+              if (selectedPartIds.contains(partId)) {
+                selectedPartIds.remove(partId);
+                print('Removed part: $selectedPart');
+              } else {
+                selectedPartIds.add(partId);
+                print('Added part: $selectedPart');
+              }
             });
           },
           style: OutlinedButton.styleFrom(
             padding: const EdgeInsets.all(22.0),
-            foregroundColor: const Color.fromARGB(255, 247, 24, 255),
-            backgroundColor: const Color.fromARGB(255, 134, 199, 252),
+            foregroundColor: isSelected
+                ? Colors.green
+                : const Color.fromARGB(255, 247, 24, 255),
+            backgroundColor: isSelected
+                ? Colors.greenAccent
+                : const Color.fromARGB(255, 134, 199, 252),
             side: const BorderSide(color: Color.fromARGB(255, 0, 104, 189)),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(20.0)),
@@ -1196,7 +1257,10 @@ class _PartmainState extends State<Partmain> {
                       builder: (context) =>
                           PartSummary(processId: widget.processId),
                     ),
-                  );
+                    // );//อันเดิม
+                  ).then((_) {
+                    _loadSelectedParts(); // โหลดข้อมูลใหม่เมื่อกลับมาจาก PartSummary
+                  });
                 },
                 style: ElevatedButton.styleFrom(
                   padding:
@@ -1353,18 +1417,32 @@ class _PartSummaryState extends State<PartSummary> {
   }
 
   // โหลดข้อมูลอะไหล่ที่เลือกจาก SharedPreferences
+  // void _loadSelectedParts() async {
+  //   List<Map<String, dynamic>> parts =
+  //       await SelectedPartsManager.getSelectedParts();
+  //   setState(() {
+  //     selectedParts = parts;
+  //   });
+  // }//อันเดิม
+
   void _loadSelectedParts() async {
     List<Map<String, dynamic>> parts =
-        await SelectedPartsManager.getSelectedParts();
+        await SelectedPartsManager.getSelectedPartsByProcessId(
+            widget.processId);
     setState(() {
       selectedParts = parts;
     });
-  }
+  } //อันใหม่
 
-  void _removePart(int processId, int partIndex) async {
-    await SelectedPartsManager.removePart(processId, partIndex);
+  void _removePart(int processId, int partId) async {
+    await SelectedPartsManager.togglePart({'Part_ID': partId}, processId);
     _loadSelectedParts(); // โหลดข้อมูลใหม่หลังจากลบ
-  }
+  } //อันใหม่
+
+  // void _removePart(int processId, int partIndex) async {
+  //   await SelectedPartsManager.removePart(processId, partIndex);
+  //   _loadSelectedParts(); // โหลดข้อมูลใหม่หลังจากลบ
+  // }//อันเดิม
 
   void _updatePartQuantity(int index, int change) {
     setState(() {
@@ -1457,7 +1535,8 @@ class _PartSummaryState extends State<PartSummary> {
                             size: 40,
                           ),
                           onPressed: () {
-                            _removePart(widget.processId, index);
+                            // _removePart(widget.processId, index);
+                            _removePart(widget.processId, part['Part_ID']);
                           },
                         ),
                       ),
@@ -1494,8 +1573,8 @@ class _PartSummaryState extends State<PartSummary> {
               ElevatedButton(
                 onPressed: () async {
                   for (var part in selectedParts) {
-                    await _savePartUsage(
-                        part['Part_ID'], part['Process_ID'], part['quantity']);
+                    await _savePartUsage(part['Part_ID'], part['Process_ID'],
+                        part['quantity'] ?? 1);
                   }
                   Navigator.pop(context); // กลับไปที่หน้าจอ Partmain
                   Navigator.pop(context); // กลับไปที่หน้าจอ Process

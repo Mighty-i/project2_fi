@@ -12,6 +12,7 @@ class SelectedPartsManager {
     final partWithProcessId = {
       ...part,
       'Process_ID': processId,
+      'quantity': part['quantity'] ?? 1,
     };
 
     if (selectedParts.containsKey(processId)) {
@@ -66,6 +67,22 @@ class SelectedPartsManager {
     }
 
     // บันทึกข้อมูลที่อัปเดตไปยัง SharedPreferences
+    await _saveSelectedPartsToPrefs(selectedParts);
+  }
+
+  static Future<void> updateQuantity(int processId, int partId, int newQuantity) async {
+    final selectedParts = await _getSelectedPartsFromPrefs();
+
+    if (selectedParts.containsKey(processId)) {
+      for (var part in selectedParts[processId]!) {
+        if (part['Part_ID'] == partId) {
+          part['quantity'] = newQuantity;
+          break;
+        }
+      }
+    }
+
+    // Save updated data to SharedPreferences
     await _saveSelectedPartsToPrefs(selectedParts);
   }
 

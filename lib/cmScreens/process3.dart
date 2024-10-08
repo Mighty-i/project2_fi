@@ -1015,11 +1015,14 @@ class _PartSummaryState extends State<PartSummary> {
 
   void _updatePartQuantity(int index, int change) {
     setState(() {
+      int partId = selectedParts[index]['Part_ID'];
       int currentQuantity = selectedParts[index]['quantity'] ?? 1;
       int newQuantity = currentQuantity + change;
 
       if (newQuantity > 0) {
         selectedParts[index]['quantity'] = newQuantity;
+        SelectedPartsManager.updateQuantity(
+            widget.processId, partId, newQuantity);
       }
     });
   }
@@ -1069,16 +1072,17 @@ class _PartSummaryState extends State<PartSummary> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.remove_circle,
-                                    color: Colors.red,
-                                    size: 30,
+                                if (quantity > 1)
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.remove_circle,
+                                      color: Colors.red,
+                                      size: 30,
+                                    ),
+                                    onPressed: () {
+                                      _updatePartQuantity(index, -1); // ลดจำนวน
+                                    },
                                   ),
-                                  onPressed: () {
-                                    _updatePartQuantity(index, -1); // ลดจำนวน
-                                  },
-                                ),
                                 Text(
                                   '$quantity',
                                   style: const TextStyle(fontSize: 18),
